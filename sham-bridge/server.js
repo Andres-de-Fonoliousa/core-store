@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import QRCode from 'qrcode';
 import { ShamClient } from '@jhad-dev/shamy';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
@@ -52,10 +53,20 @@ async function initClient() {
     console.log('[Sham]', msg);
   });
 
-  client.on('qr', (payload) => {
+  client.on('qr', async (payload) => {
     console.log('[Sham] QR emitted — scan with Sham Cash app');
-    // Store latest QR for retrieval
     latestQR = payload;
+    // Save QR as PNG for web access
+    const qrDir = process.env.QR_PUBLIC_DIR || join(__dirname, 'public');
+    if (!existsSync(qrDir)) mkdirSync(qrDir, { recursive: true });
+    try {
+      await QRCode.toFile(join(qrDir, 'sham-qr.png'), payload, {
+        type: 'png', width: 400, margin: 2,
+      });
+      console.log('[Sham] QR saved to', join(qrDir, 'sham-qr.png'));
+    } catch (err) {
+      console.error('[Sham] QR save failed:', err.message);
+    }
   });
 
   client.on('ready', (data) => {
@@ -205,6 +216,17 @@ app.get('/qr', (req, res) => {
     res.json({ qr: latestQR });
   } else {
     res.status(404).json({ error: 'No QR available. Client may already be connected.' });
+  }
+});
+
+// Serve QR as PNG image
+app.get('/qr.png', (req, res) => {
+  const qrDir = process.env.QR_PUBLIC_DIR || join(__dirname, 'public');
+  const qrFile = join(qrDir, 'sham-qr.png');
+  if (existsSync(qrFile)) {
+    res.sendFile(qrFile);
+  } else {
+    res.status(404).json({ error: 'QR image not yet generated.' });
   }
 });
 
