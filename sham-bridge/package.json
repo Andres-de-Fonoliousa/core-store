@@ -10,7 +10,7 @@
     "dev": "node --watch server.js"
   },
   "dependencies": {
-    "@jhad-dev/shamy": "^1.0.0",
+    "@jhad-dev/shamy": "^0.0.3",
     "cors": "^2.8.5",
     "express": "^4.21.0"
   }
