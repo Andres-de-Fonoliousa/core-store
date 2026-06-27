@@ -59,6 +59,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::inertia('payment-addresses', 'Admin/PaymentAddresses')->name('admin.payment-addresses');
     Route::inertia('settings', 'Admin/Settings')->name('admin.settings');
     Route::inertia('kpi', 'Admin/Kpi')->name('admin.kpi');
+    Route::any('sham-cash/{any?}', [\App\Http\Controllers\Admin\ShamCashProxyController::class, 'handle'])
+        ->where('any', '.*')
+        ->name('admin.sham-cash');
 });
 
 require __DIR__.'/settings.php';
