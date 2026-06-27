@@ -216,6 +216,7 @@
 
 <script>
 const { createApp, ref, onMounted, onUnmounted, nextTick } = Vue;
+const API_BASE = '/admin/sham-cash/';
 
 createApp({
   setup() {
@@ -275,7 +276,7 @@ createApp({
     }
 
     function connectSSE() {
-      es = new EventSource('api/events');
+      es = new EventSource(API_BASE + 'api/events');
       es.addEventListener('status', e => {
         const d = JSON.parse(e.data);
         state.value = d.status;
@@ -305,7 +306,7 @@ createApp({
       error.value = null;
       statusMessage.value = 'Initializing...';
       try {
-        const r = await fetch('api/initialize', { method: 'POST' });
+        const r = await fetch(API_BASE + 'api/initialize', { method: 'POST' });
         const d = await r.json();
         if (!r.ok) throw new Error(d.error || 'Failed');
         statusMessage.value = 'Connecting...';
@@ -318,10 +319,10 @@ createApp({
 
     async function checkSession() {
       try {
-        const r = await fetch('api/session');
+        const r = await fetch(API_BASE + 'api/session');
         const d = await r.json();
         if (d.hasSession) {
-          const s = await fetch('api/status');
+          const s = await fetch(API_BASE + 'api/status');
           const sd = await s.json();
           if (sd.authenticated) {
             authenticated.value = true;
@@ -336,7 +337,7 @@ createApp({
 
     async function loadProfile() {
       try {
-        const r = await fetch('api/profile');
+        const r = await fetch(API_BASE + 'api/profile');
         const d = await r.json();
         if (r.ok) {
           profileName.value = d.name || d.username || 'Authenticated';
@@ -349,7 +350,7 @@ createApp({
       loadingBalances.value = true;
       balancesError.value = null;
       try {
-        const r = await fetch('api/balances');
+        const r = await fetch(API_BASE + 'api/balances');
         const d = await r.json();
         if (!r.ok) throw new Error(d.error || 'Failed');
         const items = Array.isArray(d) ? d : d?.balances || d?.data || [];
@@ -367,7 +368,7 @@ createApp({
       loadingTxs.value = true;
       txsError.value = null;
       try {
-        const r = await fetch('api/transactions?page=' + page.value + '&limit=20');
+        const r = await fetch(API_BASE + 'api/transactions?page=' + page.value + '&limit=20');
         const d = await r.json();
         if (!r.ok) throw new Error(d.error || 'Failed');
         const items = (d?.log || d?.logs || d?.transactions || d?.data || (Array.isArray(d) ? d : []));
@@ -401,7 +402,7 @@ createApp({
       transferError.value = null;
       resolvedData.value = null;
       try {
-        const r = await fetch('api/resolve', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ address: resolveAddress.value.trim() }) });
+        const r = await fetch(API_BASE + 'api/resolve', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ address: resolveAddress.value.trim() }) });
         const d = await r.json();
         if (!r.ok) throw new Error(d.error || 'Not found');
         resolvedData.value = d;
@@ -420,7 +421,7 @@ createApp({
       transferError.value = null;
       transferResult.value = null;
       try {
-        const r = await fetch('api/transfer', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ peerAccount: peerAccount.value.trim(), amount: amount.value.trim(), currencyId: parseInt(currencyId.value), note: note.value.trim(), pin: pin.value.trim() || null }) });
+        const r = await fetch(API_BASE + 'api/transfer', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ peerAccount: peerAccount.value.trim(), amount: amount.value.trim(), currencyId: parseInt(currencyId.value), note: note.value.trim(), pin: pin.value.trim() || null }) });
         const d = await r.json();
         if (!r.ok) throw new Error(d.error || 'Failed');
         transferResult.value = d;
@@ -448,7 +449,7 @@ createApp({
 
     async function disconnect() {
       es?.close();
-      await fetch('api/reset', { method: 'POST' }).catch(() => {});
+      await fetch(API_BASE + 'api/reset', { method: 'POST' }).catch(() => {});
       authenticated.value = false;
       profileName.value = '';
       statusMessage.value = 'Disconnected';
