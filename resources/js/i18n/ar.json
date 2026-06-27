@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CoreS",
+    "tagline": "منتجات رقمية، توصيل فوري تلقائي"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "catalog": "المتجر",
+    "orders": "طلباتي",
+    "dashboard": "لوحة التحكم",
+    "deposit": "شحن الرصيد",
+    "profile": "الملف الشخصي",
+    "admin": "لوحة الإدارة",
+    "logout": "تسجيل الخروج",
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب"
+  },
+  "auth": {
+    "login": {
+      "title": "مرحباً بعودتك",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "submit": "تسجيل الدخول",
+      "noAccount": "ليس لديك حساب؟",
+      "register": "إنشاء حساب"
+    },
+    "register": {
+      "title": "إنشاء حساب",
+      "name": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "submit": "إنشاء حساب",
+      "hasAccount": "هل لديك حساب بالفعل؟",
+      "login": "تسجيل الدخول"
+    }
+  },
+  "product": {
+    "price": "السعر",
+    "buyNow": "شراء الآن",
+    "quantity": "الكمية",
+    "selectQty": "اختر الكمية",
+    "enterDetails": "أدخل التفاصيل",
+    "category": "الفئة",
+    "provider": "المزود",
+    "autoDelivery": "شحن فوري",
+    "manualDelivery": "شحن يدوي",
+    "inStock": "متوفر",
+    "outOfStock": "غير متوفر"
+  },
+  "order": {
+    "status": {
+      "paid": "مدفوع",
+      "unpaid": "غير مدفوع",
+      "fulfilled": "مكتمل",
+      "pending_fulfillment": "قيد المعالجة",
+      "failed": "فشل"
+    },
+    "serialCode": "الكود",
+    "copyCode": "نسخ الكود",
+    "copied": "تم النسخ!",
+    "orderDate": "تاريخ الطلب",
+    "total": "الإجمالي",
+    "quantity": "الكمية",
+    "noOrders": "لا توجد طلبات بعد"
+  },
+  "deposit": {
+    "title": "شحن الرصيد",
+    "amount": "المبلغ",
+    "proof": "إثبات الدفع",
+    "dragDrop": "اسحب وأفلت الصورة هنا، أو انقر لتصفح",
+    "note": "ملاحظة (اختياري)",
+    "submit": "إرسال",
+    "pending": "قيد الموافقة",
+    "history": "سجل الإيداعات"
+  },
+  "admin": {
+    "dashboard": "لوحة التحكم",
+    "deposits": "طلبات الإيداع",
+    "categories": "الفئات",
+    "providers": "المزودون",
+    "products": "المنتجات",
+    "settings": "الإعدادات",
+    "approve": "الموافقة",
+    "reject": "رفض",
+    "topUp": "شحن",
+    "profitMargin": "هامش الربح",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "create": "إنشاء",
+    "pendingDeposits": "الإيداعات المعلقة",
+    "totalRevenue": "إجمالي الإيرادات",
+    "activeProducts": "المنتجات النشطة"
+  },
+  "common": {
+    "loading": "جارٍ التحميل...",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "create": "إنشاء",
+    "search": "بحث",
+    "filter": "تصفية",
+    "close": "إغلاق",
+    "confirm": "تأكيد",
+    "success": "نجاح",
+    "error": "خطأ",
+    "warning": "تحذير",
+    "info": "معلومة"
+  }
+}
