@@ -1,0 +1,9 @@
+EXPLAIN SELECT * FROM products ORDER BY id DESC LIMIT 20;
+EXPLAIN SELECT * FROM products WHERE category_id = 1;
+SHOW INDEX FROM products;
+SHOW INDEX FROM categories;
+EXPLAIN SELECT * FROM orders WHERE user_id = 1 ORDER BY id DESC LIMIT 10;
+SELECT COUNT(*) FROM products;
+SELECT COUNT(*) FROM categories;
+SELECT COUNT(*) FROM orders;
+SELECT COUNT(*) FROM users;
