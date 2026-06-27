@@ -27,3 +27,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/sham-bridge/node_modules
+/sham-bridge/sessions
+/sham-bridge/public/build
+/deploy.bundle

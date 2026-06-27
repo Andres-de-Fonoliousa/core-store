@@ -1,13 +1,13 @@
 {
-  "name": "sham-cash-bridge",
+  "name": "shamy-visual",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Bridge between Laravel and ShamCash Node.js client",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js"
+    "server": "node server.js",
+    "client": "cd client && npm run dev",
+    "dev": "node server.js",
+    "install:all": "npm install && cd client && npm install"
   },
   "dependencies": {
     "@jhad-dev/shamy": "^0.0.3",
