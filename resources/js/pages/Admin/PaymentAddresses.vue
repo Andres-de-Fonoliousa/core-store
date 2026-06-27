@@ -328,7 +328,7 @@ onMounted(loadData);
     <ConfirmDialog
       :open="showDeleteConfirm"
       title="Delete Address"
-      :message="`Delete address \"${deletingLabel}\"? This cannot be undone.`"
+      :message="'Delete address ' + deletingLabel + '? This cannot be undone.'"
       confirm-text="Delete"
       confirm-variant="destructive"
       @update:open="showDeleteConfirm = $event"
