@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shamy Visual</title>
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-screen antialiased">
+<div id="app">
+  <!-- Loading splash -->
+  <div v-if="loading" class="min-h-screen flex items-center justify-center">
+    <div class="text-center space-y-4">
+      <div class="animate-spin rounded-full h-8 w-8 border-2 border-purple-500 border-t-transparent mx-auto"></div>
+      <p class="text-sm text-gray-500">Connecting...</p>
+    </div>
+  </div>
+
+  <template v-if="!loading">
+    <!-- Header -->
+    <header class="border-b border-gray-800 bg-gray-900/50">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-7 h-7 rounded-lg bg-purple-600 flex items-center justify-center text-xs font-bold">SV</div>
+          <h1 class="font-semibold text-sm">Shamy Visual</h1>
+          <span class="hidden sm:inline text-[10px] bg-gray-800 text-gray-500 px-1.5 py-0.5 rounded">@jhad-dev/shamy</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <template v-if="authenticated">
+            <span class="text-xs text-gray-500">{{ profileName }}</span>
+            <button @click="disconnect" class="text-xs text-gray-600 hover:text-red-400 transition-colors">Disconnect</button>
+          </template>
+          <span v-else class="text-xs text-gray-600">Not connected</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Not authenticated -->
+    <div v-if="!authenticated" class="max-w-lg mx-auto mt-16 px-4">
+      <div class="text-center space-y-6">
+        <div class="w-14 h-14 rounded-2xl bg-purple-600/10 border border-purple-500/20 flex items-center justify-center mx-auto text-2xl">💳</div>
+        <div>
+          <h2 class="text-xl font-bold">ShamCash API Explorer</h2>
+          <p class="text-sm text-gray-500 mt-0.5">Visual interface for the unofficial ShamCash API</p>
+        </div>
+
+        <!-- QR display -->
+        <div v-if="qrImage" class="flex justify-center">
+          <div class="bg-white p-3 rounded-xl shadow-lg shadow-purple-500/5">
+            <img :src="qrImage" alt="QR Code" class="w-60 h-60" />
+          </div>
+          <p class="text-xs text-gray-500 mt-2">Open ShamCash app → Scan QR</p>
+        </div>
+
+        <!-- Awaiting scan indicator -->
+        <div v-if="state === 'awaiting_scan'" class="flex items-center justify-center gap-2 text-xs text-gray-500">
+          <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+          Waiting for scan...
+        </div>
+
+        <!-- Status message -->
+        <div class="bg-gray-900/50 rounded-lg p-3 border border-gray-800/50">
+          <p class="text-sm font-mono text-gray-500">{{ statusMessage }}</p>
+        </div>
+
+        <!-- Connect button -->
+        <button v-if="state !== 'awaiting_scan'" @click="initialize" :disabled="connecting" class="w-full py-2.5 px-4 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-800 disabled:text-gray-600 text-white text-sm font-medium rounded-lg transition-all duration-150 active:scale-[0.98]">
+          <span v-if="connecting" class="flex items-center justify-center gap-2">
+            <div class="animate-spin rounded-full h-3.5 w-3.5 border-2 border-purple-300 border-t-transparent"></div>
+            Connecting...
+          </span>
+          <span v-else>Connect to ShamCash</span>
+        </button>
+
+        <div v-if="error" class="bg-red-900/20 border border-red-800/50 text-red-400 text-xs rounded-lg p-3">{{ error }}</div>
+      </div>
+    </div>
+
+    <!-- Authenticated Dashboard -->
+    <template v-if="authenticated">
+      <!-- Tabs -->
+      <div class="border-b border-gray-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+          <nav class="flex gap-0 -mb-px overflow-x-auto">
+            <button v-for="t in tabs" :key="t.id" @click="activeTab = t.id" :class="['px-4 py-2.5 text-xs font-medium border-b-2 transition-colors whitespace-nowrap', activeTab === t.id ? 'border-purple-500 text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-300']">{{ t.label }}</button>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Tab content -->
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6">
+
+        <!-- Balances -->
+        <div v-if="activeTab === 'balances'">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xs font-medium text-gray-400 uppercase tracking-wider">Wallet Balances</h3>
+            <button @click="loadBalances" class="text-[11px] text-gray-600 hover:text-gray-400 transition-colors" :disabled="loadingBalances">Refresh</button>
+          </div>
+          <div v-if="loadingBalances" class="flex items-center gap-2 text-sm text-gray-500 py-8 justify-center">
+            <div class="animate-spin rounded-full h-3.5 w-3.5 border border-purple-500 border-t-transparent"></div>
+            Loading balances...
+          </div>
+          <div v-else-if="balancesError" class="bg-red-900/20 border border-red-800/50 text-red-400 text-xs rounded-lg p-3">{{ balancesError }}</div>
+          <div v-else-if="balances.length === 0" class="text-sm text-gray-600 text-center py-12">No balances found</div>
+          <div v-else class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div v-for="(b, i) in balances" :key="i" class="bg-gray-900 border border-gray-800 rounded-xl p-4 hover:border-gray-700 transition-colors">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs text-gray-500 font-medium">{{ b.currencyName || 'Unknown' }}</span>
+                <span v-if="b.blocked > 0" class="text-[10px] text-yellow-500 bg-yellow-500/10 px-1.5 py-0.5 rounded">blocked: {{ b.blocked }}</span>
+              </div>
+              <p class="text-2xl font-bold tracking-tight">{{ formatAmount(b.balance ?? 0) }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transactions -->
+        <div v-if="activeTab === 'transactions'">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xs font-medium text-gray-400 uppercase tracking-wider">Transaction History</h3>
+            <button @click="resetTransactions" class="text-[11px] text-gray-600 hover:text-gray-400 transition-colors">Refresh</button>
+          </div>
+          <div v-if="loadingTxs" class="flex items-center gap-2 text-sm text-gray-500 py-8 justify-center">
+            <div class="animate-spin rounded-full h-3.5 w-3.5 border border-purple-500 border-t-transparent"></div>
+            Loading transactions...
+          </div>
+          <div v-else-if="txsError" class="bg-red-900/20 border border-red-800/50 text-red-400 text-xs rounded-lg p-3">{{ txsError }}</div>
+          <div v-else-if="transactions.length === 0" class="text-sm text-gray-600 text-center py-12">No transactions yet</div>
+          <div v-else class="space-y-1.5">
+            <div v-for="(tx, i) in transactions" :key="tx.tranId || i" class="bg-gray-900 border border-gray-800 rounded-lg px-3.5 py-2.5 flex items-center justify-between hover:border-gray-700 transition-colors">
+              <div class="flex items-center gap-3 min-w-0">
+                <div :class="['text-xs w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0', tx.tranKind === 1 ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400']">{{ tx.tranKind === 1 ? '↓' : '↑' }}</div>
+                <div class="min-w-0">
+                  <p class="text-sm truncate">{{ tx.note || tx.peerUserName || 'Transfer' }}</p>
+                  <p class="text-[11px] text-gray-500">{{ tx.tranDate }} {{ tx.tranTime }}</p>
+                  <p class="text-[10px] text-gray-600 truncate">ID: {{ tx.strTranId || tx.tranId }}</p>
+                </div>
+              </div>
+              <div class="text-right flex-shrink-0 ml-3">
+                <p :class="['text-sm font-medium tabular-nums', tx.tranKind === 1 ? 'text-green-400' : 'text-red-400']">
+                  {{ tx.tranKind === 1 ? '+' : '-' }}{{ tx.amount ?? '0' }}
+                </p>
+                <p class="text-[10px] text-gray-600">{{ tx.currencyName || '' }}</p>
+              </div>
+            </div>
+            <button v-if="hasMore && !loadingTxs" @click="loadMore" class="w-full py-2.5 text-xs text-gray-600 hover:text-gray-400 transition-colors border border-dashed border-gray-800 rounded-lg mt-2">Load more</button>
+          </div>
+        </div>
+
+        <!-- Transfer -->
+        <div v-if="activeTab === 'transfer'" class="max-w-md">
+          <h3 class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-4">Send Transfer</h3>
+          <div class="space-y-3">
+            <div>
+              <label class="text-[11px] text-gray-500 block mb-1">Address / Code</label>
+              <div class="flex gap-2">
+                <input v-model="resolveAddress" type="text" placeholder="e.g. 251aw..." class="flex-1 bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500/50 transition-colors" @keyup.enter="resolve" />
+                <button @click="resolve" :disabled="!resolveAddress.trim() || resolving" class="px-3.5 py-2 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 text-xs rounded-lg transition-colors">{{ resolving ? '...' : 'Look up' }}</button>
+              </div>
+            </div>
+            <div v-if="resolvedData" class="bg-gray-900 border border-gray-700/50 rounded-lg p-3 text-xs space-y-1">
+              <p class="text-green-400 font-medium mb-1.5">✓ Account resolved</p>
+              <div v-for="(v, k) in resolvedData" :key="k" class="text-gray-400 break-all"><span class="text-gray-600">{{ k }}:</span> {{ typeof v === 'object' ? JSON.stringify(v) : v }}</div>
+            </div>
+            <div v-if="transferError" class="bg-red-900/20 border border-red-800/50 text-red-400 text-xs rounded-lg p-3">{{ transferError }}</div>
+            <div class="flex gap-2">
+              <div class="flex-1">
+                <label class="text-[11px] text-gray-500 block mb-1">Recipient</label>
+                <input v-model="peerAccount" type="text" placeholder="Account ID" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500/50 transition-colors" />
+              </div>
+              <div class="w-20">
+                <label class="text-[11px] text-gray-500 block mb-1">Curr.</label>
+                <select v-model="currencyId" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-purple-500/50 transition-colors"><option :value="1">USD</option><option :value="2">SYP</option><option :value="3">EUR</option></select>
+              </div>
+            </div>
+            <div>
+              <label class="text-[11px] text-gray-500 block mb-1">Amount</label>
+              <input v-model="amount" type="text" placeholder="0.00" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500/50 transition-colors" />
+            </div>
+            <div>
+              <label class="text-[11px] text-gray-500 block mb-1">Note</label>
+              <input v-model="note" type="text" placeholder="Optional" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500/50 transition-colors" />
+            </div>
+            <div>
+              <label class="text-[11px] text-gray-500 block mb-1">Transaction PIN</label>
+              <input v-model="pin" type="password" placeholder="••••" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500/50 transition-colors" />
+            </div>
+            <button @click="send" :disabled="sending || !peerAccount || !amount" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-800 disabled:text-gray-600 text-white text-sm font-medium rounded-lg transition-all duration-150 active:scale-[0.98]">{{ sending ? 'Sending...' : 'Send' }}</button>
+            <div v-if="transferResult" class="bg-green-900/20 border border-green-800/50 text-green-400 text-xs rounded-lg p-3 space-y-1">
+              <p class="font-medium mb-1">✓ Transfer sent</p>
+              <div v-for="(v, k) in transferResult" :key="k" class="break-all"><span class="text-green-600">{{ k }}:</span> {{ typeof v === 'object' ? JSON.stringify(v) : v }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Raw Data -->
+        <div v-if="activeTab === 'raw'">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xs font-medium text-gray-400 uppercase tracking-wider">API Log</h3>
+          </div>
+          <div class="bg-gray-900 border border-gray-800 rounded-xl p-4">
+            <div class="space-y-2">
+              <div v-for="(entry, i) in rawLog" :key="i" class="border-b border-gray-800/50 pb-2 last:border-0">
+                <div class="text-[10px] text-gray-600 font-mono mb-1">[{{ entry.time }}] {{ entry.label }}</div>
+                <pre class="text-xs text-gray-300 font-mono overflow-x-auto whitespace-pre-wrap">{{ entry.data }}</pre>
+              </div>
+              <div v-if="rawLog.length === 0" class="text-xs text-gray-600 text-center py-4">No API calls yet.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </template>
+</div>
+
+<script>
+const { createApp, ref, onMounted, onUnmounted, nextTick } = Vue;
+
+createApp({
+  setup() {
+    const loading = ref(true);
+    const authenticated = ref(false);
+    const profileName = ref('');
+    const statusMessage = ref('Press Connect to start');
+    const connecting = ref(false);
+    const error = ref(null);
+    const activeTab = ref('balances');
+    const qrImage = ref(null);
+    const state = ref('idle');
+    const tabs = [
+      { id: 'balances', label: 'Balances' },
+      { id: 'transactions', label: 'History' },
+      { id: 'transfer', label: 'Transfer' },
+      { id: 'raw', label: 'Raw Data' },
+    ];
+
+    let es = null;
+
+    // Balances
+    const balances = ref([]);
+    const loadingBalances = ref(false);
+    const balancesError = ref(null);
+
+    // Transactions
+    const transactions = ref([]);
+    const loadingTxs = ref(false);
+    const txsError = ref(null);
+    const page = ref(1);
+    const hasMore = ref(true);
+
+    // Transfer
+    const resolveAddress = ref('');
+    const peerAccount = ref('');
+    const amount = ref('');
+    const currencyId = ref(1);
+    const note = ref('');
+    const pin = ref('');
+    const resolvedData = ref(null);
+    const transferResult = ref(null);
+    const resolving = ref(false);
+    const sending = ref(false);
+    const transferError = ref(null);
+
+    // Raw data
+    const rawLog = ref([]);
+
+    function log(label, data) {
+      rawLog.value.unshift({
+        time: new Date().toLocaleTimeString(),
+        label,
+        data: typeof data === 'string' ? data : JSON.stringify(data, null, 2),
+      });
+      if (rawLog.value.length > 100) rawLog.value.length = 100;
+    }
+
+    function connectSSE() {
+      es = new EventSource('/api/events');
+      es.addEventListener('status', e => {
+        const d = JSON.parse(e.data);
+        state.value = d.status;
+        if (d.status === 'ready') {
+          authenticated.value = true;
+          connecting.value = false;
+          loadProfile();
+          loadBalances();
+          loadTransactions();
+        }
+        if (d.message) statusMessage.value = d.message;
+      });
+      es.addEventListener('qr', e => {
+        const d = JSON.parse(e.data);
+        if (d.image) qrImage.value = d.image;
+        state.value = 'awaiting_scan';
+      });
+      es.addEventListener('error', e => {
+        const d = JSON.parse(e.data);
+        error.value = d.message;
+      });
+      es.onerror = () => {};
+    }
+
+    async function initialize() {
+      connecting.value = true;
+      error.value = null;
+      statusMessage.value = 'Initializing...';
+      try {
+        const r = await fetch('/api/initialize', { method: 'POST' });
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || 'Failed');
+        statusMessage.value = 'Connecting...';
+      } catch (err) {
+        connecting.value = false;
+        error.value = err.message;
+        statusMessage.value = 'Error: ' + err.message;
+      }
+    }
+
+    async function checkSession() {
+      try {
+        const r = await fetch('/api/session');
+        const d = await r.json();
+        if (d.hasSession) {
+          const s = await fetch('/api/status');
+          const sd = await s.json();
+          if (sd.authenticated) {
+            authenticated.value = true;
+            profileName.value = sd.profile?.name || sd.profile?.username || 'Authenticated';
+            log('CHECK_SESSION', sd);
+            return true;
+          }
+        }
+      } catch(e) {}
+      return false;
+    }
+
+    async function loadProfile() {
+      try {
+        const r = await fetch('/api/profile');
+        const d = await r.json();
+        if (r.ok) {
+          profileName.value = d.name || d.username || 'Authenticated';
+          log('GETMYPROFILE', d);
+        }
+      } catch(e) {}
+    }
+
+    async function loadBalances() {
+      loadingBalances.value = true;
+      balancesError.value = null;
+      try {
+        const r = await fetch('/api/balances');
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || 'Failed');
+        const items = Array.isArray(d) ? d : d?.balances || d?.data || [];
+        balances.value = items;
+        log('GETBALANCES', d);
+      } catch(e) {
+        balancesError.value = e.message;
+        log('GETBALANCES_ERROR', e.message);
+      } finally {
+        loadingBalances.value = false;
+      }
+    }
+
+    async function loadTransactions() {
+      loadingTxs.value = true;
+      txsError.value = null;
+      try {
+        const r = await fetch('/api/transactions?page=' + page.value + '&limit=20');
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || 'Failed');
+        const items = (d?.log || d?.logs || d?.transactions || d?.data || (Array.isArray(d) ? d : []));
+        if (!items.length) hasMore.value = false;
+        else hasMore.value = d?.haveNext !== false;
+        transactions.value = page.value === 1 ? items : [...transactions.value, ...items];
+        log('GETLOGS', { page: page.value, count: items.length, data: d });
+      } catch(e) {
+        txsError.value = e.message;
+        log('GETLOGS_ERROR', e.message);
+      } finally {
+        loadingTxs.value = false;
+      }
+    }
+
+    function resetTransactions() {
+      page.value = 1;
+      hasMore.value = true;
+      transactions.value = [];
+      loadTransactions();
+    }
+
+    function loadMore() {
+      page.value++;
+      loadTransactions();
+    }
+
+    async function resolve() {
+      if (!resolveAddress.value.trim()) return;
+      resolving.value = true;
+      transferError.value = null;
+      resolvedData.value = null;
+      try {
+        const r = await fetch('/api/resolve', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ address: resolveAddress.value.trim() }) });
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || 'Not found');
+        resolvedData.value = d;
+        peerAccount.value = resolveAddress.value;
+        log('RESOLVE_ACCOUNT', d);
+      } catch(e) {
+        transferError.value = e.message;
+        log('RESOLVE_ACCOUNT_ERROR', e.message);
+      } finally {
+        resolving.value = false;
+      }
+    }
+
+    async function send() {
+      sending.value = true;
+      transferError.value = null;
+      transferResult.value = null;
+      try {
+        const r = await fetch('/api/transfer', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ peerAccount: peerAccount.value.trim(), amount: amount.value.trim(), currencyId: parseInt(currencyId.value), note: note.value.trim(), pin: pin.value.trim() || null }) });
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || 'Failed');
+        transferResult.value = d;
+        log('EXECUTE_TRANSACTION', d);
+      } catch(e) {
+        transferError.value = e.message;
+        log('EXECUTE_TRANSACTION_ERROR', e.message);
+      } finally {
+        sending.value = false;
+      }
+    }
+
+    function formatAmount(val) {
+      if (val == null) return '0';
+      const n = parseFloat(val);
+      return isNaN(n) ? String(val) : n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatDate(s) {
+      if (!s) return '-';
+      const d = new Date(s);
+      if (isNaN(d.getTime())) return String(s);
+      return d.toLocaleString('en-SY', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    }
+
+    async function disconnect() {
+      es?.close();
+      await fetch('/api/reset', { method: 'POST' }).catch(() => {});
+      authenticated.value = false;
+      profileName.value = '';
+      statusMessage.value = 'Disconnected';
+      balances.value = [];
+      transactions.value = [];
+      loading.value = false;
+      window.location.reload();
+    }
+
+    onMounted(async () => {
+      connectSSE();
+      const hasSession = await checkSession();
+      if (hasSession) {
+        loadBalances();
+        loadTransactions();
+      }
+      loading.value = false;
+    });
+
+    onUnmounted(() => es?.close());
+
+    return {
+      loading, authenticated, profileName, statusMessage, connecting, error,
+      activeTab, tabs,
+      initialize, disconnect,
+      balances, loadingBalances, balancesError, loadBalances,
+      transactions, loadingTxs, txsError, page, hasMore, loadMore, resetTransactions,
+      formatAmount, formatDate,
+      resolveAddress, peerAccount, amount, currencyId, note, pin,
+      resolvedData, transferResult, resolving, sending, transferError,
+      resolve, send,
+      rawLog, qrImage, state,
+    };
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
