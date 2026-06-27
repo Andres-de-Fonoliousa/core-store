@@ -2,9 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use Closure;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Laravel\Sanctum\HasApiTokens;
+use Symfony\Component\HttpFoundation\Response;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -13,6 +15,14 @@ class HandleInertiaRequests extends Middleware
     public function version(Request $request): ?string
     {
         return parent::version($request);
+    }
+
+    public function handle(Request $request, \Closure $next): \Symfony\Component\HttpFoundation\Response
+    {
+        if ($request->is('admin/sham-cash*') || $request->is('sham-cash*')) {
+            return $next($request);
+        }
+        return parent::handle($request, $next);
     }
 
     public function share(Request $request): array
