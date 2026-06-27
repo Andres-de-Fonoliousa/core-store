@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /orders
+Disallow: /deposit
+Disallow: /notifications
+Disallow: /settings
+
+Sitemap: https://cores.shop/sitemap.xml

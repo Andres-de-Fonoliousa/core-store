@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Illuminate\Http\Request;
+use Inertia\Middleware;
+use Laravel\Sanctum\HasApiTokens;
+
+class HandleInertiaRequests extends Middleware
+{
+    protected $rootView = 'app';
+
+    public function version(Request $request): ?string
+    {
+        return parent::version($request);
+    }
+
+    public function share(Request $request): array
+    {
+        $user = $request->user();
+        $token = null;
+
+        if ($user && in_array(HasApiTokens::class, class_uses_recursive($user))) {
+            $existing = $user->tokens()->where('name', 'auth-token')->first();
+            if ($existing) {
+                $existing->delete();
+            }
+            $token = $user->createToken('auth-token')->plainTextToken;
+        }
+
+        return [
+            ...parent::share($request),
+            'name' => config('app.name'),
+            'auth' => [
+                'user' => $user,
+                'token' => $token,
+            ],
+            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+        ];
+    }
+}

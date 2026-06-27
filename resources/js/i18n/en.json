@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "VoucherMarket",
+    "tagline": "Digital vouchers, instant delivery"
+  },
+  "nav": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "orders": "My Orders",
+    "dashboard": "Dashboard",
+    "deposit": "Deposit",
+    "profile": "Profile",
+    "admin": "Admin Panel",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign In",
+      "noAccount": "Don't have an account?",
+      "register": "Create one"
+    },
+    "register": {
+      "title": "Create Account",
+      "name": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Create Account",
+      "hasAccount": "Already have an account?",
+      "login": "Sign in"
+    }
+  },
+  "product": {
+    "price": "Price",
+    "buyNow": "Buy Now",
+    "quantity": "Quantity",
+    "selectQty": "Select Amount",
+    "enterDetails": "Enter Details",
+    "category": "Category",
+    "provider": "Provider",
+    "autoDelivery": "Auto Delivery",
+    "manualDelivery": "Manual Delivery",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock"
+  },
+  "order": {
+    "status": {
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "fulfilled": "Fulfilled",
+      "pending_fulfillment": "Pending",
+      "failed": "Failed"
+    },
+    "serialCode": "Serial Code",
+    "copyCode": "Copy Code",
+    "copied": "Copied!",
+    "orderDate": "Order Date",
+    "total": "Total",
+    "quantity": "Quantity",
+    "noOrders": "No orders yet"
+  },
+  "deposit": {
+    "title": "Deposit Funds",
+    "amount": "Amount",
+    "proof": "Payment Proof",
+    "dragDrop": "Drag & drop image here, or click to browse",
+    "note": "Note (optional)",
+    "submit": "Submit Deposit",
+    "pending": "Pending Approval",
+    "history": "Deposit History"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "deposits": "Deposit Requests",
+    "categories": "Categories",
+    "providers": "Providers",
+    "products": "Products",
+    "settings": "Settings",
+    "approve": "Approve",
+    "reject": "Reject",
+    "topUp": "Top Up",
+    "profitMargin": "Profit Margin",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "pendingDeposits": "Pending Deposits",
+    "totalRevenue": "Total Revenue",
+    "activeProducts": "Active Products"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "close": "Close",
+    "confirm": "Confirm",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info"
+  }
+}
