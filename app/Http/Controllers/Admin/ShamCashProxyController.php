@@ -11,6 +11,11 @@ class ShamCashProxyController extends Controller
 {
     public function handle(Request $request, string $path = '')
     {
+        // Ensure trailing slash for root path
+        if ($path === '' && !str_ends_with($request->getPathInfo(), '/')) {
+            return redirect('/admin/sham-cash/');
+        }
+
         $bridgeUrl = config('services.sham_cash.bridge_url', 'http://127.0.0.1:3001');
         $target = rtrim($bridgeUrl, '/') . '/' . ltrim($path, '/');
 
