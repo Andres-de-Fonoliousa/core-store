@@ -105,7 +105,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
     <link rel="canonical" :href="canonicalUrl" />
 
     <meta property="og:type" content="product" />
-    <meta property="og:site_name" content="CoreS" />
+    <meta property="og:site_name" :content="$t('app.name')" />
     <meta property="og:title" :content="seoTitle" />
     <meta property="og:description" :content="seoDescription" />
     <meta property="og:url" :content="canonicalUrl" />
@@ -122,7 +122,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
     <JsonLdScript :data="storeJsonLd" />
   </Head>
 
-  <div dir="rtl" class="min-h-screen bg-[#050507] text-white relative overflow-x-hidden" style="font-family: 'Cairo', 'Space Grotesk', sans-serif;">
+  <div class="min-h-screen bg-[#050507] text-white relative overflow-x-hidden font-sans">
     <!-- Ambient -->
     <div class="fixed inset-0 pointer-events-none z-0">
       <div class="absolute inset-0 bg-[linear-gradient(to_right,#0f0f11_1px,transparent_1px),linear-gradient(to_bottom,#0f0f11_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
@@ -136,10 +136,10 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
           <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-cyan-500/10 border border-cyan-400/30">
             <Cpu class="w-4 h-4 text-cyan-400" />
           </div>
-          <span class="text-lg font-bold tracking-wider text-white" style="font-family: 'Space Grotesk', sans-serif;">CoreS</span>
+          <span class="text-lg font-bold tracking-wider text-white font-display">{{ $t('app.name') }}</span>
         </Link>
         <Link href="/products" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-1">
-          <ArrowLeft class="w-4 h-4" /> العودة للمنتجات
+          <ArrowLeft class="w-4 h-4" /> {{ $t('common.back') }}
         </Link>
       </div>
     </nav>
@@ -147,9 +147,9 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
     <main class="relative z-10 pt-24 pb-20 px-4 sm:px-6 lg:px-10 xl:px-16">
       <!-- Breadcrumb -->
       <div class="flex items-center gap-2 text-xs text-white/30 font-mono mb-6">
-        <Link href="/" class="hover:text-cyan-400 transition-colors">الرئيسية</Link>
+        <Link href="/" class="hover:text-cyan-400 transition-colors">{{ $t('nav.home') }}</Link>
         <span>/</span>
-        <Link href="/products" class="hover:text-cyan-400 transition-colors">المنتجات</Link>
+        <Link href="/products" class="hover:text-cyan-400 transition-colors">{{ $t('nav.products') }}</Link>
         <span>/</span>
         <span class="text-white/60 truncate max-w-[200px]">{{ product?.name }}</span>
       </div>
@@ -160,14 +160,14 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
             <CheckCircle class="w-6 h-6 text-emerald-400" />
           </div>
           <div>
-            <h3 class="text-lg font-bold text-white mb-1">تم تأكيد طلبك بنجاح!</h3>
-            <p class="text-sm text-white/60 mb-3">رقم الطلب: <span class="font-mono text-emerald-400">#{{ orderResult.id }}</span></p>
+            <h3 class="text-lg font-bold text-white mb-1">{{ $t('product.orderSuccess') }}</h3>
+            <p class="text-sm text-white/60 mb-3">{{ $t('product.orderNumber') }}: <span class="font-mono text-emerald-400">#{{ orderResult.id }}</span></p>
             <div class="flex gap-3">
               <Link :href="`/orders/${orderResult.id}`" class="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 rounded-lg hover:bg-emerald-400/20 transition-all">
-                <Package class="w-3.5 h-3.5" /> تفاصيل الطلب
+                <Package class="w-3.5 h-3.5" /> {{ $t('product.orderDetails') }}
               </Link>
               <Link href="/orders" class="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold bg-white/5 text-white border border-white/10 rounded-lg hover:bg-white/10 transition-all">
-                <ShoppingCart class="w-3.5 h-3.5" /> طلباتي
+                <ShoppingCart class="w-3.5 h-3.5" /> {{ $t('product.myOrders') }}
               </Link>
             </div>
           </div>
@@ -182,15 +182,15 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
               <img :src="product?.image || '/placeholder-product.png'" :alt="product?.name" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               <div class="absolute inset-0 bg-gradient-to-t from-[#050507] via-transparent to-transparent" />
               <div v-if="product?.status !== 'active'" class="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
-                <span class="px-4 py-2 bg-red-500/10 border border-red-400/20 rounded-lg text-red-400 text-sm font-semibold">المنتج غير متوفر حالياً</span>
+                <span class="px-4 py-2 bg-red-500/10 border border-red-400/20 rounded-lg text-red-400 text-sm font-semibold">{{ $t('product.notAvailable') }}</span>
               </div>
             </div>
             <div class="absolute top-4 right-4 flex flex-col gap-2">
               <span v-if="isAuto" class="px-3 py-1.5 text-[10px] font-mono font-semibold bg-cyan-500/15 text-cyan-400 border border-cyan-400/30 rounded-lg backdrop-blur-sm flex items-center gap-1.5">
-                <Zap class="w-3 h-3 fill-cyan-400/20" /> توصيل فوري
+                <Zap class="w-3 h-3 fill-cyan-400/20" /> {{ $t('product.autoDelivery') }}
               </span>
               <span v-if="product?.status === 'active'" class="px-3 py-1.5 text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-400/20 rounded-lg backdrop-blur-sm flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> متوفر
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> {{ $t('product.inStock') }}
               </span>
             </div>
           </div>
@@ -200,11 +200,11 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
         <div class="lg:col-span-7 space-y-6">
           <div>
             <div class="flex items-center gap-2 mb-3">
-              <span class="text-[11px] font-mono text-cyan-400/70 uppercase tracking-wider">{{ product?.category?.name || 'عام' }}</span>
+              <span class="text-[11px] font-mono text-cyan-400/70 uppercase tracking-wider">{{ product?.category?.name || $t('common.general') }}</span>
               <span class="w-1 h-1 rounded-full bg-white/20" />
-              <span class="text-[11px] font-mono text-white/40 uppercase tracking-wider">{{ product?.provider?.name || 'CoreS' }}</span>
+              <span class="text-[11px] font-mono text-white/40 uppercase tracking-wider">{{ product?.provider?.name || $t('app.name') }}</span>
             </div>
-            <h1 class="text-3xl md:text-4xl font-bold text-white leading-tight" style="font-family: 'Space Grotesk', sans-serif;">{{ product?.name }}</h1>
+            <h1 class="text-3xl md:text-4xl font-bold text-white leading-tight font-display">{{ product?.name }}</h1>
           </div>
 
           <!-- Price Card -->
@@ -212,10 +212,10 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
             <div class="absolute top-0 left-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-3xl" />
             <div class="relative flex items-end justify-between">
               <div>
-                <p class="text-[11px] font-mono text-white/40 uppercase tracking-wider mb-1">السعر</p>
+                <p class="text-[11px] font-mono text-white/40 uppercase tracking-wider mb-1">{{ $t('product.price') }}</p>
                 <div class="flex items-baseline gap-2">
                   <span class="text-4xl font-bold text-white font-mono tracking-tight">$ {{ totalPrice }}</span>
-                  <span v-if="quantity > 1" class="text-sm text-white/40">($ {{ fmtMoney(product?.price) }} للواحدة)</span>
+                  <span v-if="quantity > 1" class="text-sm text-white/40">($ {{ fmtMoney(product?.price) }} {{ $t('product.perUnit') }})</span>
                 </div>
               </div>
               <div v-if="product?.cost_price" class="text-right">
@@ -227,7 +227,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
 
           <!-- Quantity Selector -->
           <div v-if="qtyValues.length" class="space-y-3">
-            <label class="text-sm font-medium text-white/80">الكمية</label>
+            <label class="text-sm font-medium text-white/80">{{ $t('product.quantity') }}</label>
             <div class="flex flex-wrap gap-2">
               <button v-for="v in qtyValues" :key="v" @click="setQty(v)" class="px-4 py-2 text-sm rounded-xl border transition-all active:scale-95" :class="quantity === v ? 'bg-cyan-400/10 text-cyan-400 border-cyan-400/30' : 'bg-white/[0.02] text-white/50 border-white/5 hover:border-white/10 hover:text-white'">
                 {{ v }}
@@ -235,7 +235,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
             </div>
           </div>
           <div v-else class="flex items-center gap-4">
-            <label class="text-sm font-medium text-white/80">الكمية</label>
+            <label class="text-sm font-medium text-white/80">{{ $t('product.quantity') }}</label>
             <div class="flex items-center gap-3 bg-white/[0.02] border border-white/5 rounded-xl p-1">
               <button @click="decQty" class="w-9 h-9 flex items-center justify-center rounded-lg bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-colors"><Minus class="w-4 h-4" /></button>
               <span class="w-8 text-center font-mono font-bold text-white">{{ quantity }}</span>
@@ -246,10 +246,10 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
           <!-- Dynamic Fields -->
           <div v-if="params.length" class="space-y-4">
             <div class="h-px bg-white/5" />
-            <p class="text-sm font-medium text-white/80">معلومات مطلوبة</p>
+            <p class="text-sm font-medium text-white/80">{{ $t('product.requiredInfo') }}</p>
             <div v-for="param in params" :key="param" class="space-y-1.5">
               <label class="text-xs font-mono text-white/40 uppercase tracking-wider">{{ param }}</label>
-              <input v-model="formValues[param]" type="text" :placeholder="`أدخل ${param}`" class="w-full h-12 px-4 bg-white/[0.02] border border-white/10 rounded-xl text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-cyan-400/50 focus:bg-white/[0.03] transition-all" />
+              <input v-model="formValues[param]" type="text" :placeholder="`${$t('product.enterDetails')}: ${param}`" class="w-full h-12 px-4 bg-white/[0.02] border border-white/10 rounded-xl text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-cyan-400/50 focus:bg-white/[0.03] transition-all" />
             </div>
           </div>
 
@@ -258,10 +258,10 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
             <button @click="placeOrder" :disabled="product?.status !== 'active' || orderLoading" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 text-sm font-bold rounded-xl transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed" :class="product?.status === 'active' ? 'bg-cyan-400 text-black hover:bg-cyan-300 shadow-[0_0_30px_-5px_rgba(34,211,238,0.3)]' : 'bg-white/5 text-white/30 border border-white/5'">
               <Zap v-if="!orderLoading" class="w-4 h-4" />
               <div v-else class="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-              {{ orderLoading ? 'جاري المعالجة...' : 'اشترِ الآن' }}
+              {{ orderLoading ? $t('product.processing') : $t('product.buyNowAction') }}
             </button>
             <div v-if="!user" class="flex-1 flex items-center justify-center gap-2 px-6 py-4 text-sm text-white/40 border border-white/5 rounded-xl bg-white/[0.02]">
-              <User class="w-4 h-4" /> سجّل الدخول للشراء
+              <User class="w-4 h-4" /> {{ $t('product.loginToBuy') }}
             </div>
           </div>
 
@@ -269,15 +269,15 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
           <div class="flex flex-wrap items-center gap-4 pt-2">
             <div class="flex items-center gap-2 text-xs text-white/30">
               <ShieldCheck class="w-3.5 h-3.5 text-emerald-400" />
-              <span>دفع آمن</span>
+              <span>{{ $t('app.features.securePayment') }}</span>
             </div>
             <div class="flex items-center gap-2 text-xs text-white/30">
               <Zap class="w-3.5 h-3.5 text-cyan-400" />
-              <span>شحن فوري</span>
+              <span>{{ $t('app.features.instantDelivery') }}</span>
             </div>
             <div class="flex items-center gap-2 text-xs text-white/30">
               <Clock class="w-3.5 h-3.5 text-amber-400" />
-              <span>دعم 24/7</span>
+              <span>{{ $t('app.features.support247') }}</span>
             </div>
           </div>
         </div>

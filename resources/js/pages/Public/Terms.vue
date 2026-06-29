@@ -5,7 +5,7 @@ import { Cpu, FileText, AlertTriangle, CheckCircle } from 'lucide-vue-next';
 const sections = [
   {
     title: '1. المقدمة',
-    content: 'بتصفحك أو استخدامك لمنصة CoreS، فإنك توافق على الالتزام بهذه الشروط والأحكام. إذا كنت لا توافق على أي جزء منها، يجب عليك التوقف عن استخدام المنصة فوراً.',
+    content: 'بتصفحك أو استخدامك للمنصة، فإنك توافق على الالتزام بهذه الشروط والأحكام.',
   },
   {
     title: '2. المنتجات الرقمية',
@@ -29,7 +29,7 @@ const sections = [
   },
   {
     title: '7. حدود المسؤولية',
-    content: 'CoreS وسيط بينك وبين مزودي الخدمة. نحن نبذل قصارى جهدنا لضمان جودة المنتجات، لكننا لا نتحمل مسؤولية أعطال خارجة عن سيطرتنا في أنظمة المزودين.',
+    content: 'المنصة وسيط بينك وبين مزودي الخدمة. نبذل قصارى جهدنا لضمان جودة المنتجات، لكننا لا نتحمل مسؤولية أعطال خارجة عن سيطرتنا في أنظمة المزودين.',
   },
   {
     title: '8. التعديلات',
@@ -40,15 +40,15 @@ const sections = [
 
 <template>
   <Head title="الشروط والأحكام">
-    <meta name="description" content="الشروط والأحكام الخاصة باستخدام منصة CoreS للمنتجات الرقمية. تصفح وشراء واسترجاع — تعرف على حقوقك والتزاماتك." />
-    <meta property="og:title" content="الشروط والأحكام | CoreS" />
-    <meta property="og:description" content="الشروط والأحكام الخاصة باستخدام منصة CoreS للمنتجات الرقمية." />
+    <meta name="description" content="الشروط والأحكام الخاصة باستخدام المنصة للمنتجات الرقمية. تصفح وشراء واسترجاع — تعرف على حقوقك والتزاماتك." />
+    <meta property="og:title" content="الشروط والأحكام | المتجر" />
+    <meta property="og:description" content="الشروط والأحكام الخاصة باستخدام المنصة للمنتجات الرقمية." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ar_SY" />
     <meta name="twitter:card" content="summary" />
   </Head>
 
-  <div dir="rtl" class="min-h-screen bg-[#050507] text-white relative overflow-x-hidden" style="font-family: 'Cairo', 'Space Grotesk', sans-serif;">
+  <div class="min-h-screen bg-[#050507] text-white relative overflow-x-hidden font-sans">
     <div class="fixed inset-0 pointer-events-none z-0">
       <div class="absolute inset-0 bg-[linear-gradient(to_right,#0f0f11_1px,transparent_1px),linear-gradient(to_bottom,#0f0f11_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
     </div>
@@ -61,7 +61,7 @@ const sections = [
             <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-cyan-500/10 border border-cyan-400/30">
               <Cpu class="w-5 h-5 text-cyan-400" />
             </div>
-            <span class="text-xl font-bold tracking-wider text-white" style="font-family: 'Space Grotesk', sans-serif;">CoreS</span>
+            <span class="text-xl font-bold tracking-wider text-white font-display">{{ $t('app.name') }}</span>
           </Link>
           <div class="flex items-center gap-3">
             <Link href="/login" class="text-sm text-white/60 hover:text-white transition-colors px-4 py-2">تسجيل الدخول</Link>
@@ -77,7 +77,7 @@ const sections = [
             <FileText class="w-4 h-4 text-cyan-400" />
             <span class="text-xs font-mono text-cyan-400 tracking-wider uppercase">الشروط</span>
           </div>
-          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4" style="font-family: 'Space Grotesk', sans-serif;">
+          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4 font-display">
             الشروط والأحكام
           </h1>
           <p class="text-lg text-white/50 leading-relaxed">
@@ -127,7 +127,7 @@ const sections = [
                 <Cpu class="w-4 h-4 text-cyan-400" />
               </div>
               <div>
-                <span class="font-bold tracking-wider text-white text-sm" style="font-family: 'Space Grotesk', sans-serif;">CoreS</span>
+                <span class="font-bold tracking-wider text-white text-sm font-display">{{ $t('app.name') }}</span>
                 <p class="text-[10px] text-white/40 font-mono">منصة المنتجات الرقمية</p>
               </div>
             </div>
@@ -137,7 +137,7 @@ const sections = [
               <Link href="/terms" class="hover:text-cyan-400 transition-colors">الشروط</Link>
               <Link href="/privacy" class="hover:text-cyan-400 transition-colors">الخصوصية</Link>
             </div>
-            <p class="text-[10px] text-white/30 font-mono">&copy; 2026 CoreS. جميع الحقوق محفوظة.</p>
+            <p class="text-[10px] text-white/30 font-mono">&copy; {{ new Date().getFullYear() }} {{ $t('app.name') }}. {{ $t('auth.split.copyright') }}</p>
           </div>
         </div>
       </footer>

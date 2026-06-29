@@ -11,7 +11,7 @@ defineProps<{ title?: string; description?: string }>();
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   </Head>
 
-  <div class="min-h-screen bg-[#050507] text-white relative flex items-center justify-center p-6 md:p-10 overflow-x-hidden" style="font-family: 'Space Grotesk', 'Cairo', sans-serif;">
+  <div class="min-h-screen bg-[#050507] text-white relative flex items-center justify-center p-6 md:p-10 overflow-x-hidden font-sans">
     <!-- Ambient -->
     <div class="fixed inset-0 pointer-events-none z-0">
       <div class="absolute inset-0 bg-[linear-gradient(to_right,#0f0f11_1px,transparent_1px),linear-gradient(to_bottom,#0f0f11_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
@@ -25,7 +25,7 @@ defineProps<{ title?: string; description?: string }>();
         <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-cyan-500/10 border border-cyan-400/30">
           <Cpu class="w-5 h-5 text-cyan-400" />
         </div>
-        <span class="font-bold tracking-wider text-white text-xl" style="font-family: 'Space Grotesk', sans-serif;">CoreS</span>
+        <span class="font-bold tracking-wider text-white text-xl font-display">{{ $t('app.name') }}</span>
       </Link>
 
       <!-- Card -->
@@ -39,7 +39,7 @@ defineProps<{ title?: string; description?: string }>();
 
       <!-- Footer -->
       <p class="text-center text-[11px] text-white/30 font-mono flex items-center justify-center gap-1.5">
-        <Zap class="w-3 h-3 text-cyan-400/50" /> مُبنى للاعبين. يعمل بالنيون.
+        <Zap class="w-3 h-3 text-cyan-400/50" /> {{ $t('app.footerTagline') }}
       </p>
     </div>
   </div>
