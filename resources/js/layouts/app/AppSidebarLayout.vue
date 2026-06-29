@@ -24,7 +24,7 @@ const currentRoute = computed(() => page.url);
 
 const { t } = useI18n();
 
-const navItems = [
+const navItems = computed(() => [
   { label: t('admin.dashboard'), href: '/admin/dashboard', icon: LayoutDashboard },
   { label: t('admin.products'), href: '/admin/products', icon: Box },
   { label: t('admin.categories'), href: '/admin/categories', icon: Tag },
@@ -32,7 +32,7 @@ const navItems = [
   { label: t('admin.deposits'), href: '/admin/deposits', icon: CreditCard },
   { label: t('admin.transactions'), href: '/admin/transactions', icon: ArrowLeftRight },
   { label: t('admin.settings'), href: '/admin/settings', icon: Settings },
-];
+]);
 
 function isActive(href: string) {
   return currentRoute.value.startsWith(href);
