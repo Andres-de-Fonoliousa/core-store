@@ -10,6 +10,7 @@ import {
 import { Toaster } from '@/components/ui/sonner';
 import PageTransition from '@/components/PageTransition.vue';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
+import UserAccountDropdown from '@/components/UserAccountDropdown.vue';
 import NotificationDropdown from '@/components/NotificationDropdown.vue';
 
 const authStore = useAuthStore();
@@ -68,12 +69,7 @@ const navItems = [
             <Wallet class="w-4 h-4 text-cyan-400" />
             <span class="font-mono text-xs">$ {{ Number(authStore.user?.balance ?? 0).toFixed(2) }}</span>
           </Link>
-          <div class="hidden md:flex items-center gap-3 px-3 py-2 rounded-xl bg-white/[0.02] border border-white/5">
-            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-400/20 to-purple-400/20 border border-white/10 flex items-center justify-center">
-              <span class="text-xs font-bold text-white">{{ authStore.user?.name?.charAt(0) ?? 'A' }}</span>
-            </div>
-            <span class="text-sm font-medium text-white/80">{{ authStore.user?.name ?? 'User' }}</span>
-          </div>
+          <UserAccountDropdown v-if="authStore.user" />
         </div>
       </div>
 

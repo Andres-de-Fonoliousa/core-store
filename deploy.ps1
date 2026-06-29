@@ -21,7 +21,11 @@ git fetch /tmp/deploy.bundle master
 git reset --hard FETCH_HEAD
 cp /tmp/deploy.env .env 2>/dev/null || true
 
-echo "Bridge code updated"
+echo "Building assets..."
+npm ci 2>/dev/null || true
+npm run build
+
+echo "Deployed successfully"
 '@
 
 $cmdFile = "$env:TEMP\deploy_fix_v2.sh"

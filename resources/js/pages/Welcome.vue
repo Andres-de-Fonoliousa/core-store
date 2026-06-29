@@ -353,13 +353,9 @@ const stats = [
 
             <!-- CTAs -->
             <div class="reveal reveal-delay-3 flex flex-wrap gap-4">
-              <a href="#products" class="magnetic inline-flex items-center gap-2 px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-md hover:bg-primary/90 transition-all glow-primary">
+              <Link href="/browse" class="magnetic inline-flex items-center gap-2 px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-md hover:bg-primary/90 transition-all glow-primary">
                 <ShoppingCart class="w-4 h-4" />
                 {{ $t('home.hero.browseProducts') }}
-              </a>
-              <Link href="/register" class="magnetic inline-flex items-center gap-2 px-8 py-3.5 border border-primary/30 text-primary font-medium rounded-md hover:bg-primary/5 hover:border-primary/50 transition-all">
-                <Sparkles class="w-4 h-4" />
-                {{ $t('home.hero.createAccount') }}
               </Link>
             </div>
 
@@ -512,7 +508,7 @@ const stats = [
         </div>
 
         <div class="flex flex-col gap-3 items-center">
-          <div class="grid grid-cols-3 gap-3 max-w-[75%]">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full">
             <div
               v-for="(product, i) in firstRow"
               :key="product.id"
@@ -561,7 +557,7 @@ const stats = [
               </div>
             </div>
           </div>
-          <div v-if="secondRow.length" class="grid grid-cols-2 gap-3 max-w-[50%]">
+          <div v-if="secondRow.length" class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl">
             <div
               v-for="(product, i) in secondRow"
               :key="product.id"
