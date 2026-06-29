@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Link, usePage } from '@inertiajs/vue3';
 import { useAuthStore } from '@/stores/authStore';
@@ -19,14 +19,14 @@ const mobileMenu = ref(false);
 
 const { t } = useI18n();
 
-const navItems = [
+const navItems = computed(() => [
   { label: t('nav.home'), href: '/', icon: Home },
   { label: t('nav.dashboard'), href: '/dashboard', icon: LayoutDashboard },
   { label: t('nav.orders'), href: '/orders', icon: ShoppingBag },
   { label: t('nav.deposit'), href: '/deposit', icon: CreditCard },
   { label: t('nav.notifications'), href: '/notifications', icon: Bell },
   { label: t('nav.settings'), href: '/settings', icon: Settings },
-];
+]);
 </script>
 
 <template>
