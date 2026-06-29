@@ -6,6 +6,9 @@ import {
   Menu, X, Cpu, Zap, LogOut, Bell,
 } from 'lucide-vue-next';
 import { Toaster } from '@/components/ui/sonner';
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
+import ThemeToggle from '@/components/ThemeToggle.vue';
+import UserAccountDropdown from '@/components/UserAccountDropdown.vue';
 import type { BreadcrumbItem } from '@/types';
 
 type Props = { breadcrumbs?: BreadcrumbItem[] };
@@ -53,16 +56,13 @@ const currentRoute = computed(() => page.url);
 
         <!-- Right -->
         <div class="flex items-center gap-3">
+          <LanguageSwitcher />
+          <ThemeToggle />
           <button class="relative w-10 h-10 flex items-center justify-center rounded-lg border border-white/10 text-white/40 hover:text-white hover:bg-white/5 transition-all">
             <Bell class="w-4 h-4" />
             <span class="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-cyan-400" />
           </button>
-          <div class="hidden sm:flex items-center gap-3 px-3 py-2 rounded-xl bg-white/[0.02] border border-white/5">
-            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-400/20 to-purple-400/20 border border-white/10 flex items-center justify-center">
-              <span class="text-xs font-bold text-white">{{ authStore.user?.name?.charAt(0) ?? 'A' }}</span>
-            </div>
-            <span class="text-sm font-medium text-white/80">{{ authStore.user?.name ?? 'User' }}</span>
-          </div>
+          <UserAccountDropdown v-if="authStore.user" />
         </div>
       </div>
 

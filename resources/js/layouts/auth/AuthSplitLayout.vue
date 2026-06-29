@@ -2,6 +2,7 @@
 import { Link, usePage } from '@inertiajs/vue3';
 import { Cpu, Zap, ShieldCheck, Clock, Globe } from 'lucide-vue-next';
 import { home } from '@/routes';
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 
 const page = usePage();
 const name = page.props.name;
@@ -15,6 +16,10 @@ defineProps<{ title?: string; description?: string }>();
   </Head>
 
   <div class="min-h-screen bg-[#050507] text-white relative grid lg:grid-cols-2 overflow-x-hidden font-sans">
+    <!-- Language Switcher -->
+    <div class="absolute top-4 left-4 z-20">
+      <LanguageSwitcher />
+    </div>
     <!-- Left Panel -->
     <div class="relative hidden lg:flex flex-col p-10 border-r border-white/5 overflow-hidden">
       <!-- Ambient -->

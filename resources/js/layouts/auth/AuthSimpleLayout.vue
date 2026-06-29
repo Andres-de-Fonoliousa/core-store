@@ -2,6 +2,7 @@
 import { Link } from '@inertiajs/vue3';
 import { Cpu } from 'lucide-vue-next';
 import { home } from '@/routes';
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 
 defineProps<{ title?: string; description?: string }>();
 </script>
@@ -12,6 +13,10 @@ defineProps<{ title?: string; description?: string }>();
   </Head>
 
   <div class="min-h-screen bg-[#050507] text-white relative flex items-center justify-center p-6 md:p-10 overflow-x-hidden font-sans">
+    <!-- Language Switcher -->
+    <div class="absolute top-4 left-4 z-20">
+      <LanguageSwitcher />
+    </div>
     <!-- Ambient -->
     <div class="fixed inset-0 pointer-events-none z-0">
       <div class="absolute inset-0 bg-[linear-gradient(to_right,#0f0f11_1px,transparent_1px),linear-gradient(to_bottom,#0f0f11_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />

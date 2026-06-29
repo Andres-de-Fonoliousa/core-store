@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n';
 import {
   User, Lock, Palette, ChevronLeft,
 } from 'lucide-vue-next';
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit as editProfile } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
@@ -29,10 +30,13 @@ function isCurrent(href: string) {
 <template>
   <div class="space-y-8">
     <!-- Header -->
-    <div>
-      <span class="text-xs font-mono text-cyan-400 tracking-[0.2em] uppercase">{{ $t('settings.title') }}</span>
-      <h1 class="text-3xl font-bold tracking-tight mt-1 text-white">{{ $t('settings.heading') }}</h1>
-      <p class="text-sm text-white/40 mt-1">{{ $t('settings.description') }}</p>
+    <div class="flex items-start justify-between">
+      <div>
+        <span class="text-xs font-mono text-cyan-400 tracking-[0.2em] uppercase">{{ $t('settings.title') }}</span>
+        <h1 class="text-3xl font-bold tracking-tight mt-1 text-white">{{ $t('settings.heading') }}</h1>
+        <p class="text-sm text-white/40 mt-1">{{ $t('settings.description') }}</p>
+      </div>
+      <LanguageSwitcher />
     </div>
 
     <div class="flex flex-col lg:flex-row gap-8">
