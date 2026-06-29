@@ -31,3 +31,4 @@ yarn-error.log
 /sham-bridge/sessions
 /sham-bridge/public/build
 /deploy.bundle
+/auth-tmp
