@@ -4,6 +4,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createPinia } from 'pinia';
 import { i18n } from '@/i18n';
 import { useAuthStore } from '@/stores/authStore';
+import { useUiStore } from '@/stores/uiStore';
 import '../css/app.css';
 import '../css/theme.css';
 import AdminLayout from './layouts/AdminLayout.vue';
@@ -24,6 +25,7 @@ createInertiaApp({
         app.use(i18n);
 
         const authStore = useAuthStore();
+        const uiStore = useUiStore();
         const syncAuth = (pageProps: any) => {
             const user = pageProps?.auth?.user ?? null;
             const token = pageProps?.auth?.token ?? null;
@@ -37,6 +39,9 @@ createInertiaApp({
             }
         };
         syncAuth((props as any)?.initialPage?.props);
+
+        // Sync Pinia locale → i18n (ensures html dir/lang attrs are set)
+        uiStore.setLocale(uiStore.locale);
 
         app.mount(el);
 

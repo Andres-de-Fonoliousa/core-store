@@ -55,9 +55,12 @@
         </div>
 
         <!-- Awaiting scan indicator -->
-        <div v-if="state === 'awaiting_scan'" class="flex items-center justify-center gap-2 text-xs text-gray-500">
-          <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-          Waiting for scan...
+        <div v-if="state === 'awaiting_scan'" class="flex flex-col items-center gap-3">
+          <div class="flex items-center justify-center gap-2 text-xs text-gray-500">
+            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            Waiting for scan...
+          </div>
+          <button @click="checkStatus" class="text-[11px] text-gray-600 hover:text-purple-400 transition-colors underline underline-offset-2">Check connection status</button>
         </div>
 
         <!-- Status message -->
@@ -237,6 +240,7 @@ createApp({
     ];
 
     let es = null;
+    let pollTimer = null;
 
     // Balances
     const balances = ref([]);
@@ -283,6 +287,7 @@ createApp({
         if (d.status === 'ready') {
           authenticated.value = true;
           connecting.value = false;
+          stopPolling();
           loadProfile();
           loadBalances();
           loadTransactions();
@@ -293,12 +298,39 @@ createApp({
         const d = JSON.parse(e.data);
         if (d.image) qrImage.value = d.image;
         state.value = 'awaiting_scan';
+        startPolling();
       });
       es.addEventListener('error', e => {
         const d = JSON.parse(e.data);
         error.value = d.message;
       });
       es.onerror = () => {};
+    }
+
+    function startPolling() {
+      stopPolling();
+      pollTimer = setInterval(async () => {
+        try {
+          const r = await fetch(API_BASE + 'api/status');
+          const d = await r.json();
+          log('POLL_STATUS', d);
+          if (d.authenticated) {
+            authenticated.value = true;
+            connecting.value = false;
+            stopPolling();
+            statusMessage.value = 'Authenticated successfully';
+            loadProfile();
+            loadBalances();
+            loadTransactions();
+          }
+        } catch(e) {
+          log('POLL_STATUS_ERR', e.message);
+        }
+      }, 2000);
+    }
+
+    function stopPolling() {
+      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
     }
 
     async function initialize() {
@@ -333,6 +365,28 @@ createApp({
         }
       } catch(e) {}
       return false;
+    }
+
+    async function checkStatus() {
+      try {
+        const r = await fetch(API_BASE + 'api/status');
+        const d = await r.json();
+        log('CHECK_STATUS', d);
+        if (d.authenticated) {
+          authenticated.value = true;
+          connecting.value = false;
+          stopPolling();
+          statusMessage.value = 'Authenticated successfully';
+          loadProfile();
+          loadBalances();
+          loadTransactions();
+        } else {
+          statusMessage.value = 'Not yet authenticated (scanned? ' + (d.profile ? 'yes' : 'no') + ')';
+        }
+      } catch(e) {
+        log('CHECK_STATUS_ERR', e.message);
+        statusMessage.value = 'Status check failed: ' + e.message;
+      }
     }
 
     async function loadProfile() {
@@ -469,12 +523,12 @@ createApp({
       loading.value = false;
     });
 
-    onUnmounted(() => es?.close());
+    onUnmounted(() => { es?.close(); stopPolling(); });
 
     return {
       loading, authenticated, profileName, statusMessage, connecting, error,
       activeTab, tabs,
-      initialize, disconnect,
+      initialize, disconnect, checkStatus,
       balances, loadingBalances, balancesError, loadBalances,
       transactions, loadingTxs, txsError, page, hasMore, loadMore, resetTransactions,
       formatAmount, formatDate,

@@ -9,6 +9,9 @@ import {
   ChevronRight,
 } from 'lucide-vue-next';
 import { Toaster } from '@/components/ui/sonner';
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
+import ThemeToggle from '@/components/ThemeToggle.vue';
+import UserAccountDropdown from '@/components/UserAccountDropdown.vue';
 import type { BreadcrumbItem } from '@/types';
 
 type Props = { breadcrumbs?: BreadcrumbItem[] };
@@ -80,18 +83,7 @@ function isActive(href: string) {
 
         <!-- User -->
         <div class="p-4 border-t border-white/5">
-          <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.02] border border-white/5">
-            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400/20 to-purple-400/20 border border-white/10 flex items-center justify-center">
-              <span class="text-xs font-bold text-white">{{ authStore.user?.name?.charAt(0) ?? 'A' }}</span>
-            </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-white truncate">{{ authStore.user?.name ?? 'Admin' }}</p>
-              <p class="text-[10px] font-mono text-white/40 truncate">{{ authStore.user?.email ?? 'astroid198@gmail.com' }}</p>
-            </div>
-            <Link href="/logout" method="post" as="button" class="text-white/20 hover:text-red-400 transition-colors">
-              <LogOut class="w-4 h-4" />
-            </Link>
-          </div>
+          <UserAccountDropdown />
         </div>
       </div>
     </aside>
@@ -115,6 +107,8 @@ function isActive(href: string) {
           </div>
         </div>
         <div class="flex items-center gap-3">
+          <LanguageSwitcher />
+          <ThemeToggle />
           <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/5 border border-emerald-400/20">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span class="text-[10px] font-mono text-emerald-400 tracking-wider">{{ $t('admin.systemOnline') }}</span>
