@@ -33,7 +33,7 @@ onMounted(async () => {
 
 const { t } = useI18n();
 
-const navItems = [
+const navItems = computed(() => [
   { label: t('admin.storeHome'), href: '/', icon: Home },
   { label: t('admin.dashboard'), href: '/admin', icon: LayoutDashboard },
   { label: t('admin.orders'), href: '/admin/orders', icon: ShoppingBag },
@@ -48,7 +48,7 @@ const navItems = [
   { label: t('admin.analytics'), href: '/admin/kpi', icon: BarChart3 },
   { label: t('admin.pulse'), href: '/pulse', icon: Activity },
   { label: t('admin.settings'), href: '/admin/settings', icon: Settings },
-];
+]);
 
 function isActive(href: string) {
   return currentRoute.value.startsWith(href);

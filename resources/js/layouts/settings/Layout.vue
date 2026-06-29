@@ -16,11 +16,11 @@ const currentUrl = computed(() => page.url);
 
 const { t } = useI18n();
 
-const sidebarNavItems = [
+const sidebarNavItems = computed(() => [
   { title: t('settings.profile'), href: editProfile(), icon: User },
   { title: t('settings.security'), href: editSecurity(), icon: Lock },
   { title: t('settings.appearance'), href: editAppearance(), icon: Palette },
-];
+]);
 
 function isCurrent(href: string) {
   return currentUrl.value === href || currentUrl.value.startsWith(href + '/');

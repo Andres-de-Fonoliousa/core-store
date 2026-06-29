@@ -8,6 +8,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { useToast } from '@/composables/useToast';
 import { parseApiError } from '@/lib/errors';
 import { logout } from '@/routes';
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import { 
   Gamepad2, Zap, Shield, Clock, ChevronLeft, ChevronRight,
   ShoppingCart, CreditCard, Gift, Download, Sparkles,
@@ -249,6 +250,7 @@ const stats = [
           <a href="#products" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">{{ $t('nav.products') }}</a>
           <a href="#categories" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">{{ $t('home.section.browse') }}</a>
           <a href="#how" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">{{ $t('home.howItWorks.title') }}</a>
+          <LanguageSwitcher />
           <!-- Auth user dropdown -->
           <div v-if="user" ref="userMenuRef" class="relative">
             <button @click="userMenuOpen = !userMenuOpen" class="flex items-center gap-2 px-3 py-2 text-sm font-medium bg-primary/5 text-primary border border-primary/20 rounded-md hover:bg-primary/10 hover:border-primary/40 transition-all">
@@ -299,6 +301,7 @@ const stats = [
           <a href="#products" class="text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">{{ $t('nav.products') }}</a>
           <a href="#categories" class="text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">{{ $t('home.section.browse') }}</a>
           <a href="#how" class="text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">{{ $t('home.howItWorks.title') }}</a>
+          <div class="py-2"><LanguageSwitcher /></div>
           <!-- Auth'd: profile/settings/logout -->
           <template v-if="user">
             <div class="h-px bg-primary/10 my-1" />
