@@ -389,37 +389,37 @@ const stats = [
                 <div class="w-3 h-3 rounded-full bg-danger/80" />
                 <div class="w-3 h-3 rounded-full bg-warning/80" />
                 <div class="w-3 h-3 rounded-full bg-success/80" />
-                <span class="mr-auto text-[10px] font-mono text-muted-foreground">cores://terminal</span>
+                <span class="mr-auto text-[10px] font-mono text-muted-foreground">cores://{{ $t('home.terminal.systemStatus') }}</span>
               </div>
               <!-- Terminal Body -->
               <div class="p-5 font-mono text-xs space-y-3">
                 <div class="flex items-center gap-2">
                   <span class="text-primary">&gt;</span>
-                  <span class="text-muted-foreground">system.status</span>
+                  <span class="text-muted-foreground">{{ $t('home.terminal.systemStatus') }}</span>
                 </div>
                 <div class="flex items-center gap-3">
-                  <span class="text-muted-foreground w-20 text-right">الاستقرار</span>
+                  <span class="text-muted-foreground w-20 text-right">{{ $t('home.terminal.stability') }}</span>
                   <div class="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
                     <div class="h-full w-[99.9%] rounded-full bg-gradient-to-r from-primary to-success" />
                   </div>
                   <span class="text-success text-[10px]">99.9%</span>
                 </div>
                 <div class="flex items-center gap-3">
-                  <span class="text-muted-foreground w-20 text-right">التوصيل</span>
+                  <span class="text-muted-foreground w-20 text-right">{{ $t('home.terminal.delivery') }}</span>
                   <div class="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
                     <div class="h-full w-[98%] rounded-full bg-primary" />
                   </div>
-                  <span class="text-primary text-[10px]">3.2ث</span>
+                  <span class="text-primary text-[10px]">3.2{{ $t('home.terminal.seconds') }}</span>
                 </div>
                 <div class="flex items-center gap-3">
-                  <span class="text-muted-foreground w-20 text-right">المخزون</span>
+                  <span class="text-muted-foreground w-20 text-right">{{ $t('home.terminal.inventory') }}</span>
                   <div class="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
                     <div class="h-full w-[85%] rounded-full bg-gradient-to-r from-purple-400 to-primary" />
                   </div>
                   <span class="text-purple-400 text-[10px]">85%</span>
                 </div>
                 <div class="flex items-center gap-3">
-                  <span class="text-muted-foreground w-20 text-right">الأمان</span>
+                  <span class="text-muted-foreground w-20 text-right">{{ $t('home.terminal.security') }}</span>
                   <div class="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
                     <div class="h-full w-full rounded-full bg-success" />
                   </div>
@@ -428,16 +428,16 @@ const stats = [
                 <div class="pt-3 border-t border-primary/10">
                   <div class="flex items-center gap-2">
                     <span class="text-primary">&gt;</span>
-                    <span class="text-muted-foreground">order.place —product steam_50</span>
+                    <span class="text-muted-foreground">{{ $t('home.terminal.placeOrder') }} —product steam_50</span>
                   </div>
                   <div class="mt-1.5 pr-4 text-[10px]">
-                    <span class="text-success">✓</span> <span class="text-muted-foreground">تم تأكيد الطلب</span>
+                    <span class="text-success">✓</span> <span class="text-muted-foreground">{{ $t('home.terminal.orderConfirmed') }}</span>
                   </div>
                   <div class="pr-4 text-[10px]">
-                    <span class="text-success">✓</span> <span class="text-muted-foreground">تمت معالجة الدفع</span>
+                    <span class="text-success">✓</span> <span class="text-muted-foreground">{{ $t('home.terminal.paymentProcessed') }}</span>
                   </div>
                   <div class="pr-4 text-[10px]">
-                    <span class="text-success">✓</span> <span class="text-muted-foreground">تم الشحن التلقائي على الحساب</span>
+                    <span class="text-success">✓</span> <span class="text-muted-foreground">{{ $t('home.terminal.autoShipped') }}</span>
                   </div>
                   <div class="mt-2 pr-4">
                     <span class="text-primary">&gt;</span> <span class="cursor-blink" />
@@ -541,7 +541,7 @@ const stats = [
                   <span class="w-0.5 h-0.5 rounded-full bg-muted-foreground/30" />
                   <span class="text-[9px] font-mono text-success uppercase tracking-wider flex items-center gap-0.5">
                     <span class="w-0.5 h-0.5 rounded-full bg-success animate-pulse" />
-                    متوفر
+                    {{ $t('product.inStock') }}
                   </span>
                 </div>
                 <h3 class="text-xs font-semibold text-white group-hover:text-primary transition-colors mb-1 leading-tight">
@@ -589,7 +589,7 @@ const stats = [
                   <span class="w-0.5 h-0.5 rounded-full bg-muted-foreground/30" />
                   <span class="text-[9px] font-mono text-success uppercase tracking-wider flex items-center gap-0.5">
                     <span class="w-0.5 h-0.5 rounded-full bg-success animate-pulse" />
-                    متوفر
+                    {{ $t('product.inStock') }}
                   </span>
                 </div>
                 <h3 class="text-xs font-semibold text-white group-hover:text-primary transition-colors mb-1 leading-tight">

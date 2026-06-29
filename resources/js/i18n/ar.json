@@ -179,6 +179,18 @@
       "step4Desc": "انطلق في اللعب مباشرة بدون أي خطوات إضافية",
       "stepLabel": "خطوة"
     },
+    "terminal": {
+      "stability": "الاستقرار",
+      "delivery": "التوصيل",
+      "inventory": "المخزون",
+      "security": "الأمان",
+      "seconds": "ث",
+      "orderConfirmed": "تم تأكيد الطلب",
+      "paymentProcessed": "تمت معالجة الدفع",
+      "autoShipped": "تم الشحن التلقائي على الحساب",
+      "placeOrder": "order.place",
+      "systemStatus": "system.status"
+    },
     "section": {
       "featured": "مميز",
       "mostRequested": "الأكثر طلباً",
