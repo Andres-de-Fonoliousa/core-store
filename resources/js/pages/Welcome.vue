@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { onClickOutside } from '@vueuse/core';
 import { useApi } from '@/composables/useApi';
 import { useAuthStore } from '@/stores/authStore';
@@ -198,29 +199,31 @@ async function fetchCategories() {
   }
 }
 
+const { t } = useI18n();
+
 const steps = [
-  { num: '01', title: 'اختر', desc: 'تصفح الكتالوج واختر بطاقتك المفضلة', icon: ShoppingCart, color: 'text-cyan-400', border: 'border-cyan-500/20', bg: 'bg-cyan-500/5' },
-  { num: '02', title: 'ادفع', desc: 'دفع آمن باستخدام رصيدك أو إيداع جديد', icon: CreditCard, color: 'text-purple-400', border: 'border-purple-500/20', bg: 'bg-purple-500/5' },
-  { num: '03', title: 'شحن فوري', desc: 'يتم شحن اللعبة تلقائياً — لا أكواد، لا تعقيد', icon: Zap, color: 'text-emerald-400', border: 'border-emerald-500/20', bg: 'bg-emerald-500/5' },
-  { num: '04', title: 'العب', desc: 'انطلق في اللعب مباشرة بدون أي خطوات إضافية', icon: Gamepad2, color: 'text-amber-400', border: 'border-amber-500/20', bg: 'bg-amber-500/5' },
+  { num: '01', title: t('home.howItWorks.step1'), desc: t('home.howItWorks.step1Desc'), icon: ShoppingCart, color: 'text-cyan-400', border: 'border-cyan-500/20', bg: 'bg-cyan-500/5' },
+  { num: '02', title: t('home.howItWorks.step2'), desc: t('home.howItWorks.step2Desc'), icon: CreditCard, color: 'text-purple-400', border: 'border-purple-500/20', bg: 'bg-purple-500/5' },
+  { num: '03', title: t('home.howItWorks.step3'), desc: t('home.howItWorks.step3Desc'), icon: Zap, color: 'text-emerald-400', border: 'border-emerald-500/20', bg: 'bg-emerald-500/5' },
+  { num: '04', title: t('home.howItWorks.step4'), desc: t('home.howItWorks.step4Desc'), icon: Gamepad2, color: 'text-amber-400', border: 'border-amber-500/20', bg: 'bg-amber-500/5' },
 ];
 
 const stats = [
-  { label: 'طلبات منجزة', value: '50000', suffix: '+', icon: Package, sparkline: 'M0,20 L15,18 L30,15 L45,16 L60,10 L75,12 L90,6 L105,8 L120,2' },
-  { label: 'لاعب سعيد', value: '12000', suffix: '+', icon: Users, sparkline: 'M0,18 L20,15 L40,12 L60,14 L80,8 L100,10 L120,4' },
-  { label: 'استقرار النظام', value: '99', suffix: '.9%', icon: Shield, sparkline: 'M0,4 L20,3 L40,5 L60,2 L80,3 L100,2 L120,1' },
-  { label: 'متوسط التوصيل', value: '3', suffix: 'ث', icon: Clock, sparkline: 'M0,18 L15,14 L30,16 L45,10 L60,12 L75,8 L90,6 L105,5 L120,4' },
+  { label: t('home.stats.ordersCompleted'), value: '50000', suffix: '+', icon: Package, sparkline: 'M0,20 L15,18 L30,15 L45,16 L60,10 L75,12 L90,6 L105,8 L120,2' },
+  { label: t('home.stats.happyPlayers'), value: '12000', suffix: '+', icon: Users, sparkline: 'M0,18 L20,15 L40,12 L60,14 L80,8 L100,10 L120,4' },
+  { label: t('home.stats.systemUptime'), value: '99', suffix: '.9%', icon: Shield, sparkline: 'M0,4 L20,3 L40,5 L60,2 L80,3 L100,2 L120,1' },
+  { label: t('home.stats.avgDelivery'), value: '3', suffix: 's', icon: Clock, sparkline: 'M0,18 L15,14 L30,16 L45,10 L60,12 L75,8 L90,6 L105,5 L120,4' },
 ];
 </script>
 
 <template>
-  <Head title="مرحباً">
+  <Head :title="$t('nav.home')">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet" />
   </Head>
 
-  <div dir="rtl" class="min-h-screen bg-background text-foreground relative overflow-x-hidden" style="font-family: 'Cairo', 'Inter', system-ui, sans-serif;">
+  <div class="min-h-screen bg-background text-foreground relative overflow-x-hidden font-sans">
     <!-- ═══ Background Grid ═══ -->
     <div class="fixed inset-0 bg-grid pointer-events-none z-0" />
     <div class="fixed inset-0 pointer-events-none z-0" style="background: radial-gradient(ellipse at 50% 0%, hsl(186 100% 55% / 0.04) 0%, transparent 60%)" />
@@ -236,16 +239,16 @@ const stats = [
           <div class="w-8 h-8 rounded-md flex items-center justify-center border border-primary/30 bg-primary/10 glow-primary">
             <Cpu class="w-4 h-4 text-primary" />
           </div>
-          <span class="font-display text-lg font-bold tracking-wider text-white group-hover:text-primary transition-colors" style="font-family: 'Orbitron', 'Cairo', sans-serif;">
-            CoreS
+          <span class="font-display text-lg font-bold tracking-wider text-white group-hover:text-primary transition-colors">
+            {{ $t('app.name') }}
           </span>
         </Link>
 
         <!-- Desktop Nav -->
         <div class="hidden md:flex items-center gap-8">
-          <a href="#products" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">المنتجات</a>
-          <a href="#categories" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">الفئات</a>
-          <a href="#how" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">كيف يعمل</a>
+          <a href="#products" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">{{ $t('nav.products') }}</a>
+          <a href="#categories" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">{{ $t('home.section.browse') }}</a>
+          <a href="#how" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">{{ $t('home.howItWorks.title') }}</a>
           <!-- Auth user dropdown -->
           <div v-if="user" ref="userMenuRef" class="relative">
             <button @click="userMenuOpen = !userMenuOpen" class="flex items-center gap-2 px-3 py-2 text-sm font-medium bg-primary/5 text-primary border border-primary/20 rounded-md hover:bg-primary/10 hover:border-primary/40 transition-all">
@@ -258,22 +261,22 @@ const stats = [
             <div v-if="userMenuOpen" class="absolute left-0 top-full mt-2 w-48 bg-card border border-primary/10 rounded-lg shadow-2xl shadow-black/50 backdrop-blur-xl overflow-hidden z-50">
               <div class="p-1.5 flex flex-col gap-0.5">
                 <Link href="/settings/profile" class="flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:text-white hover:bg-primary/5 rounded-md transition-colors" @click="userMenuOpen = false">
-                  <User class="w-4 h-4 text-primary/70" /> الملف الشخصي
+                  <User class="w-4 h-4 text-primary/70" /> {{ $t('nav.profile') }}
                 </Link>
                 <Link href="/settings/appearance" class="flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:text-white hover:bg-primary/5 rounded-md transition-colors" @click="userMenuOpen = false">
-                  <Settings class="w-4 h-4 text-primary/70" /> الإعدادات
+                  <Settings class="w-4 h-4 text-primary/70" /> {{ $t('nav.settings') }}
                 </Link>
                 <div class="h-px bg-primary/10 my-1" />
                 <Link :href="logout()" as="button" class="flex items-center gap-3 px-3 py-2 text-sm text-red-400/70 hover:text-red-400 hover:bg-red-500/5 rounded-md transition-colors w-full text-right" @click="userMenuOpen = false">
-                  <LogOut class="w-4 h-4" /> تسجيل الخروج
+                  <LogOut class="w-4 h-4" /> {{ $t('nav.logout') }}
                 </Link>
               </div>
             </div>
           </div>
           <!-- Guest: login/register -->
-          <Link v-if="!user" href="/login" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">تسجيل الدخول</Link>
+          <Link v-if="!user" href="/login" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">{{ $t('nav.login') }}</Link>
           <Link v-if="!user" href="/register" class="magnetic px-5 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-all glow-primary">
-            ابدأ الآن
+            {{ $t('nav.startNow') }}
           </Link>
         </div>
 
@@ -281,7 +284,7 @@ const stats = [
         <button
           class="md:hidden w-10 h-10 flex items-center justify-center text-white"
           @click="mobileMenuOpen = !mobileMenuOpen"
-          aria-label="القائمة"
+          aria-label="Menu"
         >
           <component :is="mobileMenuOpen ? ChevronRight : ChevronLeft" class="w-5 h-5" />
         </button>
@@ -293,27 +296,27 @@ const stats = [
         class="md:hidden glass-strong border-t border-primary/10"
       >
         <div class="px-6 py-4 flex flex-col gap-3">
-          <a href="#products" class="text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">المنتجات</a>
-          <a href="#categories" class="text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">الفئات</a>
-          <a href="#how" class="text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">كيف يعمل</a>
+          <a href="#products" class="text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">{{ $t('nav.products') }}</a>
+          <a href="#categories" class="text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">{{ $t('home.section.browse') }}</a>
+          <a href="#how" class="text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">{{ $t('home.howItWorks.title') }}</a>
           <!-- Auth'd: profile/settings/logout -->
           <template v-if="user">
             <div class="h-px bg-primary/10 my-1" />
             <Link href="/settings/profile" class="flex items-center gap-3 text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">
-              <User class="w-4 h-4 text-primary/70" /> الملف الشخصي
+              <User class="w-4 h-4 text-primary/70" /> {{ $t('nav.profile') }}
             </Link>
             <Link href="/settings/appearance" class="flex items-center gap-3 text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">
-              <Settings class="w-4 h-4 text-primary/70" /> الإعدادات
+              <Settings class="w-4 h-4 text-primary/70" /> {{ $t('nav.settings') }}
             </Link>
             <Link :href="logout()" as="button" class="flex items-center gap-3 text-sm text-red-400/70 hover:text-red-400 py-2" @click="mobileMenuOpen = false">
-              <LogOut class="w-4 h-4" /> تسجيل الخروج
+              <LogOut class="w-4 h-4" /> {{ $t('nav.logout') }}
             </Link>
           </template>
           <!-- Guest: login/register -->
           <template v-if="!user">
-            <Link href="/login" class="text-sm text-muted-foreground hover:text-primary py-2">تسجيل الدخول</Link>
+            <Link href="/login" class="text-sm text-muted-foreground hover:text-primary py-2">{{ $t('nav.login') }}</Link>
             <Link href="/register" class="px-5 py-2.5 text-sm font-medium bg-primary text-primary-foreground rounded-md text-center glow-primary">
-              ابدأ الآن
+              {{ $t('nav.register') }}
             </Link>
           </template>
         </div>
@@ -332,31 +335,31 @@ const stats = [
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-success" />
               </span>
-              <span class="text-xs font-mono text-success tracking-wider uppercase">النظام متصل — توصيل فوري</span>
+              <span class="text-xs font-mono text-success tracking-wider uppercase">{{ $t('app.systemStatus') }}</span>
             </div>
 
             <!-- Headline -->
-            <h1 class="reveal reveal-delay-1 text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.15] tracking-tight" style="font-family: 'Cairo', 'Orbitron', sans-serif;">
-              <span class="block text-white">بطاقات رقمية</span>
-              <span class="block text-gradient mt-2">توصيل فوري</span>
-              <span class="block text-white/60 mt-2 text-3xl md:text-4xl lg:text-5xl font-light">بدون انتظار</span>
+            <h1 class="reveal reveal-delay-1 text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.15] tracking-tight font-display">
+              <span class="block text-white">{{ $t('home.hero.title1') }}</span>
+              <span class="block text-gradient mt-2">{{ $t('home.hero.title2') }}</span>
+              <span class="block text-white/60 mt-2 text-3xl md:text-4xl lg:text-5xl font-light">{{ $t('home.hero.title3') }}</span>
             </h1>
 
             <!-- Description -->
             <p class="reveal reveal-delay-2 text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed">
-              وجهتك الأولى لبطاقات الألعاب والاشتراكات الرقمية. شحن تلقائي في ثوانٍ.
-              آمن. سريع. مُبنى للاعبين.
+              {{ $t('home.hero.description') }}<br>
+              {{ $t('home.hero.subtitle') }}
             </p>
 
             <!-- CTAs -->
             <div class="reveal reveal-delay-3 flex flex-wrap gap-4">
               <a href="#products" class="magnetic inline-flex items-center gap-2 px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-md hover:bg-primary/90 transition-all glow-primary">
                 <ShoppingCart class="w-4 h-4" />
-                تصفح المنتجات
+                {{ $t('home.hero.browseProducts') }}
               </a>
               <Link href="/register" class="magnetic inline-flex items-center gap-2 px-8 py-3.5 border border-primary/30 text-primary font-medium rounded-md hover:bg-primary/5 hover:border-primary/50 transition-all">
                 <Sparkles class="w-4 h-4" />
-                إنشاء حساب
+                {{ $t('home.hero.createAccount') }}
               </Link>
             </div>
 
@@ -364,17 +367,17 @@ const stats = [
             <div class="reveal reveal-delay-4 flex items-center gap-6 pt-4">
               <div class="flex items-center gap-2">
                 <Shield class="w-4 h-4 text-success" />
-                <span class="text-xs text-muted-foreground">SSL مشفر</span>
+                <span class="text-xs text-muted-foreground">{{ $t('app.features.sslEncrypted') }}</span>
               </div>
               <div class="w-px h-4 bg-border" />
               <div class="flex items-center gap-2">
                 <Zap class="w-4 h-4 text-warning" />
-                <span class="text-xs text-muted-foreground">شحن تلقائي</span>
+                <span class="text-xs text-muted-foreground">{{ $t('app.features.autoDelivery') }}</span>
               </div>
               <div class="w-px h-4 bg-border" />
               <div class="flex items-center gap-2">
                 <Clock class="w-4 h-4 text-primary" />
-                <span class="text-xs text-muted-foreground">دعم 24/7</span>
+                <span class="text-xs text-muted-foreground">{{ $t('app.features.support247') }}</span>
               </div>
             </div>
           </div>
@@ -497,13 +500,13 @@ const stats = [
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
           <div>
-            <span class="section-label reveal">مميز</span>
-            <h2 class="text-3xl md:text-4xl font-bold tracking-tight mt-3 reveal reveal-delay-1" style="font-family: 'Cairo', 'Orbitron', sans-serif;">
-              الأكثر طلباً <span class="text-gradient">//</span>
+            <span class="section-label reveal">{{ $t('home.section.featured') }}</span>
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight mt-3 reveal reveal-delay-1 font-display">
+              {{ $t('home.section.mostRequested') }} <span class="text-gradient">//</span>
             </h2>
           </div>
           <Link href="/browse" class="reveal reveal-delay-2 inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors group">
-            عرض الكل
+            {{ $t('product.showAll') }}
             <ArrowLeft class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -535,7 +538,7 @@ const stats = [
               </div>
               <div class="p-2">
                 <div class="flex items-center gap-1 mb-1">
-                  <span class="text-[9px] font-mono text-muted-foreground uppercase tracking-wider">{{ product.category?.name || 'عام' }}</span>
+                  <span class="text-[9px] font-mono text-muted-foreground uppercase tracking-wider">{{ product.category?.name || $t('common.general') }}</span>
                   <span class="w-0.5 h-0.5 rounded-full bg-muted-foreground/30" />
                   <span class="text-[9px] font-mono text-success uppercase tracking-wider flex items-center gap-0.5">
                     <span class="w-0.5 h-0.5 rounded-full bg-success animate-pulse" />
@@ -552,7 +555,7 @@ const stats = [
                     class="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-medium bg-primary/10 text-primary border border-primary/20 rounded-md hover:bg-primary/20 hover:border-primary/40 transition-all"
                   >
                     <ShoppingCart class="w-2.5 h-2.5" />
-                    اشترِ
+                    {{ $t('product.buyNowAction') }}
                   </Link>
                 </div>
               </div>
@@ -583,7 +586,7 @@ const stats = [
               </div>
               <div class="p-2">
                 <div class="flex items-center gap-1 mb-1">
-                  <span class="text-[9px] font-mono text-muted-foreground uppercase tracking-wider">{{ product.category?.name || 'عام' }}</span>
+                  <span class="text-[9px] font-mono text-muted-foreground uppercase tracking-wider">{{ product.category?.name || $t('common.general') }}</span>
                   <span class="w-0.5 h-0.5 rounded-full bg-muted-foreground/30" />
                   <span class="text-[9px] font-mono text-success uppercase tracking-wider flex items-center gap-0.5">
                     <span class="w-0.5 h-0.5 rounded-full bg-success animate-pulse" />
@@ -600,7 +603,7 @@ const stats = [
                     class="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-medium bg-primary/10 text-primary border border-primary/20 rounded-md hover:bg-primary/20 hover:border-primary/40 transition-all"
                   >
                     <ShoppingCart class="w-2.5 h-2.5" />
-                    اشترِ
+                    {{ $t('product.buyNowAction') }}
                   </Link>
                 </div>
               </div>
@@ -614,9 +617,9 @@ const stats = [
     <section id="categories" class="py-24 md:py-32 border-t border-primary/5">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
-          <span class="section-label reveal">تصفح</span>
-          <h2 class="text-3xl md:text-4xl font-bold tracking-tight mt-3 reveal reveal-delay-1" style="font-family: 'Cairo', 'Orbitron', sans-serif;">
-            تسوق حسب الفئة <span class="text-gradient">//</span>
+          <span class="section-label reveal">{{ $t('home.section.browse') }}</span>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight mt-3 reveal reveal-delay-1 font-display">
+            {{ $t('home.section.shopByCategory') }} <span class="text-gradient">//</span>
           </h2>
         </div>
 
@@ -633,7 +636,7 @@ const stats = [
                 <component :is="cat.icon" class="w-6 h-6 text-primary" />
               </div>
               <h3 class="font-semibold text-white mb-1">{{ cat.name }}</h3>
-              <span class="text-xs font-mono text-muted-foreground">{{ cat.count }} منتج</span>
+              <span class="text-xs font-mono text-muted-foreground">{{ cat.count }} {{ $t('common.product') }}</span>
             </div>
           </div>
         </div>
@@ -644,9 +647,9 @@ const stats = [
     <section id="how" class="py-24 md:py-32 border-t border-primary/5">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
-          <span class="section-label reveal">الخطوات</span>
-          <h2 class="text-3xl md:text-4xl font-bold tracking-tight mt-3 reveal reveal-delay-1" style="font-family: 'Cairo', 'Orbitron', sans-serif;">
-            كيف يعمل <span class="text-gradient">//</span>
+          <span class="section-label reveal">{{ $t('home.howItWorks.title') }}</span>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight mt-3 reveal reveal-delay-1 font-display">
+            {{ $t('home.howItWorks.title') }} <span class="text-gradient">//</span>
           </h2>
         </div>
 
@@ -664,7 +667,7 @@ const stats = [
               <div class="w-12 h-12 mx-auto mb-4 rounded-lg flex items-center justify-center" :class="step.bg">
                 <component :is="step.icon" class="w-5 h-5" :class="step.color" />
               </div>
-              <div class="font-mono text-[10px] tracking-wider mb-2" :class="step.color">خطوة {{ step.num }}</div>
+              <div class="font-mono text-[10px] tracking-wider mb-2" :class="step.color">{{ $t('home.howItWorks.stepLabel') }} {{ step.num }}</div>
               <h3 class="font-semibold text-white mb-2">{{ step.title }}</h3>
               <p class="text-xs text-muted-foreground leading-relaxed">{{ step.desc }}</p>
             </div>
@@ -677,22 +680,22 @@ const stats = [
     <section class="py-24 md:py-32 border-t border-primary/5 relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
       <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-        <span class="section-label reveal">جاهز؟</span>
-        <h2 class="text-3xl md:text-5xl font-bold tracking-tight mt-6 leading-tight reveal reveal-delay-1" style="font-family: 'Cairo', 'Orbitron', sans-serif;">
-          اشحن رصيدك.<br><span class="text-gradient">وانطلق في اللعب الآن.</span>
+        <span class="section-label reveal">{{ $t('home.section.ready') }}</span>
+        <h2 class="text-3xl md:text-5xl font-bold tracking-tight mt-6 leading-tight reveal reveal-delay-1 font-display">
+          {{ $t('home.section.depositAndPlay') }}
         </h2>
         <p class="mt-6 text-muted-foreground max-w-lg mx-auto leading-relaxed reveal reveal-delay-2">
-          انضم إلى آلاف اللاعبين الذين يثقون بـ CoreS للتوصيل الفوري.
-          لا انتظار. لا تعقيد. فقط لعب.
+          {{ $t('home.hero.description') }}<br>
+          {{ $t('home.hero.subtitle') }}
         </p>
         <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 reveal reveal-delay-3">
           <Link href="/register" class="magnetic inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-md hover:bg-primary/90 transition-all glow-primary">
             <Zap class="w-4 h-4" />
-            إنشاء حساب مجاني
+            {{ $t('home.hero.createAccount') }}
           </Link>
           <Link href="/deposit" class="magnetic inline-flex items-center gap-2 px-8 py-4 border border-primary/30 text-primary font-medium rounded-md hover:bg-primary/5 hover:border-primary/50 transition-all">
             <CreditCard class="w-4 h-4" />
-            إيداع رصيد
+            {{ $t('nav.deposit') }}
           </Link>
         </div>
       </div>
@@ -707,10 +710,10 @@ const stats = [
               <div class="w-7 h-7 rounded-md flex items-center justify-center border border-primary/30 bg-primary/10">
                 <Cpu class="w-3.5 h-3.5 text-primary" />
               </div>
-              <span class="font-bold tracking-wider text-white" style="font-family: 'Orbitron', 'Cairo', sans-serif;">CoreS</span>
+              <span class="font-bold tracking-wider text-white font-display">{{ $t('app.name') }}</span>
             </div>
             <p class="text-xs text-muted-foreground mt-2 max-w-sm leading-relaxed">
-              سوق البطاقات الرقمية المتميز. توصيل فوري للاعبين، من لاعبين.
+              {{ $t('app.tagline') }}
             </p>
           </div>
           <div class="flex items-center gap-6">
@@ -726,8 +729,8 @@ const stats = [
           </div>
         </div>
         <div class="mt-8 pt-6 border-t border-primary/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p class="text-[11px] text-muted-foreground">&copy; 2026 CoreS. جميع الحقوق محفوظة.</p>
-          <p class="text-[11px] text-muted-foreground font-mono">مُبنى للاعبين. يعمل بالنيون.</p>
+          <p class="text-[11px] text-muted-foreground">&copy; {{ new Date().getFullYear() }} {{ $t('app.name') }}. {{ $t('auth.split.copyright') }}</p>
+          <p class="text-[11px] text-muted-foreground font-mono">{{ $t('app.footerTagline') }}</p>
         </div>
       </div>
     </footer>

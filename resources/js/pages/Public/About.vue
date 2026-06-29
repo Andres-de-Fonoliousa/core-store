@@ -21,17 +21,17 @@ const stats = [
 </script>
 
 <template>
-  <Head title="عن CoreS">
-    <meta name="description" content="تعرف على CoreS — متجر رقمي رائد في حسابات الألعاب، اشتراكات المنصات، والشحن الرقمي. توصيل فوري، دعم 24/7، وأسعار تنافسية." />
-    <meta property="og:title" content="عن CoreS | متجر رقمي للحسابات والاشتراكات" />
-    <meta property="og:description" content="تعرف على CoreS — متجر رقمي رائد في حسابات الألعاب، اشتراكات المنصات، والشحن الرقمي. توصيل فوري، دعم 24/7." />
+  <Head :title="'عن ' + $t('app.name')">
+    <meta name="description" content="تعرف على المتجر — متجر رقمي رائد في حسابات الألعاب، اشتراكات المنصات، والشحن الرقمي. توصيل فوري، دعم 24/7، وأسعار تنافسية." />
+    <meta property="og:title" content="عن المتجر | متجر رقمي للحسابات والاشتراكات" />
+    <meta property="og:description" content="تعرف على المتجر — متجر رقمي رائد في حسابات الألعاب، اشتراكات المنصات، والشحن الرقمي. توصيل فوري، دعم 24/7." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ar_SY" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="عن CoreS | متجر رقمي للحسابات والاشتراكات" />
+    <meta name="twitter:title" content="عن المتجر | متجر رقمي للحسابات والاشتراكات" />
   </Head>
 
-  <div dir="rtl" class="min-h-screen bg-[#050507] text-white relative overflow-x-hidden" style="font-family: 'Cairo', 'Space Grotesk', sans-serif;">
+  <div class="min-h-screen bg-[#050507] text-white relative overflow-x-hidden font-sans">
     <!-- Ambient -->
     <div class="fixed inset-0 pointer-events-none z-0">
       <div class="absolute inset-0 bg-[linear-gradient(to_right,#0f0f11_1px,transparent_1px),linear-gradient(to_bottom,#0f0f11_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
@@ -47,7 +47,7 @@ const stats = [
             <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-cyan-500/10 border border-cyan-400/30">
               <Cpu class="w-5 h-5 text-cyan-400" />
             </div>
-            <span class="text-xl font-bold tracking-wider text-white" style="font-family: 'Space Grotesk', sans-serif;">CoreS</span>
+            <span class="text-xl font-bold tracking-wider text-white font-display">{{ $t('app.name') }}</span>
           </Link>
           <div class="flex items-center gap-3">
             <Link href="/login" class="text-sm text-white/60 hover:text-white transition-colors px-4 py-2">تسجيل الدخول</Link>
@@ -63,9 +63,9 @@ const stats = [
             <Zap class="w-4 h-4 text-cyan-400" />
             <span class="text-xs font-mono text-cyan-400 tracking-wider uppercase">من نحن</span>
           </div>
-          <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6" style="font-family: 'Space Grotesk', sans-serif;">
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6 font-display">
             <span class="text-white">منصة</span>
-            <span class="text-cyan-400"> CoreS</span>
+            <span class="text-cyan-400"> {{ $t('app.name') }}</span>
           </h1>
           <p class="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
             وجهتك الأولى للمنتجات الرقمية. نبني تجربة شراء سلسة للاعبين وعشاق التقنية —
@@ -91,7 +91,7 @@ const stats = [
         <div class="max-w-5xl mx-auto">
           <div class="text-center mb-16">
             <span class="text-xs font-mono text-cyan-400 tracking-[0.2em] uppercase">قيمنا</span>
-            <h2 class="text-3xl md:text-4xl font-bold tracking-tight mt-3" style="font-family: 'Space Grotesk', sans-serif;">لماذا CoreS؟</h2>
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight mt-3 font-display">لماذا {{ $t('app.name') }}؟</h2>
           </div>
           <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <div v-for="v in values" :key="v.title" class="group relative bg-white/[0.02] border border-white/5 rounded-2xl p-6 hover:border-cyan-400/20 transition-all duration-300">
@@ -148,11 +148,11 @@ const stats = [
       <section class="w-full py-24 px-4 sm:px-6 lg:px-10 xl:px-16 border-t border-white/5 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent pointer-events-none" />
         <div class="max-w-2xl mx-auto text-center relative z-10">
-          <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4" style="font-family: 'Space Grotesk', sans-serif;">
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4 font-display">
             جاهز للانضمام؟
           </h2>
           <p class="text-white/50 mb-8 leading-relaxed">
-            آلاف اللاعبين يثقون بـ CoreS يومياً. انضم إليهم واستمتع بالتوصيل الفوري.
+            آلاف اللاعبين يثقون بـ {{ $t('app.name') }} يومياً. انضم إليهم واستمتع بالتوصيل الفوري.
           </p>
           <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/register" class="px-8 py-3.5 bg-cyan-400 text-black rounded-xl font-semibold hover:bg-cyan-300 transition-all shadow-[0_0_30px_-5px_rgba(34,211,238,0.3)]">
@@ -174,7 +174,7 @@ const stats = [
                 <Cpu class="w-4 h-4 text-cyan-400" />
               </div>
               <div>
-                <span class="font-bold tracking-wider text-white text-sm" style="font-family: 'Space Grotesk', sans-serif;">CoreS</span>
+                <span class="font-bold tracking-wider text-white text-sm font-display">{{ $t('app.name') }}</span>
                 <p class="text-[10px] text-white/40 font-mono">منصة المنتجات الرقمية</p>
               </div>
             </div>
@@ -184,7 +184,7 @@ const stats = [
               <Link href="/terms" class="hover:text-cyan-400 transition-colors">الشروط</Link>
               <Link href="/privacy" class="hover:text-cyan-400 transition-colors">الخصوصية</Link>
             </div>
-            <p class="text-[10px] text-white/30 font-mono">&copy; 2026 CoreS. جميع الحقوق محفوظة.</p>
+            <p class="text-[10px] text-white/30 font-mono">&copy; 2026 {{ $t('app.name') }}. جميع الحقوق محفوظة.</p>
           </div>
         </div>
       </footer>

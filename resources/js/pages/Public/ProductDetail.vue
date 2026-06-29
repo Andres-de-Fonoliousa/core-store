@@ -132,7 +132,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
     <link rel="canonical" :href="canonicalUrl" />
 
     <meta property="og:type" content="product" />
-    <meta property="og:site_name" content="CoreS" />
+    <meta property="og:site_name" :content="$t('app.name')" />
     <meta property="og:title" :content="seoTitle" />
     <meta property="og:description" :content="seoDescription" />
     <meta property="og:url" :content="canonicalUrl" />
@@ -247,7 +247,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
 
             <div class="flex flex-wrap items-center gap-2 mb-4">
               <span class="px-3 py-1.5 text-xs font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-400/20 rounded-lg flex items-center gap-1.5">
-                <Cpu class="w-3.5 h-3.5" /> {{ product.provider?.name || 'CoreS' }}
+                <Cpu class="w-3.5 h-3.5" /> {{ product.provider?.name || $t('app.name') }}
               </span>
               <span class="px-3 py-1.5 text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-400/20 rounded-lg flex items-center gap-1.5">
                 <Tag class="w-3.5 h-3.5" /> {{ product.category?.name || 'عام' }}
@@ -437,7 +437,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
           <div class="w-6 h-6 rounded-md flex items-center justify-center border border-cyan-400/30 bg-cyan-500/10">
             <Cpu class="w-3 h-3 text-cyan-400" />
           </div>
-          <span class="text-xs font-bold tracking-wider text-white/60" style="font-family: 'Space Grotesk', sans-serif;">CoreS</span>
+          <span class="text-xs font-bold tracking-wider text-white/60 font-display">{{ $t('app.name') }}</span>
         </div>
         <p class="text-[10px] text-white/30 font-mono">مُبنى للاعبين. يعمل بالنيون.</p>
       </div>

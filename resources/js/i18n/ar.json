@@ -1,19 +1,35 @@
 {
   "app": {
     "name": "CoreS",
-    "tagline": "منتجات رقمية، توصيل فوري تلقائي"
+    "tagline": "منتجات رقمية، توصيل فوري تلقائي",
+    "footerTagline": "مُبنى للاعبين. يعمل بالنيون.",
+    "systemStatus": "النظام متصل — توصيل فوري",
+    "features": {
+      "securePayment": "دفع آمن",
+      "instantDelivery": "توصيل فوري",
+      "support247": "دعم 24/7",
+      "autoDelivery": "شحن تلقائي",
+      "sslEncrypted": "SSL مشفر"
+    }
   },
   "nav": {
     "home": "الرئيسية",
     "catalog": "المتجر",
+    "products": "المنتجات",
     "orders": "طلباتي",
     "dashboard": "لوحة التحكم",
-    "deposit": "شحن الرصيد",
+    "deposit": "الإيداع",
     "profile": "الملف الشخصي",
     "admin": "لوحة الإدارة",
     "logout": "تسجيل الخروج",
     "login": "تسجيل الدخول",
-    "register": "إنشاء حساب"
+    "register": "إنشاء حساب",
+    "startNow": "ابدأ الآن",
+    "balance": "الرصيد",
+    "notifications": "الإشعارات",
+    "settings": "الإعدادات",
+    "cart": "السلة",
+    "allCategories": "جميع الفئات"
   },
   "auth": {
     "login": {
@@ -33,6 +49,14 @@
       "submit": "إنشاء حساب",
       "hasAccount": "هل لديك حساب بالفعل؟",
       "login": "تسجيل الدخول"
+    },
+    "split": {
+      "heading": "منصة المنتجات الرقمية الأولى",
+      "description": "توصيل فوري تلقائي على مدار الساعة. اشتراكات ألعاب وبطاقات هدايا بأفضل الأسعار.",
+      "securePayment": "دفع آمن",
+      "instantDelivery": "توصيل فوري",
+      "countries": "50+ دولة",
+      "copyright": "جميع الحقوق محفوظة."
     }
   },
   "product": {
@@ -46,7 +70,21 @@
     "autoDelivery": "شحن فوري",
     "manualDelivery": "شحن يدوي",
     "inStock": "متوفر",
-    "outOfStock": "غير متوفر"
+    "outOfStock": "غير متوفر",
+    "notAvailable": "المنتج غير متوفر حالياً",
+    "orderSuccess": "تم تأكيد طلبك بنجاح!",
+    "orderNumber": "رقم الطلب",
+    "orderDetails": "تفاصيل الطلب",
+    "myOrders": "طلباتي",
+    "perUnit": "للواحدة",
+    "requiredInfo": "معلومات مطلوبة",
+    "buyNowAction": "اشترِ الآن",
+    "processing": "جاري المعالجة...",
+    "loginToBuy": "سجّل الدخول للشراء",
+    "pleaseLogin": "سجّل الدخول أولاً لإتمام الشراء",
+    "fillRequired": "أكمل الحقول المطلوبة",
+    "showAll": "عرض الكل",
+    "getStarted": "ابدأ الآن"
   },
   "order": {
     "status": {
@@ -92,8 +130,65 @@
     "create": "إنشاء",
     "pendingDeposits": "الإيداعات المعلقة",
     "totalRevenue": "إجمالي الإيرادات",
-    "activeProducts": "المنتجات النشطة"
+    "activeProducts": "المنتجات النشطة",
+    "storeHome": "الرئيسية",
+    "orders": "الطلبات",
+    "notifications": "الإشعارات",
+    "transactions": "المعاملات",
+    "users": "المستخدمون",
+    "analytics": "التحليلات",
+    "pulse": "مؤشرات",
+    "panel": "لوحة الإدارة",
+    "systemOnline": "النظام نشط",
+    "paymentAddresses": "عناوين الدفع"
   },
+  "settings": {
+    "title": "الإعدادات",
+    "heading": "إعدادات الحساب",
+    "description": "إدارة ملفك الشخصي وإعدادات الأمان.",
+    "profile": "الملف الشخصي",
+    "security": "الأمان",
+    "appearance": "المظهر"
+  },
+
+  "home": {
+    "hero": {
+      "title1": "بطاقات رقمية",
+      "title2": "توصيل فوري",
+      "title3": "بدون انتظار",
+      "description": "وجهتك الأولى لبطاقات الألعاب والاشتراكات الرقمية. شحن تلقائي في ثوانٍ.",
+      "subtitle": "آمن. سريع. مُبنى للاعبين.",
+      "browseProducts": "تصفح المنتجات",
+      "createAccount": "إنشاء حساب"
+    },
+    "stats": {
+      "ordersCompleted": "طلبات منجزة",
+      "happyPlayers": "لاعب سعيد",
+      "systemUptime": "استقرار النظام",
+      "avgDelivery": "متوسط التوصيل"
+    },
+    "howItWorks": {
+      "title": "كيف يعمل",
+      "step1": "اختر",
+      "step1Desc": "تصفح الكتالوج واختر بطاقتك المفضلة",
+      "step2": "ادفع",
+      "step2Desc": "دفع آمن باستخدام رصيدك أو إيداع جديد",
+      "step3": "شحن فوري",
+      "step3Desc": "يتم شحن اللعبة تلقائياً — لا أكواد، لا تعقيد",
+      "step4": "العب",
+      "step4Desc": "انطلق في اللعب مباشرة بدون أي خطوات إضافية",
+      "stepLabel": "خطوة"
+    },
+    "section": {
+      "featured": "مميز",
+      "mostRequested": "الأكثر طلباً",
+      "browse": "تصفح",
+      "shopByCategory": "تسوق حسب الفئة",
+      "ready": "جاهز؟",
+      "depositAndPlay": "اشحن رصيدك. وانطلق في اللعب الآن."
+    }
+  },
+
   "common": {
     "loading": "جارٍ التحميل...",
     "save": "حفظ",
@@ -108,6 +203,14 @@
     "success": "نجاح",
     "error": "خطأ",
     "warning": "تحذير",
-    "info": "معلومة"
+    "info": "معلومة",
+    "product": "منتج",
+    "products": "منتجات",
+    "general": "عام",
+    "noResults": "لم نتمكن من العثور على منتجات تطابق بحثك أو فلاترك.",
+    "clearFilters": "مسح الفلاتر",
+    "noItems": "لا توجد عناصر",
+    "back": "رجوع",
+    "noOrders": "لا توجد طلبات بعد"
   }
 }
