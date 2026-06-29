@@ -179,6 +179,18 @@
       "step4Desc": "Jump right in and start playing instantly",
       "stepLabel": "Step"
     },
+    "terminal": {
+      "stability": "Stability",
+      "delivery": "Delivery",
+      "inventory": "Inventory",
+      "security": "Security",
+      "seconds": "s",
+      "orderConfirmed": "Order confirmed",
+      "paymentProcessed": "Payment processed",
+      "autoShipped": "Auto-shipped to your account",
+      "placeOrder": "order.place",
+      "systemStatus": "system.status"
+    },
     "section": {
       "featured": "Featured",
       "mostRequested": "Most Requested",
