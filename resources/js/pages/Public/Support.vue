@@ -53,15 +53,15 @@ const contactMethods = [
 
 <template>
   <Head title="الدعم والمساعدة">
-    <meta name="description" content="الدعم الفني لـ CoreS — إجابات للأسئلة الشائعة وطرق التواصل. نواصل معنا عبر Telegram أو البريد الإلكتروني." />
-    <meta property="og:title" content="الدعم والمساعدة | CoreS" />
-    <meta property="og:description" content="الدعم الفني لـ CoreS — إجابات للأسئلة الشائعة وطرق التواصل." />
+    <meta name="description" content="الدعم الفني — إجابات للأسئلة الشائعة وطرق التواصل. نواصل معنا عبر Telegram أو البريد الإلكتروني." />
+    <meta property="og:title" content="الدعم والمساعدة" />
+    <meta property="og:description" content="الدعم الفني — إجابات للأسئلة الشائعة وطرق التواصل." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ar_SY" />
     <meta name="twitter:card" content="summary" />
   </Head>
 
-  <div dir="rtl" class="min-h-screen bg-[#050507] text-white relative overflow-x-hidden" style="font-family: 'Cairo', 'Space Grotesk', sans-serif;">
+  <div class="min-h-screen bg-[#050507] text-white relative overflow-x-hidden font-sans">
     <!-- Ambient -->
     <div class="fixed inset-0 pointer-events-none z-0">
       <div class="absolute inset-0 bg-[linear-gradient(to_right,#0f0f11_1px,transparent_1px),linear-gradient(to_bottom,#0f0f11_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
@@ -77,7 +77,7 @@ const contactMethods = [
             <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-cyan-500/10 border border-cyan-400/30">
               <Cpu class="w-5 h-5 text-cyan-400" />
             </div>
-            <span class="text-xl font-bold tracking-wider text-white" style="font-family: 'Space Grotesk', sans-serif;">CoreS</span>
+            <span class="text-xl font-bold tracking-wider text-white font-display">{{ $t('app.name') }}</span>
           </Link>
           <div class="flex items-center gap-3">
             <Link href="/login" class="text-sm text-white/60 hover:text-white transition-colors px-4 py-2">تسجيل الدخول</Link>
@@ -93,7 +93,7 @@ const contactMethods = [
             <HelpCircle class="w-4 h-4 text-cyan-400" />
             <span class="text-xs font-mono text-cyan-400 tracking-wider uppercase">المركز</span>
           </div>
-          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4" style="font-family: 'Space Grotesk', sans-serif;">
+          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4 font-display">
             كيف نساعدك؟
           </h1>
           <p class="text-lg text-white/50 max-w-xl mx-auto leading-relaxed">
@@ -142,7 +142,7 @@ const contactMethods = [
         <div class="max-w-3xl mx-auto">
           <div class="text-center mb-12">
             <span class="text-xs font-mono text-cyan-400 tracking-[0.2em] uppercase">تواصل</span>
-            <h2 class="text-3xl font-bold tracking-tight mt-3" style="font-family: 'Space Grotesk', sans-serif;">طرق التواصل</h2>
+            <h2 class="text-3xl font-bold tracking-tight mt-3 font-display">طرق التواصل</h2>
           </div>
           <div class="grid sm:grid-cols-3 gap-5">
             <a
@@ -170,7 +170,7 @@ const contactMethods = [
                 <Cpu class="w-4 h-4 text-cyan-400" />
               </div>
               <div>
-                <span class="font-bold tracking-wider text-white text-sm" style="font-family: 'Space Grotesk', sans-serif;">CoreS</span>
+                <span class="font-bold tracking-wider text-white text-sm font-display">{{ $t('app.name') }}</span>
                 <p class="text-[10px] text-white/40 font-mono">منصة المنتجات الرقمية</p>
               </div>
             </div>
@@ -180,7 +180,7 @@ const contactMethods = [
               <Link href="/terms" class="hover:text-cyan-400 transition-colors">الشروط</Link>
               <Link href="/privacy" class="hover:text-cyan-400 transition-colors">الخصوصية</Link>
             </div>
-            <p class="text-[10px] text-white/30 font-mono">&copy; 2026 CoreS. جميع الحقوق محفوظة.</p>
+            <p class="text-[10px] text-white/30 font-mono">&copy; {{ new Date().getFullYear() }} {{ $t('app.name') }}. {{ $t('auth.split.copyright') }}</p>
           </div>
         </div>
       </footer>

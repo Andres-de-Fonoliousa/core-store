@@ -1,11 +1,21 @@
 {
   "app": {
-    "name": "VoucherMarket",
-    "tagline": "Digital vouchers, instant delivery"
+    "name": "CoreS",
+    "tagline": "Digital vouchers, instant delivery",
+    "footerTagline": "Built for gamers. Powered by neon.",
+    "systemStatus": "System Online — Instant Delivery",
+    "features": {
+      "securePayment": "Secure Payment",
+      "instantDelivery": "Instant Delivery",
+      "support247": "24/7 Support",
+      "autoDelivery": "Auto Delivery",
+      "sslEncrypted": "SSL Encrypted"
+    }
   },
   "nav": {
     "home": "Home",
     "catalog": "Catalog",
+    "products": "Products",
     "orders": "My Orders",
     "dashboard": "Dashboard",
     "deposit": "Deposit",
@@ -13,7 +23,13 @@
     "admin": "Admin Panel",
     "logout": "Logout",
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "startNow": "Get Started",
+    "balance": "Balance",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "cart": "Cart",
+    "allCategories": "All Categories"
   },
   "auth": {
     "login": {
@@ -33,6 +49,14 @@
       "submit": "Create Account",
       "hasAccount": "Already have an account?",
       "login": "Sign in"
+    },
+    "split": {
+      "heading": "The #1 Digital Products Platform",
+      "description": "24/7 auto-delivery. Game subscriptions and gift cards at the best prices.",
+      "securePayment": "Secure Payment",
+      "instantDelivery": "Instant Delivery",
+      "countries": "50+ Countries",
+      "copyright": "All rights reserved."
     }
   },
   "product": {
@@ -46,7 +70,21 @@
     "autoDelivery": "Auto Delivery",
     "manualDelivery": "Manual Delivery",
     "inStock": "In Stock",
-    "outOfStock": "Out of Stock"
+    "outOfStock": "Out of Stock",
+    "notAvailable": "Product currently unavailable",
+    "orderSuccess": "Your order has been confirmed!",
+    "orderNumber": "Order Number",
+    "orderDetails": "Order Details",
+    "myOrders": "My Orders",
+    "perUnit": "per unit",
+    "requiredInfo": "Required Information",
+    "buyNowAction": "Buy Now",
+    "processing": "Processing...",
+    "loginToBuy": "Log in to purchase",
+    "pleaseLogin": "Please log in first to complete your purchase",
+    "fillRequired": "Please fill in the required fields",
+    "showAll": "Show All",
+    "getStarted": "Get Started"
   },
   "order": {
     "status": {
@@ -92,8 +130,65 @@
     "create": "Create",
     "pendingDeposits": "Pending Deposits",
     "totalRevenue": "Total Revenue",
-    "activeProducts": "Active Products"
+    "activeProducts": "Active Products",
+    "storeHome": "Store Home",
+    "orders": "Orders",
+    "notifications": "Notifications",
+    "transactions": "Transactions",
+    "users": "Users",
+    "analytics": "Analytics",
+    "pulse": "Pulse",
+    "panel": "Admin Panel",
+    "systemOnline": "System Online",
+    "paymentAddresses": "Payment Addresses"
   },
+  "settings": {
+    "title": "Settings",
+    "heading": "Account Settings",
+    "description": "Manage your profile and security settings.",
+    "profile": "Profile",
+    "security": "Security",
+    "appearance": "Appearance"
+  },
+
+  "home": {
+    "hero": {
+      "title1": "Digital Cards",
+      "title2": "Instant Delivery",
+      "title3": "No Waiting",
+      "description": "Your #1 destination for game cards & digital subscriptions. Auto-delivery in seconds.",
+      "subtitle": "Secure. Fast. Built for gamers.",
+      "browseProducts": "Browse Products",
+      "createAccount": "Create Account"
+    },
+    "stats": {
+      "ordersCompleted": "Orders Completed",
+      "happyPlayers": "Happy Players",
+      "systemUptime": "System Uptime",
+      "avgDelivery": "Avg. Delivery"
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "step1": "Choose",
+      "step1Desc": "Browse the catalog and pick your favorite card",
+      "step2": "Pay",
+      "step2Desc": "Secure payment using your balance or new deposit",
+      "step3": "Instant Delivery",
+      "step3Desc": "Auto-delivered to your account — no codes, no hassle",
+      "step4": "Play",
+      "step4Desc": "Jump right in and start playing instantly",
+      "stepLabel": "Step"
+    },
+    "section": {
+      "featured": "Featured",
+      "mostRequested": "Most Requested",
+      "browse": "Browse",
+      "shopByCategory": "Shop by Category",
+      "ready": "Ready?",
+      "depositAndPlay": "Deposit now. And start playing."
+    }
+  },
+
   "common": {
     "loading": "Loading...",
     "save": "Save",
@@ -108,6 +203,14 @@
     "success": "Success",
     "error": "Error",
     "warning": "Warning",
-    "info": "Info"
+    "info": "Info",
+    "product": "Product",
+    "products": "Products",
+    "general": "General",
+    "noResults": "No matching products found. Try adjusting your search or filters.",
+    "clearFilters": "Clear Filters",
+    "noItems": "No items",
+    "back": "Back",
+    "noOrders": "No orders yet"
   }
 }

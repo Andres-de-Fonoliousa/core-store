@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Link, usePage } from '@inertiajs/vue3';
 import { useAuthStore } from '@/stores/authStore';
 import {
@@ -18,14 +19,16 @@ const page = usePage();
 const sidebarOpen = ref(false);
 const currentRoute = computed(() => page.url);
 
+const { t } = useI18n();
+
 const navItems = [
-  { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-  { label: 'Products', href: '/admin/products', icon: Box },
-  { label: 'Categories', href: '/admin/categories', icon: Tag },
-  { label: 'Providers', href: '/admin/providers', icon: Server },
-  { label: 'Deposits', href: '/admin/deposits', icon: CreditCard },
-  { label: 'Transactions', href: '/admin/transactions', icon: ArrowLeftRight },
-  { label: 'Settings', href: '/admin/settings', icon: Settings },
+  { label: t('admin.dashboard'), href: '/admin/dashboard', icon: LayoutDashboard },
+  { label: t('admin.products'), href: '/admin/products', icon: Box },
+  { label: t('admin.categories'), href: '/admin/categories', icon: Tag },
+  { label: t('admin.providers'), href: '/admin/providers', icon: Server },
+  { label: t('admin.deposits'), href: '/admin/deposits', icon: CreditCard },
+  { label: t('admin.transactions'), href: '/admin/transactions', icon: ArrowLeftRight },
+  { label: t('admin.settings'), href: '/admin/settings', icon: Settings },
 ];
 
 function isActive(href: string) {
@@ -38,7 +41,7 @@ function isActive(href: string) {
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   </Head>
 
-  <div class="min-h-screen bg-[#050507] text-white relative overflow-x-hidden" style="font-family: 'Space Grotesk', 'Cairo', sans-serif;">
+  <div class="min-h-screen bg-[#050507] text-white relative overflow-x-hidden font-sans">
     <!-- Ambient -->
     <div class="fixed inset-0 pointer-events-none z-0">
       <div class="absolute inset-0 bg-[linear-gradient(to_right,#0f0f11_1px,transparent_1px),linear-gradient(to_bottom,#0f0f11_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
@@ -58,8 +61,8 @@ function isActive(href: string) {
             <Cpu class="w-5 h-5 text-cyan-400" />
           </div>
           <div>
-            <span class="font-bold tracking-wider text-white text-lg" style="font-family: 'Space Grotesk', sans-serif;">CoreS</span>
-            <p class="text-[10px] font-mono text-white/40 tracking-wider">ADMIN PANEL</p>
+            <span class="font-bold tracking-wider text-white text-lg font-display">{{ $t('app.name') }}</span>
+            <p class="text-[10px] font-mono text-white/40 tracking-wider">{{ $t('admin.panel') }}</p>
           </div>
           <button @click="sidebarOpen = false" class="lg:hidden ml-auto text-white/40 hover:text-white">
             <X class="w-5 h-5" />
@@ -102,19 +105,19 @@ function isActive(href: string) {
             <Menu class="w-5 h-5" />
           </button>
           <div>
-            <h1 class="text-lg font-semibold text-white tracking-tight">{{ $page.props.title ?? 'Admin' }}</h1>
+            <h1 class="text-lg font-semibold text-white tracking-tight">{{ $page.props.title ?? $t('admin.dashboard') }}</h1>
             <div class="hidden sm:flex items-center gap-2 text-[11px] font-mono text-white/40">
               <Link v-for="(crumb, i) in breadcrumbs" :key="crumb.href" :href="crumb.href" class="hover:text-cyan-400 transition-colors">
                 {{ crumb.title }} <span v-if="i < breadcrumbs.length - 1" class="mx-1 text-white/20">/</span>
               </Link>
-              <span v-if="breadcrumbs.length === 0">لوحة التحكم</span>
+              <span v-if="breadcrumbs.length === 0">{{ $t('admin.dashboard') }}</span>
             </div>
           </div>
         </div>
         <div class="flex items-center gap-3">
           <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/5 border border-emerald-400/20">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span class="text-[10px] font-mono text-emerald-400 tracking-wider">SYSTEM ONLINE</span>
+            <span class="text-[10px] font-mono text-emerald-400 tracking-wider">{{ $t('admin.systemOnline') }}</span>
           </div>
         </div>
       </header>

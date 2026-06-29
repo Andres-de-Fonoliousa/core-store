@@ -14,7 +14,7 @@ defineProps<{ title?: string; description?: string }>();
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   </Head>
 
-  <div class="min-h-screen bg-[#050507] text-white relative grid lg:grid-cols-2 overflow-x-hidden" style="font-family: 'Space Grotesk', 'Cairo', sans-serif;">
+  <div class="min-h-screen bg-[#050507] text-white relative grid lg:grid-cols-2 overflow-x-hidden font-sans">
     <!-- Left Panel -->
     <div class="relative hidden lg:flex flex-col p-10 border-r border-white/5 overflow-hidden">
       <!-- Ambient -->
@@ -29,24 +29,20 @@ defineProps<{ title?: string; description?: string }>();
           <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-cyan-500/10 border border-cyan-400/30">
             <Cpu class="w-5 h-5 text-cyan-400" />
           </div>
-          <span class="font-bold tracking-wider text-white text-xl" style="font-family: 'Space Grotesk', sans-serif;">{{ name }}</span>
+            <span class="font-bold tracking-wider text-white text-xl font-display">{{ $t('app.name') }}</span>
         </Link>
 
         <div class="flex-1 flex flex-col justify-center max-w-md gap-8">
-          <h2 class="text-4xl font-bold leading-tight">
-            منصة المنتجات الرقمية <span class="text-cyan-400">الأولى</span>
-          </h2>
-          <p class="text-white/50 leading-relaxed">
-            توصيل فوري تلقائي على مدار الساعة. اشتراكات ألعاب وبطاقات هدايا بأفضل الأسعار.
-          </p>
+          <h2 class="text-4xl font-bold leading-tight">{{ $t('auth.split.heading') }}</h2>
+          <p class="text-white/50 leading-relaxed">{{ $t('auth.split.description') }}</p>
           <div class="flex items-center gap-6 text-sm text-white/40">
-            <span class="flex items-center gap-2"><ShieldCheck class="w-4 h-4 text-emerald-400" /> دفع آمن</span>
-            <span class="flex items-center gap-2"><Zap class="w-4 h-4 text-cyan-400" /> توصيل فوري</span>
-            <span class="flex items-center gap-2"><Globe class="w-4 h-4 text-purple-400" /> 50+ دولة</span>
+            <span class="flex items-center gap-2"><ShieldCheck class="w-4 h-4 text-emerald-400" /> {{ $t('auth.split.securePayment') }}</span>
+            <span class="flex items-center gap-2"><Zap class="w-4 h-4 text-cyan-400" /> {{ $t('auth.split.instantDelivery') }}</span>
+            <span class="flex items-center gap-2"><Globe class="w-4 h-4 text-purple-400" /> {{ $t('auth.split.countries') }}</span>
           </div>
         </div>
 
-        <p class="text-[11px] text-white/30 font-mono">© 2026 CoreS. جميع الحقوق محفوظة.</p>
+        <p class="text-[11px] text-white/30 font-mono">© {{ new Date().getFullYear() }} {{ $t('app.name') }}. {{ $t('auth.split.copyright') }}</p>
       </div>
     </div>
 
@@ -63,7 +59,7 @@ defineProps<{ title?: string; description?: string }>();
             <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-cyan-500/10 border border-cyan-400/30">
               <Cpu class="w-5 h-5 text-cyan-400" />
             </div>
-            <span class="font-bold tracking-wider text-white text-xl" style="font-family: 'Space Grotesk', sans-serif;">{{ name }}</span>
+          <span class="font-bold tracking-wider text-white text-xl font-display">{{ $t('app.name') }}</span>
           </div>
         </div>
 

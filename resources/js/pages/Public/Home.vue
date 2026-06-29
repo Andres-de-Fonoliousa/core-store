@@ -204,7 +204,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
     <JsonLdScript :data="storeJsonLd" />
   </Head>
 
-  <div dir="rtl" class="fixed inset-0 bg-background text-foreground overflow-y-auto overflow-x-hidden" style="font-family: 'Cairo', 'Inter', sans-serif;">
+  <div class="fixed inset-0 bg-background text-foreground overflow-y-auto overflow-x-hidden font-sans">
     <div class="fixed inset-0 bg-grid pointer-events-none z-0 opacity-50" />
     <div class="fixed inset-0 pointer-events-none z-0" style="background: radial-gradient(ellipse at 50% 0%, hsl(186 100% 55% / 0.03) 0%, transparent 50%)" />
 
@@ -215,16 +215,16 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
           <div class="w-8 h-8 rounded-lg flex items-center justify-center border border-primary/30 bg-primary/10">
             <Cpu class="w-4 h-4 text-primary" />
           </div>
-          <span class="text-lg font-bold tracking-wider text-white" style="font-family: 'Orbitron', 'Cairo', sans-serif;">CoreS</span>
+          <span class="text-lg font-bold tracking-wider text-white font-display">{{ $t('app.name') }}</span>
         </Link>
         <div class="flex items-center gap-3 sm:gap-6">
-          <Link href="/browse" class="text-sm text-primary font-semibold">المتجر</Link>
+          <Link href="/browse" class="text-sm text-primary font-semibold">{{ $t('nav.catalog') }}</Link>
           <template v-if="auth.user">
-            <Link href="/dashboard" class="text-sm text-muted-foreground hover:text-white transition-colors">لوحة التحكم</Link>
+            <Link href="/dashboard" class="text-sm text-muted-foreground hover:text-white transition-colors">{{ $t('nav.dashboard') }}</Link>
           </template>
           <template v-else>
-            <Link href="/login" class="text-sm text-muted-foreground hover:text-white transition-colors hidden sm:inline">تسجيل الدخول</Link>
-            <Link href="/register" class="text-sm px-4 sm:px-5 py-2 font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all glow-primary">إنشاء حساب</Link>
+            <Link href="/login" class="text-sm text-muted-foreground hover:text-white transition-colors hidden sm:inline">{{ $t('nav.login') }}</Link>
+            <Link href="/register" class="text-sm px-4 sm:px-5 py-2 font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all glow-primary">{{ $t('nav.register') }}</Link>
           </template>
         </div>
       </div>
@@ -238,7 +238,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
           <div class="min-w-0">
             <div class="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono text-muted-foreground/60 mb-2 flex-wrap">
               <button @click="goHome" class="hover:text-primary transition-colors flex items-center gap-1">
-                <Home class="w-2.5 h-2.5 sm:w-3 sm:h-3" /> الرئيسية
+                <Home class="w-2.5 h-2.5 sm:w-3 sm:h-3" /> {{ $t('nav.home') }}
               </button>
               <template v-if="!isRoot">
                 <ChevronLeft class="w-2.5 h-2.5 sm:w-3 sm:h-3 shrink-0" />
@@ -252,21 +252,21 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
               </template>
             </div>
             <span class="text-[10px] sm:text-xs font-mono text-primary tracking-[0.2em] uppercase">
-              {{ isRoot ? 'تصفح المنتجات' : hasSubcategories ? 'اختر فئة' : 'المنتجات' }}
+              {{ isRoot ? $t('nav.products') : hasSubcategories ? $t('product.selectQty') : $t('common.products') }}
             </span>
-            <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight mt-1 sm:mt-2 text-white leading-tight" style="font-family: 'Cairo', 'Orbitron', sans-serif;">
+            <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight mt-1 sm:mt-2 text-white leading-tight">
               <template v-if="isRoot">
-                سوق <span class="text-gradient" style="font-family: 'Orbitron', sans-serif;">CoreS</span> الرقمي
+                سوق <span class="text-gradient font-display">{{ $t('app.name') }}</span> الرقمي
               </template>
               <template v-else>
                 {{ currentCat?.name }}
               </template>
             </h1>
             <p v-if="isRoot" class="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2 max-w-lg">
-              اختر فئة للبدء — شحن فوري، أسعار تنافسية.
+              {{ $t('app.tagline') }}
             </p>
             <p v-else-if="!hasSubcategories" class="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2">
-              تصفح المنتجات المتاحة في هذه الفئة
+              Browse products
             </p>
           </div>
           <div v-if="!isRoot && hasSubcategories" class="relative w-full sm:w-72 shrink-0">
@@ -293,7 +293,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                 class="w-full flex items-center gap-2 px-4 py-3 rounded-xl bg-white/[0.02] border border-white/5 text-sm text-muted-foreground hover:text-white hover:bg-white/[0.04] hover:border-primary/20 transition-all backdrop-blur-xl"
               >
                 <ChevronRight class="w-4 h-4 text-primary" />
-                جميع الفئات
+                {{ $t('nav.allCategories') }}
               </button>
 
               <div class="bg-white/[0.02] border border-white/5 rounded-2xl p-4 backdrop-blur-xl">
@@ -384,7 +384,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                         {{ cat.name }}
                       </h3>
                       <p class="text-[11px] sm:text-xs text-white/70 drop-shadow">
-                        {{ cat.products_count }} منتج{{ cat.products_count !== 1 ? 'ات' : '' }}
+                        {{ cat.products_count }} {{ cat.products_count !== 1 ? $t('common.products') : $t('common.product') }}
                       </p>
                     </div>
                     <div class="shrink-0 w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center transition-all duration-300 group-hover:bg-primary/20 group-hover:border-primary/40">
@@ -412,7 +412,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
             <div class="sticky top-28 space-y-6">
               <button @click="goHome" class="w-full flex items-center gap-2 px-4 py-3 rounded-xl bg-white/[0.02] border border-white/5 text-sm text-muted-foreground hover:text-white hover:bg-white/[0.04] hover:border-primary/20 transition-all backdrop-blur-xl">
                 <ChevronRight class="w-4 h-4 text-primary" />
-                جميع الفئات
+                {{ $t('nav.allCategories') }}
               </button>
 
               <div v-if="currentCat" class="bg-gradient-to-br from-primary/[0.06] to-transparent border border-primary/15 rounded-2xl p-5 backdrop-blur-xl">
@@ -445,7 +445,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                     <Zap class="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h4 class="text-sm font-bold text-white">توصيل فوري</h4>
+                    <h4 class="text-sm font-bold text-white">{{ $t('product.autoDelivery') }}</h4>
                     <p class="text-[10px] text-muted-foreground font-mono">AUTOMATED SYSTEM</p>
                   </div>
                 </div>
@@ -461,7 +461,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
             <div class="flex flex-wrap items-center justify-between gap-3 mb-6 p-3 sm:p-4 bg-white/[0.02] border border-white/5 rounded-2xl backdrop-blur-xl">
               <div class="flex items-center gap-3">
                 <span class="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
-                  <span class="font-mono text-white font-bold">{{ products.length }}</span> منتج
+                  <span class="font-mono text-white font-bold">{{ products.length }}</span> {{ products.length !== 1 ? $t('common.products') : $t('common.product') }}
                 </span>
               </div>
               <div class="flex items-center gap-2">
@@ -472,9 +472,9 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                 </div>
                 <select v-model="sortBy"
                   class="bg-white/[0.02] border border-white/10 rounded-lg py-2 px-2.5 text-[11px] text-white focus:outline-none focus:border-primary/30 cursor-pointer">
-                  <option value="popular" class="bg-card">الأكثر شعبية</option>
-                  <option value="price_asc" class="bg-card">السعر: من الأقل</option>
-                  <option value="price_desc" class="bg-card">السعر: من الأعلى</option>
+                  <option value="popular" class="bg-card">Popular</option>
+                  <option value="price_asc" class="bg-card">Price: Low</option>
+                  <option value="price_desc" class="bg-card">Price: High</option>
                 </select>
                 <div class="hidden sm:flex items-center gap-1 p-1 bg-white/[0.02] border border-white/10 rounded-lg">
                   <button @click="viewMode = 'grid'" class="p-1.5 rounded transition-colors" :class="viewMode === 'grid' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-white'">
@@ -548,10 +548,10 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
               <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-center mb-4">
                 <Package class="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground/50" />
               </div>
-              <h3 class="text-base sm:text-lg font-semibold text-white mb-2">لا توجد منتجات مطابقة</h3>
-              <p class="text-xs sm:text-sm text-muted-foreground mb-6 text-center">لم نتمكن من العثور على منتجات تطابق بحثك أو فلاترك.</p>
+              <h3 class="text-base sm:text-lg font-semibold text-white mb-2">{{ $t('common.noResults') }}</h3>
+              <p class="text-xs sm:text-sm text-muted-foreground mb-6 text-center">{{ $t('common.noResults') }}</p>
               <button @click="clearFilters" class="px-5 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all">
-                مسح الفلاتر
+                {{ $t('common.clearFilters') }}
               </button>
             </div>
           </main>
@@ -574,7 +574,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
             <button v-if="!isRoot" @click="goHome"
               class="w-full flex items-center gap-2 px-4 py-3 rounded-xl bg-white/[0.02] border border-white/5 text-sm text-muted-foreground hover:text-white hover:bg-white/[0.04] hover:border-primary/20 transition-all mb-4">
               <ChevronRight class="w-4 h-4 text-primary" />
-              جميع الفئات
+              {{ $t('nav.allCategories') }}
             </button>
             <div class="flex flex-col gap-1.5">
               <button v-for="cat in sidebarCats" :key="cat.id" @click="navigateTo(cat.id)"

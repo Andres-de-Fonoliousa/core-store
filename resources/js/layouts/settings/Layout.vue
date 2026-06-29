@@ -2,6 +2,7 @@
 import { Link } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import {
   User, Lock, Palette, ChevronLeft,
 } from 'lucide-vue-next';
@@ -12,10 +13,12 @@ import { edit as editSecurity } from '@/routes/security';
 const page = usePage();
 const currentUrl = computed(() => page.url);
 
+const { t } = useI18n();
+
 const sidebarNavItems = [
-  { title: 'Profile', href: editProfile(), icon: User },
-  { title: 'Security', href: editSecurity(), icon: Lock },
-  { title: 'Appearance', href: editAppearance(), icon: Palette },
+  { title: t('settings.profile'), href: editProfile(), icon: User },
+  { title: t('settings.security'), href: editSecurity(), icon: Lock },
+  { title: t('settings.appearance'), href: editAppearance(), icon: Palette },
 ];
 
 function isCurrent(href: string) {
@@ -27,9 +30,9 @@ function isCurrent(href: string) {
   <div class="space-y-8">
     <!-- Header -->
     <div>
-      <span class="text-xs font-mono text-cyan-400 tracking-[0.2em] uppercase">الإعدادات</span>
-      <h1 class="text-3xl font-bold tracking-tight mt-1 text-white">إعدادات الحساب</h1>
-      <p class="text-sm text-white/40 mt-1">إدارة ملفك الشخصي وإعدادات الأمان.</p>
+      <span class="text-xs font-mono text-cyan-400 tracking-[0.2em] uppercase">{{ $t('settings.title') }}</span>
+      <h1 class="text-3xl font-bold tracking-tight mt-1 text-white">{{ $t('settings.heading') }}</h1>
+      <p class="text-sm text-white/40 mt-1">{{ $t('settings.description') }}</p>
     </div>
 
     <div class="flex flex-col lg:flex-row gap-8">

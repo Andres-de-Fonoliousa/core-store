@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Link, usePage } from '@inertiajs/vue3';
 import { useAuthStore } from '@/stores/authStore';
 import { useApi } from '@/composables/useApi';
@@ -29,21 +30,23 @@ onMounted(async () => {
   }
 });
 
+const { t } = useI18n();
+
 const navItems = [
-  { label: 'Store Home', href: '/', icon: Home },
-  { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { label: 'Orders', href: '/admin/orders', icon: ShoppingBag },
-  { label: 'Products', href: '/admin/products', icon: Box },
-  { label: 'Categories', href: '/admin/categories', icon: Tag },
-  { label: 'Providers', href: '/admin/providers', icon: Server },
-  { label: 'Deposits', href: '/admin/deposits', icon: CreditCard },
-  { label: 'Payment Addresses', href: '/admin/payment-addresses', icon: Banknote },
-  { label: 'Notifications', href: '/admin/notifications', icon: Bell },
-  { label: 'Transactions', href: '/admin/transactions', icon: ArrowLeftRight },
-  { label: 'Users', href: '/admin/users', icon: Users },
-  { label: 'Analytics', href: '/admin/kpi', icon: BarChart3 },
-  { label: 'Pulse', href: '/pulse', icon: Activity },
-  { label: 'Settings', href: '/admin/settings', icon: Settings },
+  { label: t('admin.storeHome'), href: '/', icon: Home },
+  { label: t('admin.dashboard'), href: '/admin', icon: LayoutDashboard },
+  { label: t('admin.orders'), href: '/admin/orders', icon: ShoppingBag },
+  { label: t('admin.products'), href: '/admin/products', icon: Box },
+  { label: t('admin.categories'), href: '/admin/categories', icon: Tag },
+  { label: t('admin.providers'), href: '/admin/providers', icon: Server },
+  { label: t('admin.deposits'), href: '/admin/deposits', icon: CreditCard },
+  { label: t('admin.paymentAddresses'), href: '/admin/payment-addresses', icon: Banknote },
+  { label: t('admin.notifications'), href: '/admin/notifications', icon: Bell },
+  { label: t('admin.transactions'), href: '/admin/transactions', icon: ArrowLeftRight },
+  { label: t('admin.users'), href: '/admin/users', icon: Users },
+  { label: t('admin.analytics'), href: '/admin/kpi', icon: BarChart3 },
+  { label: t('admin.pulse'), href: '/pulse', icon: Activity },
+  { label: t('admin.settings'), href: '/admin/settings', icon: Settings },
 ];
 
 function isActive(href: string) {
@@ -56,7 +59,7 @@ function isActive(href: string) {
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   </Head>
 
-  <div class="min-h-screen bg-[#050507] text-white relative isolate overflow-x-hidden" style="font-family: 'Space Grotesk', 'Cairo', sans-serif;">
+  <div class="min-h-screen bg-[#050507] text-white relative isolate overflow-x-hidden font-sans">
     <!-- Ambient -->
     <div class="fixed inset-0 pointer-events-none z-0">
       <div class="absolute inset-0 bg-[linear-gradient(to_right,#0f0f11_1px,transparent_1px),linear-gradient(to_bottom,#0f0f11_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
@@ -76,8 +79,8 @@ function isActive(href: string) {
             <Cpu class="w-5 h-5 text-cyan-400" />
           </div>
           <div>
-            <span class="font-bold tracking-wider text-white text-lg" style="font-family: 'Space Grotesk', sans-serif;">CoreS</span>
-            <p class="text-[10px] font-mono text-white/40 tracking-wider">ADMIN PANEL</p>
+            <span class="font-bold tracking-wider text-white text-lg font-display">{{ $t('app.name') }}</span>
+            <p class="text-[10px] font-mono text-white/40 tracking-wider">{{ $t('admin.panel') }}</p>
           </div>
           <button @click="sidebarOpen = false" class="lg:hidden ml-auto text-white/40 hover:text-white">
             <X class="w-5 h-5" />
@@ -121,7 +124,7 @@ function isActive(href: string) {
             <Menu class="w-5 h-5" />
           </button>
           <div>
-            <h1 class="text-lg font-semibold text-white tracking-tight">{{ $page.props.title ?? 'Admin' }}</h1>
+            <h1 class="text-lg font-semibold text-white tracking-tight">{{ $page.props.title ?? $t('admin.dashboard') }}</h1>
             <p class="text-[11px] font-mono text-white/40 hidden sm:block">{{ new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
           </div>
         </div>
@@ -134,7 +137,7 @@ function isActive(href: string) {
           <ThemeToggle />
           <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/5 border border-emerald-400/20">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span class="text-[10px] font-mono text-emerald-400 tracking-wider">SYSTEM ONLINE</span>
+            <span class="text-[10px] font-mono text-emerald-400 tracking-wider">{{ $t('admin.systemOnline') }}</span>
           </div>
         </div>
       </header>
