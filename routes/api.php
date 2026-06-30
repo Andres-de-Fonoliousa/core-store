@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\NotificationController as CustomerNotificationContr
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentMethodController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\Auth\TelegramLinkController;
 use App\Http\Controllers\Api\ShamCashWebhookController;
 use App\Http\Controllers\Api\TransactionController as CustomerTransactionController;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Public Routes
+| Public Routes (no auth required)
 |--------------------------------------------------------------------------
 */
 Route::get('products', [ProductController::class, 'index']);
@@ -29,6 +30,17 @@ Route::get('products/{product}', [ProductController::class, 'show']);
 Route::get('categories', [CategoryController::class, 'index']);
 Route::get('payment-methods', [PaymentMethodController::class, 'index']);
 Route::get('payment-methods/{paymentMethod}/addresses', [PaymentMethodController::class, 'addresses']);
+
+/*
+|--------------------------------------------------------------------------
+| Bot-Authenticated Routes (require X-API-Key)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('api.key')->group(function () {
+    // Telegram link auth
+    Route::post('auth/telegram/send-otp', [TelegramLinkController::class, 'sendOtp']);
+    Route::post('auth/telegram/verify-otp', [TelegramLinkController::class, 'verifyOtp']);
+});
 
 /*
 |--------------------------------------------------------------------------
