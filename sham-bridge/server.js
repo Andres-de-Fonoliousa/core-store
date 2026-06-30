@@ -8,19 +8,17 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+function withTimeout(promise, ms = 8000) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error(`Timeout after ${ms}ms`)), ms)),
+  ]);
+}
 const app = express();
 const server = createServer(app);
 app.use(cors());
 app.use(express.json({ limit: '1mb' }));
-
-const API_TIMEOUT = 8000;
-
-function withTimeout(promise, ms = API_TIMEOUT) {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => setTimeout(() => reject(new Error('API timeout')), ms)),
-  ]);
-}
 
 const sessionsDir = join(__dirname, 'sessions');
 if (!existsSync(sessionsDir)) mkdirSync(sessionsDir, { recursive: true });
@@ -103,7 +101,7 @@ app.get('/api/events', (req, res) => {
 app.post('/api/initialize', async (req, res) => {
   try {
     setupShamClient();
-    await shamClient.initialize();
+    await withTimeout(shamClient.initialize(), 15000);
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -212,7 +210,7 @@ app.post('/api/transfer', async (req, res) => {
 app.post('/api/monitor/start', async (req, res) => {
   try {
     const interval = parseInt(req.body.interval) || 10000;
-    shamClient.history.startMonitoring(interval);
+    await withTimeout(shamClient.history.startMonitoring(interval));
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -221,7 +219,7 @@ app.post('/api/monitor/start', async (req, res) => {
 
 app.post('/api/monitor/stop', async (req, res) => {
   try {
-    shamClient.history.stopMonitoring();
+    await withTimeout(shamClient.history.stopMonitoring());
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
