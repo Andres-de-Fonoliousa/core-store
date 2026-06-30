@@ -116,13 +116,19 @@ app.get('/api/status', async (req, res) => {
       res.json({ authenticated: true, profile: cachedProfile });
       return;
     }
-    if (!shamClient?.account?.getMyProfile) {
+    const hasSession = existsSync(join(sessionsDir, 'session.json'));
+    const hasToken = shamClient && (shamClient.token || shamClient.accessToken);
+    if (!hasSession && !hasToken) {
       res.json({ authenticated: false, profile: null });
       return;
     }
-    const profile = await withTimeout(shamClient.account.getMyProfile());
-    cachedProfile = profile;
-    res.json({ authenticated: true, profile });
+    try {
+      const profile = await withTimeout(shamClient.account.getMyProfile());
+      cachedProfile = profile;
+      res.json({ authenticated: true, profile });
+    } catch {
+      res.json({ authenticated: true, profile: null });
+    }
   } catch (err) {
     res.json({ authenticated: false, profile: null });
   }
