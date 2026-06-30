@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state', 'cores-session']);
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'api.key' => \App\Http\Middleware\ApiKeyMiddleware::class,
             'security.headers' => SecurityHeaders::class,
             'force.https' => ForceHttps::class,
         ]);
