@@ -84,7 +84,22 @@
     "pleaseLogin": "Please log in first to complete your purchase",
     "fillRequired": "Please fill in the required fields",
     "showAll": "Show All",
-    "getStarted": "Get Started"
+    "getStarted": "Get Started",
+    "autoDeliveryDesc": "All products are auto-delivered to your account within seconds of payment.",
+    "instant": "Instant",
+    "badgeAuto": "Auto Delivery",
+    "within30s": "Within 30 seconds",
+    "liveStockTitle": "Live Stock",
+    "realTimeUpdate": "Real-time Update",
+    "qualityGuaranteeTitle": "Quality Guarantee",
+    "trusted": "100% Trusted",
+    "autoShippingBadge": "Auto Delivery",
+    "enterDetails": "Enter required details then click Buy to get the product instantly.",
+    "clickBuy": "Click Buy to get the product instantly.",
+    "pleaseFillParam": "Please enter: {param}",
+    "orderPlaced": "Order placed! Auto-delivering...",
+    "savePercent": "Save {pct}%",
+    "balanceLabel": "Balance"
   },
   "order": {
     "status": {
@@ -201,6 +216,26 @@
     }
   },
 
+  "browse": {
+    "digitalMarket": "{name} Digital Market",
+    "categories": "Categories",
+    "subcategories": "Subcategories",
+    "mainCategories": "Main Categories",
+    "currentCategory": "Current Category",
+    "maxPrice": "Max Price",
+    "searchCategory": "Search categories...",
+    "searchProducts": "Search products...",
+    "categoriesCount": "{n} categories",
+    "sortPopular": "Popular",
+    "sortPriceLow": "Price: Low",
+    "sortPriceHigh": "Price: High",
+    "buy": "Buy",
+    "instant": "Instant",
+    "browseProducts": "Browse products",
+    "description": "Browse {name} products at {store} — instant delivery, competitive prices.",
+    "locale": "en_US"
+  },
+
   "common": {
     "loading": "Loading...",
     "save": "Save",
@@ -223,6 +258,10 @@
     "clearFilters": "Clear Filters",
     "noItems": "No items",
     "back": "Back",
-    "noOrders": "No orders yet"
+    "noOrders": "No orders yet",
+    "backToStore": "Back to Store",
+    "errorOccurred": "An error occurred",
+    "retry": "Retry",
+    "mustLoginToBuy": "You must log in to purchase"
   }
 }

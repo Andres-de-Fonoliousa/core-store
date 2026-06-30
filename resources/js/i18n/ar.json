@@ -84,7 +84,22 @@
     "pleaseLogin": "سجّل الدخول أولاً لإتمام الشراء",
     "fillRequired": "أكمل الحقول المطلوبة",
     "showAll": "عرض الكل",
-    "getStarted": "ابدأ الآن"
+    "getStarted": "ابدأ الآن",
+    "autoDeliveryDesc": "يتم شحن جميع المنتجات تلقائياً إلى حسابك خلال ثوانٍ من إتمام الدفع.",
+    "instant": "فوري",
+    "badgeAuto": "شحن فوري",
+    "within30s": "خلال 30 ثانية",
+    "liveStockTitle": "مخزون مباشر",
+    "realTimeUpdate": "تحديث فوري",
+    "qualityGuaranteeTitle": "ضمان الجودة",
+    "trusted": "100% موثوق",
+    "autoShippingBadge": "تسليم تلقائي",
+    "enterDetails": "أدخل البيانات المطلوبة ثم اضغط شراء للحصول على المنتج فوراً.",
+    "clickBuy": "اضغط شراء للحصول على المنتج فوراً.",
+    "pleaseFillParam": "يرجى إدخال: {param}",
+    "orderPlaced": "تم الطلب بنجاح! جاري الشحن التلقائي...",
+    "savePercent": "وفر {pct}%",
+    "balanceLabel": "الرصيد"
   },
   "order": {
     "status": {
@@ -201,6 +216,26 @@
     }
   },
 
+  "browse": {
+    "digitalMarket": "سوق {name} الرقمي",
+    "categories": "التصنيفات",
+    "subcategories": "فئات فرعية",
+    "mainCategories": "الفئات الرئيسية",
+    "currentCategory": "التصنيف الحالي",
+    "maxPrice": "السعر الأقصى",
+    "searchCategory": "ابحث عن فئة...",
+    "searchProducts": "ابحث في المنتجات...",
+    "categoriesCount": "{n} فئة",
+    "sortPopular": "Popular",
+    "sortPriceLow": "Price: Low",
+    "sortPriceHigh": "Price: High",
+    "buy": "شراء",
+    "instant": "فوري",
+    "browseProducts": "تصفح المنتجات",
+    "description": "تصفح منتجات {name} في متجر {store} — توصيل فوري، أسعار تنافسية.",
+    "locale": "ar_SY"
+  },
+
   "common": {
     "loading": "جارٍ التحميل...",
     "save": "حفظ",
@@ -223,6 +258,10 @@
     "clearFilters": "مسح الفلاتر",
     "noItems": "لا توجد عناصر",
     "back": "رجوع",
-    "noOrders": "لا توجد طلبات بعد"
+    "noOrders": "لا توجد طلبات بعد",
+    "backToStore": "العودة إلى المتجر",
+    "errorOccurred": "حدث خطأ",
+    "retry": "إعادة المحاولة",
+    "mustLoginToBuy": "يجب تسجيل الدخول لإتمام الشراء"
   }
 }
