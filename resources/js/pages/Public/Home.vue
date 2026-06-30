@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 import {
   Search, SlidersHorizontal, Grid2x2, List, Tag,
   ChevronLeft, ShoppingCart, Zap,
@@ -24,6 +25,7 @@ const props = defineProps<{
   categoryParentId?: number | null;
 }>();
 
+const { t } = useI18n();
 const api = useApi();
 const toast = useToast();
 const auth = useAuthStore();
@@ -162,7 +164,7 @@ const seoTitle = computed(() => {
   return siteName;
 });
 const seoDescription = computed(() => {
-  if (currentCat.value) return `تصفح منتجات ${currentCat.value.name} في متجر CoreS — توصيل فوري، أسعار تنافسية.`;
+      if (currentCat.value) return t('browse.description', { name: currentCat.value.name, store: siteName });
   return defaultDescription;
 });
 const canonicalUrl = computed(() => {
@@ -184,7 +186,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
 </script>
 
 <template>
-  <Head :title="currentCat?.name || 'الكتالوج'">
+  <Head :title="currentCat?.name || $t('nav.catalog')">
     <meta name="description" :content="seoDescription" />
     <link rel="canonical" :href="canonicalUrl" />
 
@@ -193,7 +195,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
     <meta property="og:title" :content="seoTitle" />
     <meta property="og:description" :content="seoDescription" />
     <meta property="og:url" :content="canonicalUrl" />
-    <meta property="og:locale" content="ar_SY" />
+    <meta property="og:locale" :content="$t('browse.locale')" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" :content="seoTitle" />
@@ -256,7 +258,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
             </span>
             <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight mt-1 sm:mt-2 text-white leading-tight">
               <template v-if="isRoot">
-                سوق <span class="text-gradient font-display">{{ $t('app.name') }}</span> الرقمي
+                {{ $t('browse.digitalMarket', { name: $t('app.name') }) }}
               </template>
               <template v-else>
                 {{ currentCat?.name }}
@@ -266,14 +268,14 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
               {{ $t('app.tagline') }}
             </p>
             <p v-else-if="!hasSubcategories" class="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2">
-              Browse products
+              {{ $t('browse.browseProducts') }}
             </p>
           </div>
           <div v-if="!isRoot && hasSubcategories" class="relative w-full sm:w-72 shrink-0">
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="ابحث عن فئة..."
+              :placeholder="$t('browse.searchCategory')"
               class="w-full bg-white/[0.02] border border-white/10 rounded-lg py-2.5 sm:py-3 px-3 sm:px-4 pr-9 sm:pr-10 text-xs sm:text-sm text-white placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all font-sans"
             />
             <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-foreground/50" />
@@ -298,7 +300,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
 
               <div class="bg-white/[0.02] border border-white/5 rounded-2xl p-4 backdrop-blur-xl">
                 <h3 class="text-xs font-semibold text-white tracking-wide mb-3">
-                  {{ isRoot ? 'الفئات الرئيسية' : 'فئات فرعية' }}
+                  {{ isRoot ? $t('browse.mainCategories') : $t('browse.subcategories') }}
                 </h3>
                 <div class="flex flex-col gap-0.5">
                   <button
@@ -328,14 +330,14 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
           <main>
             <div class="flex items-center justify-between mb-6">
               <p class="text-xs sm:text-sm text-muted-foreground">
-                <span class="font-mono text-white font-bold">{{ sidebarCats.length }}</span> فئة
+                {{ $t('browse.categoriesCount', { n: sidebarCats.length }) }}
               </p>
               <button
                 @click="mobileCatOpen = true"
                 class="lg:hidden flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary/10 text-primary border border-primary/20 text-xs font-semibold hover:bg-primary/15 transition-all"
               >
                 <Layers class="w-3.5 h-3.5" />
-                التصنيفات
+                {{ $t('browse.categories') }}
               </button>
             </div>
 
@@ -401,8 +403,8 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
       <!-- ===== PRODUCTS VIEW (leaf categories only) ===== -->
       <template v-else>
         <div class="flex items-center gap-3 mb-5">
-          <button @click="goBack" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/[0.03] border border-white/5 text-xs text-muted-foreground hover:text-white hover:bg-white/[0.06] transition-all lg:hidden">
-            <ChevronRight class="w-3.5 h-3.5" /> رجوع
+          <button @click="goHome" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/[0.03] border border-white/5 text-xs text-muted-foreground hover:text-white hover:bg-white/[0.06] transition-all lg:hidden">
+            <ChevronRight class="w-3.5 h-3.5" /> {{ $t('common.back') }}
           </button>
         </div>
 
@@ -421,7 +423,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                     <Tag class="w-4 h-4 text-primary" />
                   </div>
                   <div>
-                    <h3 class="text-xs font-mono text-primary tracking-wider uppercase">التصنيف الحالي</h3>
+                    <h3 class="text-xs font-mono text-primary tracking-wider uppercase">{{ $t('browse.currentCategory') }}</h3>
                     <p class="text-base font-bold text-white mt-0.5">{{ currentCat.name }}</p>
                   </div>
                 </div>
@@ -430,7 +432,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
               <div class="bg-white/[0.02] border border-white/5 rounded-2xl p-5 backdrop-blur-xl">
                 <div class="flex items-center gap-2 mb-4">
                   <SlidersHorizontal class="w-4 h-4 text-primary" />
-                  <h3 class="text-sm font-semibold text-white tracking-wide">السعر الأقصى</h3>
+                  <h3 class="text-sm font-semibold text-white tracking-wide">{{ $t('browse.maxPrice') }}</h3>
                 </div>
                 <input type="range" v-model="priceRange" min="0" max="100" class="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-primary" />
                 <div class="flex justify-between mt-3 text-xs font-mono">
@@ -450,7 +452,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                   </div>
                 </div>
                 <p class="text-xs text-muted-foreground leading-relaxed">
-                  يتم شحن جميع المنتجات تلقائياً إلى حسابك خلال ثوانٍ من إتمام الدفع.
+                  {{ $t('product.autoDeliveryDesc') }}
                 </p>
               </div>
             </div>
@@ -466,15 +468,15 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
               </div>
               <div class="flex items-center gap-2">
                 <div class="relative w-48 sm:w-56">
-                  <input v-model="searchQuery" type="text" placeholder="ابحث في المنتجات..."
+                  <input v-model="searchQuery" type="text" :placeholder="$t('browse.searchProducts')"
                     class="w-full bg-white/[0.02] border border-white/10 rounded-lg py-2 px-3 pr-8 text-xs text-white placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/30 transition-all font-sans" />
                   <Search class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground/50" />
                 </div>
                 <select v-model="sortBy"
                   class="bg-white/[0.02] border border-white/10 rounded-lg py-2 px-2.5 text-[11px] text-white focus:outline-none focus:border-primary/30 cursor-pointer">
-                  <option value="popular" class="bg-card">Popular</option>
-                  <option value="price_asc" class="bg-card">Price: Low</option>
-                  <option value="price_desc" class="bg-card">Price: High</option>
+                  <option value="popular" class="bg-card">{{ $t('browse.sortPopular') }}</option>
+                  <option value="price_asc" class="bg-card">{{ $t('browse.sortPriceLow') }}</option>
+                  <option value="price_desc" class="bg-card">{{ $t('browse.sortPriceHigh') }}</option>
                 </select>
                 <div class="hidden sm:flex items-center gap-1 p-1 bg-white/[0.02] border border-white/10 rounded-lg">
                   <button @click="viewMode = 'grid'" class="p-1.5 rounded transition-colors" :class="viewMode === 'grid' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-white'">
@@ -503,7 +505,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                     <div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
                     <div class="absolute top-2 sm:top-3 right-2 sm:right-3 flex flex-col gap-2 items-start">
                       <span v-if="product.is_auto" class="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 text-[9px] sm:text-[10px] font-mono font-semibold uppercase tracking-wider bg-success/15 text-success border border-success/20 rounded backdrop-blur-sm">
-                        <Zap class="w-2 h-2 sm:w-2.5 sm:h-2.5" /> فوري
+                        <Zap class="w-2 h-2 sm:w-2.5 sm:h-2.5" /> {{ $t('browse.instant') }}
                       </span>
                     </div>
                     <div class="absolute top-2 sm:top-3 left-2 sm:left-3 w-2 sm:w-3 h-2 sm:h-3 border-t border-l border-primary/20 group-hover:border-primary/50 transition-colors"></div>
@@ -522,7 +524,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                       </div>
                       <div class="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-all active:scale-95 glow-primary shrink-0">
                         <ShoppingCart class="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                        <span class="hidden sm:inline">شراء</span>
+                        <span class="hidden sm:inline">{{ $t('browse.buy') }}</span>
                       </div>
                     </div>
                   </div>
@@ -566,7 +568,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
         <div class="absolute inset-y-0 left-0 w-[85vw] max-w-sm bg-background border-l border-white/5 shadow-2xl overflow-y-auto">
           <div class="p-4 sm:p-5">
             <div class="flex items-center justify-between mb-5">
-              <h3 class="text-sm font-bold text-white">{{ isRoot ? 'الفئات' : 'فئات فرعية' }}</h3>
+              <h3 class="text-sm font-bold text-white">{{ isRoot ? $t('browse.categories') : $t('browse.subcategories') }}</h3>
               <button @click="mobileCatOpen = false" class="w-8 h-8 rounded-lg flex items-center justify-center bg-white/[0.03] border border-white/5 text-muted-foreground hover:text-white transition-colors">
                 <X class="w-4 h-4" />
               </button>

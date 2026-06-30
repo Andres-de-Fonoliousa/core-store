@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { Head, usePage, Link, router } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
+import { useUiStore } from '@/stores/uiStore';
 import { useApi } from '@/composables/useApi';
 import { useToast } from '@/composables/useToast';
 import { useAuthStore } from '@/stores/authStore';
@@ -16,6 +18,8 @@ import {
 
 const page = usePage();
 const api = useApi();
+const { t } = useI18n();
+const ui = useUiStore();
 const toast = useToast();
 const authStore = useAuthStore();
 
@@ -66,14 +70,14 @@ async function placeOrder() {
   if (!product.value) return;
 
   if (!canPurchase.value) {
-    toast.warning('سجّل الدخول أولاً لإتمام الشراء');
+    toast.warning(t('product.loginToBuy'));
     setTimeout(() => { window.location.href = '/login?redirect=/products/' + productId; }, 800);
     return;
   }
 
   const invalidParam = product.value.params?.find((name) => !params.value[name]?.trim());
   if (invalidParam) {
-    toast.error(`يرجى إدخال: ${invalidParam}`);
+    toast.error(t('product.pleaseFillParam', { param: invalidParam }));
     return;
   }
 
@@ -88,7 +92,7 @@ async function placeOrder() {
       params: params.value,
     };
     const { data } = await api.post('/orders', payload);
-    toast.success('تم الطلب بنجاح! جاري الشحن التلقائي...');
+    toast.success(t('product.orderPlaced'));
     setTimeout(() => router.visit(`/orders/${data.id}`), 800);
   } catch (err: any) {
     if (err?.response?.status === 422 && err?.response?.data?.errors) {
@@ -112,18 +116,18 @@ const seoImage = computed(() => {
 const canonicalUrl = computed(() => product.value ? `${window.location.origin}/products/${product.value.id}` : window.location.href);
 const productJsonLd = computed(() => product.value ? safeJsonLd(buildProductJsonLd(product.value)) : '');
 const breadcrumbJsonLd = computed(() => {
-  const items = [{ name: 'الرئيسية', url: window.location.origin }];
+  const items = [{ name: t('nav.home'), url: window.location.origin }];
   if (product.value?.category?.name) {
     items.push({ name: product.value.category.name, url: `${window.location.origin}/browse/${product.value.category_id}` });
   }
-  items.push({ name: product.value?.name ?? 'المنتج', url: canonicalUrl.value });
+  items.push({ name: product.value?.name ?? t('common.product'), url: canonicalUrl.value });
   return safeJsonLd(buildBreadcrumbJsonLd(items));
 });
 const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
 </script>
 
 <template>
-  <Head :title="product?.name ?? 'تفاصيل المنتج'">
+  <Head :title="product?.name ?? $t('common.product')">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -137,7 +141,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
     <meta property="og:description" :content="seoDescription" />
     <meta property="og:url" :content="canonicalUrl" />
     <meta v-if="seoImage" property="og:image" :content="seoImage" />
-    <meta property="og:locale" content="ar_SY" />
+    <meta property="og:locale" :content="ui.locale === 'ar' ? 'ar_SY' : 'en_US'" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" :content="seoTitle" />
@@ -150,7 +154,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
   </Head>
 
   <div
-    dir="rtl"
+    :dir="ui.isRtl ? 'rtl' : 'ltr'"
     class="min-h-screen bg-[#050507] text-white relative overflow-x-hidden"
     style="font-family: 'Cairo', 'Space Grotesk', sans-serif; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); width: 100vw;"
   >
@@ -166,7 +170,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
         <div class="w-8 h-8 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center group-hover:border-cyan-400/30 transition-colors">
           <ArrowLeft class="w-4 h-4" />
         </div>
-        <span>العودة إلى المتجر</span>
+        <span>{{ $t('common.backToStore') }}</span>
       </Link>
     </div>
 
@@ -194,10 +198,10 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
         <div class="w-20 h-20 rounded-2xl bg-red-500/5 border border-red-500/10 flex items-center justify-center mb-5 mx-auto">
           <AlertTriangle class="w-8 h-8 text-red-500/50" />
         </div>
-        <h3 class="text-xl font-semibold text-white mb-2">حدث خطأ</h3>
+        <h3 class="text-xl font-semibold text-white mb-2">{{ $t('common.errorOccurred') }}</h3>
         <p class="text-sm text-white/50 mb-6">{{ fetchError }}</p>
         <button @click="loadProduct" class="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500/10 text-cyan-400 border border-cyan-400/20 rounded-xl hover:bg-cyan-500/20 transition-all active:scale-95">
-          <Loader2 class="w-4 h-4" /> إعادة المحاولة
+          <Loader2 class="w-4 h-4" /> {{ $t('common.retry') }}
         </button>
       </div>
     </div>
@@ -228,15 +232,15 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
             <!-- Status Badges -->
             <div class="absolute top-6 right-6 flex flex-col gap-2">
               <span v-if="product.status === 'active'" class="px-3 py-1.5 text-[11px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-400/20 rounded-lg backdrop-blur-sm flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> متوفر
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> {{ $t('product.inStock') }}
               </span>
               <span v-else class="px-3 py-1.5 text-[11px] font-mono font-semibold bg-red-500/10 text-red-400 border border-red-400/20 rounded-lg backdrop-blur-sm">
-                غير متوفر
+                {{ $t('product.outOfStock') }}
               </span>
             </div>
             <div v-if="product.is_auto" class="absolute top-6 left-6">
               <span class="px-3 py-1.5 text-[11px] font-mono font-semibold bg-cyan-500/15 text-cyan-400 border border-cyan-400/30 rounded-lg backdrop-blur-sm flex items-center gap-1.5 shadow-lg shadow-cyan-500/10">
-                <Zap class="w-3.5 h-3.5 fill-cyan-400/20" /> شحن فوري
+                <Zap class="w-3.5 h-3.5 fill-cyan-400/20" /> {{ $t('product.badgeAuto') }}
               </span>
             </div>
           </div>
@@ -250,10 +254,10 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                 <Cpu class="w-3.5 h-3.5" /> {{ product.provider?.name || $t('app.name') }}
               </span>
               <span class="px-3 py-1.5 text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-400/20 rounded-lg flex items-center gap-1.5">
-                <Tag class="w-3.5 h-3.5" /> {{ product.category?.name || 'عام' }}
+                <Tag class="w-3.5 h-3.5" /> {{ product.category?.name || $t('common.general') }}
               </span>
               <span v-if="product.is_auto" class="px-3 py-1.5 text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-400/20 rounded-lg flex items-center gap-1.5">
-                <Check class="w-3.5 h-3.5" /> تسليم تلقائي
+                <Check class="w-3.5 h-3.5" /> {{ $t('product.autoShippingBadge') }}
               </span>
             </div>
 
@@ -262,7 +266,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
             </h1>
 
             <p class="text-sm text-white/50 leading-relaxed mb-6">
-              {{ product.params?.length ? 'أدخل البيانات المطلوبة ثم اضغط شراء للحصول على المنتج فوراً.' : 'اضغط شراء للحصول على المنتج فوراً.' }}
+              {{ product.params?.length ? $t('product.enterDetails') : $t('product.clickBuy') }}
             </p>
 
             <!-- Features -->
@@ -272,8 +276,8 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                   <Clock class="w-4 h-4 text-cyan-400" />
                 </div>
                 <div>
-                  <div class="text-xs font-semibold text-white">توصيل فوري</div>
-                  <div class="text-[10px] text-white/40">خلال 30 ثانية</div>
+                  <div class="text-xs font-semibold text-white">{{ $t('app.features.instantDelivery') }}</div>
+                  <div class="text-[10px] text-white/40">{{ $t('product.within30s') }}</div>
                 </div>
               </div>
               <div class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5">
@@ -281,8 +285,8 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                   <ShieldCheck class="w-4 h-4 text-emerald-400" />
                 </div>
                 <div>
-                  <div class="text-xs font-semibold text-white">دفع آمن</div>
-                  <div class="text-[10px] text-white/40">SSL مشفر</div>
+                  <div class="text-xs font-semibold text-white">{{ $t('app.features.securePayment') }}</div>
+                  <div class="text-[10px] text-white/40">{{ $t('app.features.sslEncrypted') }}</div>
                 </div>
               </div>
               <div class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5">
@@ -290,8 +294,8 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                   <Package class="w-4 h-4 text-purple-400" />
                 </div>
                 <div>
-                  <div class="text-xs font-semibold text-white">مخزون مباشر</div>
-                  <div class="text-[10px] text-white/40">تحديث فوري</div>
+                  <div class="text-xs font-semibold text-white">{{ $t('product.liveStockTitle') }}</div>
+                  <div class="text-[10px] text-white/40">{{ $t('product.realTimeUpdate') }}</div>
                 </div>
               </div>
               <div class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5">
@@ -299,8 +303,8 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                   <Star class="w-4 h-4 text-amber-400" />
                 </div>
                 <div>
-                  <div class="text-xs font-semibold text-white">ضمان الجودة</div>
-                  <div class="text-[10px] text-white/40">100% موثوق</div>
+                  <div class="text-xs font-semibold text-white">{{ $t('product.qualityGuaranteeTitle') }}</div>
+                  <div class="text-[10px] text-white/40">{{ $t('product.trusted') }}</div>
                 </div>
               </div>
             </div>
@@ -319,14 +323,14 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
             <!-- Price -->
             <div class="flex items-center justify-between mb-6">
               <div>
-                <p class="text-xs text-white/40 font-mono mb-1">السعر</p>
+                <p class="text-xs text-white/40 font-mono mb-1">{{ $t('product.price') }}</p>
                 <p class="text-4xl font-bold text-white tracking-tight font-mono">
                   $ {{ fmtMoney(product.price) }}
                 </p>
               </div>
               <div v-if="product.cost_price && toNum(product.cost_price) < toNum(product.price)" class="text-right">
                 <p class="text-xs text-white/30 line-through font-mono">$ {{ fmtMoney(product.cost_price) }}</p>
-                <p class="text-[10px] text-emerald-400 font-mono">وفر {{ Math.round((1 - toNum(product.cost_price)/toNum(product.price)) * 100) }}%</p>
+                <p class="text-[10px] text-emerald-400 font-mono">{{ $t('product.savePercent', { pct: Math.round((1 - toNum(product.cost_price)/toNum(product.price)) * 100) }) }}</p>
               </div>
             </div>
 
@@ -335,7 +339,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
 
             <!-- Quantity -->
             <div class="mb-6">
-              <label class="block text-xs font-medium text-white/60 mb-3">اختر الكمية</label>
+              <label class="block text-xs font-medium text-white/60 mb-3">{{ $t('product.selectQty') }}</label>
               <div class="flex flex-wrap gap-2">
                 <button
                   v-for="qty in product.qty_values || [1]"
@@ -376,7 +380,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
 
             <!-- Total -->
             <div class="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/5 mb-6">
-              <span class="text-sm text-white/60">الإجمالي</span>
+              <span class="text-sm text-white/60">{{ $t('order.total') }}</span>
               <span class="text-2xl font-bold text-cyan-400 font-mono tracking-tight">
                 $ {{ fmtMoney(toNum(product.price) * quantity) }}
               </span>
@@ -396,7 +400,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
                 <Loader2 v-if="submitting" class="w-4 h-4 animate-spin" />
                 <Zap v-else-if="product.status === 'active'" class="w-4 h-4" />
                 <ShoppingCart v-else class="w-4 h-4" />
-                {{ submitting ? 'جاري المعالجة...' : product.status === 'active' ? 'شراء الآن' : 'غير متوفر' }}
+                {{ submitting ? $t('product.processing') : product.status === 'active' ? $t('product.buyNow') : $t('product.notAvailable') }}
               </span>
             </button>
 
@@ -404,25 +408,25 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
             <div class="flex items-center justify-center gap-4 mt-5">
               <div class="flex items-center gap-1.5 text-[10px] text-white/40">
                 <ShieldCheck class="w-3 h-3 text-emerald-400/60" />
-                <span>دفع آمن</span>
+                <span>{{ $t('app.features.securePayment') }}</span>
               </div>
               <div class="w-px h-3 bg-white/10" />
               <div class="flex items-center gap-1.5 text-[10px] text-white/40">
                 <Clock class="w-3 h-3 text-cyan-400/60" />
-                <span>توصيل فوري</span>
+                <span>{{ $t('app.features.instantDelivery') }}</span>
               </div>
               <div class="w-px h-3 bg-white/10" />
               <div class="flex items-center gap-1.5 text-[10px] text-white/40">
                 <CreditCard class="w-3 h-3 text-purple-400/60" />
-                <span>رصيد</span>
+                <span>{{ $t('product.balanceLabel') }}</span>
               </div>
             </div>
 
             <!-- Login prompt for guests -->
             <div v-if="!user" class="mt-5 p-4 rounded-xl bg-cyan-500/5 border border-cyan-400/10 text-center">
-              <p class="text-xs text-white/60 mb-2">يجب تسجيل الدخول لإتمام الشراء</p>
+              <p class="text-xs text-white/60 mb-2">{{ $t('common.mustLoginToBuy') }}</p>
               <Link href="/login" class="inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 font-semibold transition-colors">
-                تسجيل الدخول <ChevronRight class="w-3 h-3" />
+                {{ $t('nav.login') }} <ChevronRight class="w-3 h-3" />
               </Link>
             </div>
           </div>
@@ -439,7 +443,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
           </div>
           <span class="text-xs font-bold tracking-wider text-white/60 font-display">{{ $t('app.name') }}</span>
         </div>
-        <p class="text-[10px] text-white/30 font-mono">مُبنى للاعبين. يعمل بالنيون.</p>
+        <p class="text-[10px] text-white/30 font-mono">{{ $t('app.footerTagline') }}</p>
       </div>
     </footer>
   </div>
