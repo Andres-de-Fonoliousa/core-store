@@ -13,6 +13,15 @@ const server = createServer(app);
 app.use(cors());
 app.use(express.json({ limit: '1mb' }));
 
+const API_TIMEOUT = 8000;
+
+function withTimeout(promise, ms = API_TIMEOUT) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error('API timeout')), ms)),
+  ]);
+}
+
 const sessionsDir = join(__dirname, 'sessions');
 if (!existsSync(sessionsDir)) mkdirSync(sessionsDir, { recursive: true });
 
@@ -113,7 +122,7 @@ app.get('/api/status', async (req, res) => {
       res.json({ authenticated: false, profile: null });
       return;
     }
-    const profile = await shamClient.account.getMyProfile();
+    const profile = await withTimeout(shamClient.account.getMyProfile());
     cachedProfile = profile;
     res.json({ authenticated: true, profile });
   } catch (err) {
@@ -123,7 +132,7 @@ app.get('/api/status', async (req, res) => {
 
 app.get('/api/profile', async (req, res) => {
   try {
-    const profile = await shamClient.account.getMyProfile();
+    const profile = await withTimeout(shamClient.account.getMyProfile());
     cachedProfile = profile;
     res.json(profile);
   } catch (err) {
@@ -133,7 +142,7 @@ app.get('/api/profile', async (req, res) => {
 
 app.get('/api/balances', async (req, res) => {
   try {
-    const balances = await shamClient.account.getBalances();
+    const balances = await withTimeout(shamClient.account.getBalances());
     res.json(balances);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -162,7 +171,7 @@ app.get('/api/transactions', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
     const filters = req.query.filters ? JSON.parse(req.query.filters) : {};
-    const logs = await shamClient.history.getLogs(page, limit, filters);
+    const logs = await withTimeout(shamClient.history.getLogs(page, limit, filters));
     res.json(logs);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -171,7 +180,7 @@ app.get('/api/transactions', async (req, res) => {
 
 app.get('/api/favorites', async (req, res) => {
   try {
-    const favorites = await shamClient.account.getFavorites();
+    const favorites = await withTimeout(shamClient.account.getFavorites());
     res.json(favorites);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -181,7 +190,7 @@ app.get('/api/favorites', async (req, res) => {
 app.post('/api/resolve', async (req, res) => {
   try {
     const { address } = req.body;
-    const result = await shamClient.transfer.resolveAccount(address);
+    const result = await withTimeout(shamClient.transfer.resolveAccount(address));
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -191,7 +200,7 @@ app.post('/api/resolve', async (req, res) => {
 app.post('/api/transfer', async (req, res) => {
   try {
     const { peerAccount, amount, currencyId, note, pin } = req.body;
-    const result = await shamClient.transfer.executeTransaction(peerAccount, amount, currencyId, note, pin);
+    const result = await withTimeout(shamClient.transfer.executeTransaction(peerAccount, amount, currencyId, note, pin));
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -238,7 +247,7 @@ app.post('/check', async (req, res) => {
     return res.status(400).json({ found: false, error: 'tranId required' });
   }
   try {
-    const logs = await shamClient.history.getLogs(1, 10, { tranID: String(tranId) });
+    const logs = await withTimeout(shamClient.history.getLogs(1, 10, { tranID: String(tranId) }));
     const match = logs?.log?.find(tx => {
       const idMatch = String(tx.tranId) === String(tranId) || String(tx.strTranId) === String(tranId);
       const amountMatch = !amount || Number(tx.amount) === Number(amount);
@@ -281,7 +290,7 @@ app.post('/incoming', async (req, res) => {
     let page = 1;
     let hasMore = true;
     while (hasMore && page <= 3) {
-      const logs = await shamClient.history.getLogs(page, 50);
+      const logs = await withTimeout(shamClient.history.getLogs(page, 50));
       if (!logs?.log || logs.log.length === 0) break;
       for (const tx of logs.log) {
         if (tx.tranKind !== 1) continue;
