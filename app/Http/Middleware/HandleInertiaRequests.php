@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Tenant\TenantManager;
 use Closure;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -40,6 +41,9 @@ class HandleInertiaRequests extends Middleware
             }
         }
 
+        $manager = app(TenantManager::class);
+        $tenant = $manager->getCurrent();
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -47,6 +51,19 @@ class HandleInertiaRequests extends Middleware
                 'user' => $user,
                 'token' => $token,
             ],
+            'shop' => $tenant ? [
+                'id' => $tenant->uuid,
+                'name' => $tenant->name,
+                'logo' => $tenant->logo_url,
+                'favicon' => $tenant->favicon_url,
+                'color' => $tenant->brand_color,
+                'colorDark' => $tenant->brand_color_dark,
+                'locale' => $tenant->locale,
+                'currency' => $tenant->currency,
+                'plan' => $tenant->plan,
+                'status' => $tenant->status,
+            ] : null,
+            'platform' => $manager->isPlatformRequest(),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

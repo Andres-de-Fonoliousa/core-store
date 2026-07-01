@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use App\Concerns\HasTenantScope;
 use App\Traits\LogsActivity;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -40,7 +41,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable implements PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable, LogsActivity;
+    use HasApiTokens, HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable, LogsActivity, HasTenantScope;
 
     /**
      * Get the attributes that should be cast.

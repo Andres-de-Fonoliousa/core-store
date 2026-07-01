@@ -3,6 +3,7 @@
 use App\Http\Middleware\ForceHttps;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\IdentifyTenant;
 use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -27,9 +28,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'api.key' => \App\Http\Middleware\ApiKeyMiddleware::class,
             'security.headers' => SecurityHeaders::class,
             'force.https' => ForceHttps::class,
+            'tenant' => IdentifyTenant::class,
         ]);
         $middleware->web(append: [
             HandleAppearance::class,
+            IdentifyTenant::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
             SecurityHeaders::class,
@@ -40,6 +43,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->api(append: [
             StartSession::class,
+            IdentifyTenant::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
