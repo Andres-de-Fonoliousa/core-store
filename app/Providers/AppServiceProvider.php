@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\Tenant\TenantManager;
+use App\Services\Tenant\TenantResolver;
+use App\Services\Tenant\TenantScope;
 use Carbon\CarbonImmutable;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -20,7 +23,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(TenantManager::class);
+        $this->app->singleton(TenantScope::class, function () {
+            return new TenantScope();
+        });
+        $this->app->singleton(TenantResolver::class);
     }
 
     /**
