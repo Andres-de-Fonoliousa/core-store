@@ -125,7 +125,6 @@ const userMenuRef = ref<HTMLElement | null>(null);
 onClickOutside(userMenuRef, () => { userMenuOpen.value = false; });
 
 function handleLogout() {
-  authStore.logout();
   router.post(logout().url);
 }
 
@@ -139,6 +138,7 @@ function fmtPrice(v: string | number | null | undefined): string {
 const featuredProducts = ref<any[]>([]);
 const categoriesList = ref<any[]>([]);
 const isLoading = ref(false);
+const hasApiError = ref(false);
 
 const firstRow = computed(() => featuredProducts.value.slice(0, 3));
 const secondRow = computed(() => featuredProducts.value.slice(3, 5));
@@ -181,6 +181,7 @@ async function fetchFeatured() {
     nextTick(() => { initReveal(); initTilt(); });
   } catch (err: any) {
     console.error('fetch featured failed', parseApiError(err));
+    hasApiError.value = true;
   }
 }
 
@@ -197,6 +198,7 @@ async function fetchCategories() {
     nextTick(initReveal);
   } catch (e) {
     console.error('fetch categories failed', e);
+    hasApiError.value = true;
   }
 }
 

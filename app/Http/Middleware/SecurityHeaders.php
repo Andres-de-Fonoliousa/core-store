@@ -12,7 +12,6 @@ class SecurityHeaders
     {
         $response = $next($request);
 
-        $response->headers->set('X-Frame-Options', 'DENY');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
@@ -22,6 +21,7 @@ class SecurityHeaders
 
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
+        $response->headers->remove('X-Frame-Options');
         $response->headers->set('Content-Security-Policy', $this->cspPolicy());
 
         return $response;
@@ -37,6 +37,7 @@ class SecurityHeaders
             "font-src 'self' https://fonts.gstatic.com",
             "connect-src 'self'",
             "frame-src 'self' https://js.stripe.com",
+            "frame-ancestors *",
             "base-uri 'self'",
             "form-action 'self'",
         ];
