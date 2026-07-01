@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Link, usePage } from '@inertiajs/vue3';
 import { useAuthStore } from '@/stores/authStore';
@@ -21,14 +21,24 @@ const page = usePage();
 const sidebarOpen = ref(false);
 const currentRoute = computed(() => page.url);
 const unreadCount = ref(0);
+let notifPollTimer: ReturnType<typeof setInterval> | null = null;
 
-onMounted(async () => {
+async function fetchUnreadCount() {
   try {
     const res = await api.get('/admin/notifications', { params: { per_page: 1 } });
     unreadCount.value = res.data.meta?.unread ?? 0;
   } catch {
     // silently ignore
   }
+}
+
+onMounted(() => {
+  fetchUnreadCount();
+  notifPollTimer = setInterval(fetchUnreadCount, 30000);
+});
+
+onUnmounted(() => {
+  if (notifPollTimer) clearInterval(notifPollTimer);
 });
 
 const { t } = useI18n();
