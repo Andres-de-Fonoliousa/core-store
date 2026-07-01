@@ -31,8 +31,13 @@ class HandleInertiaRequests extends Middleware
         $token = null;
 
         if ($user && in_array(HasApiTokens::class, class_uses_recursive($user))) {
-            $token = $user->tokens()->where('name', 'auth-token')->first()?->plainTextToken
-                  ?? $user->createToken('auth-token')->plainTextToken;
+            $existing = $user->tokens()->where('name', 'auth-token')->latest()->first();
+            if ($existing) {
+                $user->tokens()->where('name', 'auth-token')->where('id', '!=', $existing->id)->delete();
+                $token = $existing->id . '|' . $existing->token;
+            } else {
+                $token = $user->createToken('auth-token')->plainTextToken;
+            }
         }
 
         return [
