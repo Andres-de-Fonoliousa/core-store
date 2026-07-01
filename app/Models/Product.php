@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Concerns\HasTenantScope;
 use App\Traits\LogsActivity;
 
 #[Fillable(['provider_id', 'category_id', 'name', 'price', 'cost_price', 'external_id', 'image', 'params', 'qty_values', 'is_auto', 'status'])]
 class Product extends Model
 {
-    use SoftDeletes, LogsActivity;
+    use SoftDeletes, LogsActivity, HasTenantScope;
 
     public function provider(): BelongsTo
     {

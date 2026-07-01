@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Concerns\HasTenantScope;
 use App\Traits\LogsActivity;
 
 #[Fillable(['provider_category_id', 'parent_id', 'name', 'image', 'status'])]
 class Category extends Model
 {
-    use SoftDeletes, LogsActivity;
+    use SoftDeletes, LogsActivity, HasTenantScope;
 
     public function products(): HasMany
     {
