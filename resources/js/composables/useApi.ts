@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
+import { router } from '@inertiajs/vue3';
 import { useAuthStore } from '@/stores/authStore';
 
 const api: AxiosInstance = axios.create({
@@ -27,12 +28,10 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !window.location.pathname.startsWith('/login')) {
       const authStore = useAuthStore();
       authStore.logout();
-      if (!window.location.pathname.startsWith('/login')) {
-        window.location.href = '/login';
-      }
+      router.visit('/login');
     }
 
     return Promise.reject(error);
