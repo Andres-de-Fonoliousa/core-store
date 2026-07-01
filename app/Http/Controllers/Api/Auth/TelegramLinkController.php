@@ -63,6 +63,11 @@ class TelegramLinkController extends Controller
             return response()->json(['error' => 'Email already linked to another Telegram account'], 422);
         }
 
+        $existing = User::where('telegram_id', $validated['telegram_id'])->where('id', '!=', $user->id)->first();
+        if ($existing) {
+            return response()->json(['error' => 'Telegram account already linked to another user'], 422);
+        }
+
         $user->update([
             'telegram_id' => $validated['telegram_id'],
             'telegram_username' => $validated['telegram_username'],
