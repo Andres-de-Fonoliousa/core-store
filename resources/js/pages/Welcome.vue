@@ -25,6 +25,9 @@ const handleScroll = () => {
 };
 
 let revealObserver: IntersectionObserver | null = null;
+let countersObserver: IntersectionObserver | null = null;
+const observedMagnetic = new WeakSet<Element>();
+const observedTilt = new WeakSet<Element>();
 
 const initReveal = () => {
   revealObserver = new IntersectionObserver(
@@ -42,7 +45,7 @@ const initReveal = () => {
 };
 
 const initCounters = () => {
-  const observer = new IntersectionObserver(
+  countersObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -58,17 +61,19 @@ const initCounters = () => {
             }
             el.textContent = current.toLocaleString('ar-SA') + (el.dataset.suffix || '');
           }, 30);
-          observer.unobserve(el);
+          countersObserver?.unobserve(el);
         }
       });
     },
     { threshold: 0.5 }
   );
-  document.querySelectorAll('.counter-anim').forEach((el) => observer.observe(el));
+  document.querySelectorAll('.counter-anim').forEach((el) => countersObserver?.observe(el));
 };
 
 const initMagnetic = () => {
   document.querySelectorAll('.magnetic').forEach((el) => {
+    if (observedMagnetic.has(el)) return;
+    observedMagnetic.add(el);
     const htmlEl = el as HTMLElement;
     htmlEl.addEventListener('mousemove', (e: MouseEvent) => {
       const rect = htmlEl.getBoundingClientRect();
@@ -84,6 +89,8 @@ const initMagnetic = () => {
 
 const initTilt = () => {
   document.querySelectorAll('.tilt-card').forEach((el) => {
+    if (observedTilt.has(el)) return;
+    observedTilt.add(el);
     const htmlEl = el as HTMLElement;
     htmlEl.addEventListener('mousemove', (e: MouseEvent) => {
       const rect = htmlEl.getBoundingClientRect();
@@ -112,6 +119,7 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
   revealObserver?.disconnect();
+  countersObserver?.disconnect();
 });
 
 // ── API & Auth ──
