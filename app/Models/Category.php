@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Concerns\HasTenantScope;
 use App\Traits\LogsActivity;
 
-#[Fillable(['provider_category_id', 'parent_id', 'name', 'image', 'status'])]
+#[Fillable(['provider_category_id', 'parent_id', 'name', 'image', 'status', 'tenant_id'])]
 class Category extends Model
 {
     use SoftDeletes, LogsActivity, HasTenantScope;
