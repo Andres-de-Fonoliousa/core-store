@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Concerns\HasTenantScope;
 use App\Traits\LogsActivity;
 
-#[Fillable(['provider_id', 'category_id', 'name', 'price', 'cost_price', 'external_id', 'image', 'params', 'qty_values', 'is_auto', 'status'])]
+#[Fillable(['provider_id', 'category_id', 'name', 'price', 'cost_price', 'external_id', 'image', 'params', 'qty_values', 'is_auto', 'status', 'tenant_id'])]
 class Product extends Model
 {
     use SoftDeletes, LogsActivity, HasTenantScope;
