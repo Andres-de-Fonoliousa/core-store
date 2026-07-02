@@ -6,28 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    private array $tables = [
-        'users' => ['table' => 'users', 'nullable' => false],
-        'products' => ['table' => 'products', 'nullable' => false],
-        'categories' => ['table' => 'categories', 'nullable' => false],
-        'orders' => ['table' => 'orders', 'nullable' => false],
-        'transactions' => ['table' => 'transactions', 'nullable' => false],
-        'providers' => ['table' => 'providers', 'nullable' => true],
-        'notifications' => ['table' => 'notifications', 'nullable' => true],
-    ];
-
     public function up(): void
     {
-        foreach ($this->tables as $config) {
-            Schema::table($config['table'], function (Blueprint $table) use ($config) {
-                if (!Schema::hasColumn($config['table'], 'tenant_id')) {
-                    $col = $table->foreignId('tenant_id');
-                    if ($config['nullable']) {
-                        $col->nullable();
-                    }
-                    $col->constrained()->cascadeOnDelete();
+        $tables = ['users', 'products', 'categories', 'orders', 'transactions', 'providers', 'notifications'];
 
-                    $table->index('tenant_id');
+        foreach ($tables as $table) {
+            Schema::table($table, function (Blueprint $t) use ($table) {
+                if (!Schema::hasColumn($table, 'tenant_id')) {
+                    $t->unsignedBigInteger('tenant_id')->nullable()->after('id');
+                    $t->index('tenant_id');
                 }
             });
         }
@@ -35,10 +22,12 @@ return new class extends Migration
 
     public function down(): void
     {
-        foreach ($this->tables as $config) {
-            Schema::table($config['table'], function (Blueprint $table) use ($config) {
-                $table->dropForeign([$config['table'] . '_tenant_id_foreign']);
-                $table->dropColumn('tenant_id');
+        $tables = ['users', 'products', 'categories', 'orders', 'transactions', 'providers', 'notifications'];
+
+        foreach ($tables as $table) {
+            Schema::table($table, function (Blueprint $t) use ($table) {
+                $t->dropIndex(['tenant_id']);
+                $t->dropColumn('tenant_id');
             });
         }
     }

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Concerns\HasTenantScope;
 use App\Traits\LogsActivity;
 
-#[Fillable(['user_id', 'order_id', 'amount', 'type', 'status', 'balance_before', 'balance_after', 'payment_id', 'proof', 'note', 'date', 'payment_method_id', 'payment_address_id', 'verified_at'])]
+#[Fillable(['user_id', 'order_id', 'amount', 'type', 'status', 'balance_before', 'balance_after', 'payment_id', 'proof', 'note', 'date', 'payment_method_id', 'payment_address_id', 'verified_at', 'tenant_id'])]
 class Transaction extends Model
 {
     use SoftDeletes, LogsActivity, HasTenantScope;

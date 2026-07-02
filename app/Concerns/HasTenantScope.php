@@ -19,6 +19,11 @@ trait HasTenantScope
         return true;
     }
 
+    public function isTenantScopeNullable(): bool
+    {
+        return property_exists($this, 'tenantScopeNullable') && $this->tenantScopeNullable;
+    }
+
     public function scopeWithoutTenant(Builder $query): Builder
     {
         return $query->withoutGlobalScope('tenant');

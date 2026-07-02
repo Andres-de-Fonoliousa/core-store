@@ -36,6 +36,13 @@ class TenantScope
             return;
         }
 
-        $query->where("{$table}.tenant_id", $tenantId);
+        if (method_exists($model, 'isTenantScopeNullable') && $model->isTenantScopeNullable()) {
+            $query->where(function ($q) use ($table, $tenantId) {
+                $q->where("{$table}.tenant_id", $tenantId)
+                  ->orWhereNull("{$table}.tenant_id");
+            });
+        } else {
+            $query->where("{$table}.tenant_id", $tenantId);
+        }
     }
 }
