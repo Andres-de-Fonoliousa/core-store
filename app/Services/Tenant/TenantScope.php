@@ -3,9 +3,11 @@
 namespace App\Services\Tenant;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\App;
 
-class TenantScope
+class TenantScope implements Scope
 {
     private TenantManager $manager;
 
@@ -17,7 +19,7 @@ class TenantScope
         $this->exceptTables = $exceptTables;
     }
 
-    public function __invoke(Builder $query): void
+    public function apply(Builder $query, Model $model): void
     {
         $tenantId = $this->manager->getCurrentId();
 

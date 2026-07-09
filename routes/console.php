@@ -20,3 +20,9 @@ Schedule::command('db:backup --keep=14')->dailyAt('03:00');
 
 // Prune audit logs older than 90 days weekly (Sunday at 4 AM)
 Schedule::command('model:prune', ['--model' => [\App\Models\AuditLog::class]])->weeklyOn(0, '04:00');
+
+// Onboarding follow-up email to tenants inactive after 24h
+Schedule::command('onboarding:follow-up')->dailyAt('10:00');
+
+// Process monthly subscription billing
+Schedule::command('billing:process')->monthly();

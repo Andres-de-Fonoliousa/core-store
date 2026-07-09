@@ -64,6 +64,7 @@ class HandleInertiaRequests extends Middleware
                 'status' => $tenant->status,
             ] : null,
             'platform' => $manager->isPlatformRequest(),
+            'is_platform_admin' => $user?->is_platform_admin ?? false,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

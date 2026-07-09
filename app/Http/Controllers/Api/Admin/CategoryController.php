@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Services\Tenant\PlanFeatures;
+use App\Services\Tenant\TenantManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -71,6 +73,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        $tenant = app(TenantManager::class)->getCurrent();
+        if ($tenant && !PlanFeatures::canCreateCategory($tenant)) {
+            return response()->json([
+                'error' => 'Category limit reached for your plan. Upgrade to add more categories.',
+            ], 403);
+        }
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'image' => ['nullable', 'string', 'max:2048'],

@@ -236,6 +236,108 @@
     "locale": "en_US"
   },
 
+  "platform": {
+    "nav": {
+      "pricing": "Pricing",
+      "features": "Features",
+      "login": "Login",
+      "getStarted": "Get Started"
+    },
+    "hero": {
+      "badge": "SaaS Platform v2.0",
+      "title": "Launch your {highlight} store in minutes",
+      "highlight": "digital goods",
+      "subtitle": "The complete multi-tenant platform for selling game keys, gift cards, software licenses, and digital products. Built for scalability.",
+      "cta": "Get Started Free",
+      "viewPricing": "View Pricing"
+    },
+    "features": {
+      "title": "Everything you need to sell",
+      "subtitle": "Built for digital goods from day one. Auto-fulfillment, multi-currency, and real-time inventory management.",
+      "autoFulfillment": "Auto-Fulfillment",
+      "autoFulfillmentDesc": "Connect providers and automate delivery. Orders are fulfilled instantly when payment is confirmed.",
+      "securePayments": "Secure Payments",
+      "securePaymentsDesc": "Multiple payment methods including Sham Cash bridge. Full transaction audit trail.",
+      "analytics": "Real-Time Analytics",
+      "analyticsDesc": "Track orders, revenue, deposits, and customer behavior with live KPI dashboards.",
+      "teamManagement": "Team Management",
+      "teamManagementDesc": "Invite staff members with role-based access. Control who can manage products, orders, and settings.",
+      "productManagement": "Product Management",
+      "productManagementDesc": "Organize products into categories with images, descriptions, and multiple price tiers.",
+      "customDomain": "Custom Domain",
+      "customDomainDesc": "Use your own domain with automatic SSL. Professional branding for your store."
+    },
+    "pricing": {
+      "title": "Simple, transparent pricing",
+      "subtitle": "Start free, scale as you grow. No hidden fees.",
+      "free": "Free",
+      "pro": "Pro",
+      "enterprise": "Enterprise",
+      "perMonth": "/mo",
+      "getStarted": "Get Started",
+      "freeProducts": "Basic storefront",
+      "freeUsers": "3 staff members",
+      "freeProductsLimit": "10 products",
+      "freeSupport": "Community support",
+      "proDomain": "Custom domain",
+      "proUsers": "25 staff members",
+      "proProducts": "500 products",
+      "proFulfillment": "Auto-fulfillment",
+      "proSupport": "Email support",
+      "proFee": "2% transaction fee",
+      "enterpriseInherit": "Everything in Pro",
+      "enterpriseProducts": "Unlimited products",
+      "enterpriseApi": "API access",
+      "enterpriseSupport": "Priority support",
+      "enterpriseFee": "1.5% transaction fee"
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "q1": "What is CoreS?",
+      "a1": "CoreS is a SaaS platform that lets you run your own digital goods store. Sell game keys, gift cards, software licenses, and more.",
+      "q2": "How does pricing work?",
+      "a2": "Choose from Free, Pro, or Enterprise plans. Transaction fees apply on Pro and Enterprise plans. No setup fees, cancel anytime.",
+      "q3": "Can I use my own domain?",
+      "a3": "Yes, Pro and Enterprise plans support custom domains with automatic SSL provisioning.",
+      "q4": "How do I get paid?",
+      "a4": "Payments are processed through Sham Cash and manual transfers. Funds are held in your store wallet for withdrawal."
+    },
+    "register": {
+      "title": "Create your store",
+      "subtitle": "Start selling digital goods in minutes",
+      "storeName": "Store Name",
+      "storeNamePlaceholder": "My Digital Store",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Min 8 characters",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Repeat password",
+      "submit": "Create Store",
+      "submitting": "Creating store...",
+      "backToHome": "Back to home",
+      "success": "Store created! Redirecting..."
+    },
+    "invitations": {
+      "title": "Pending Invitations",
+      "invite": "Invite User",
+      "emailLabel": "Email address",
+      "send": "Send Invite",
+      "sending": "Sending...",
+      "cancel": "Cancel",
+      "resend": "Resend",
+      "revoke": "Revoke",
+      "noInvitations": "No pending invitations",
+      "statusPending": "Pending",
+      "statusJoined": "Joined",
+      "sent": "Invitation sent",
+      "resent": "Invitation resent",
+      "revoked": "Invitation revoked",
+      "alreadyMember": "User is already a member of this tenant",
+      "failed": "Failed to send invitation"
+    }
+  },
+
   "common": {
     "loading": "Loading...",
     "save": "Save",
