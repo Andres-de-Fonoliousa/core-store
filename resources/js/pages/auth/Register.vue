@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Form, Head, Link } from '@inertiajs/vue3';
+import { Form, Head, Link, usePage } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
 import TextLink from '@/components/TextLink.vue';
@@ -10,10 +10,15 @@ import { Spinner } from '@/components/ui/spinner';
 import { login } from '@/routes';
 import { store } from '@/routes/register';
 import { Cpu, Zap, ArrowLeft, User, Mail, Lock, ShieldCheck } from 'lucide-vue-next';
+import { ref } from 'vue';
 
 defineProps<{
     passwordRules: string;
 }>();
+
+const page = usePage();
+const params = new URLSearchParams(page.url.split('?')[1] || '');
+const invitationId = ref(params.get('invitation') || '');
 
 defineOptions({
     layout: {
@@ -176,6 +181,9 @@ defineOptions({
               </div>
               <InputError :message="errors.password_confirmation" class="text-danger text-xs" />
             </div>
+
+            <!-- Hidden invitation field -->
+            <input v-if="invitationId" type="hidden" name="invitation" :value="invitationId" />
 
             <!-- Submit -->
             <Button

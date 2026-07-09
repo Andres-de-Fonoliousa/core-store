@@ -45,6 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
     Route::inertia('/', 'Admin/Dashboard')->name('admin.dashboard');
+    Route::inertia('onboarding', 'Admin/Onboarding')->name('admin.onboarding');
     Route::inertia('users', 'Admin/Users')->name('admin.users');
     Route::inertia('orders', 'Admin/Orders')->name('admin.orders');
     Route::get('orders/{order}', fn (string $order) => Inertia::render('Admin/OrderDetail', [
@@ -62,6 +63,25 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::any('sham-cash/{any?}', [\App\Http\Controllers\Admin\ShamCashProxyController::class, 'handle'])
         ->where('any', '.*')
         ->name('admin.sham-cash');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Platform Routes (SaaS marketing, no tenant context)
+|--------------------------------------------------------------------------
+*/
+Route::inertia('/pricing', 'Platform/Pricing')->name('platform.pricing');
+Route::inertia('/features', 'Platform/Features')->name('platform.features');
+Route::inertia('/create-store', 'Platform/Register')->name('platform.register');
+Route::post('/platform/register', [\App\Http\Controllers\Platform\RegistrationController::class, 'store'])
+    ->name('platform.register.store');
+
+Route::middleware(['auth', 'verified', 'platform.admin'])->prefix('platform/admin')->group(function () {
+    Route::inertia('/', 'Platform/Admin/Dashboard')->name('platform.admin.dashboard');
+    Route::inertia('tenants', 'Platform/Admin/Tenants')->name('platform.admin.tenants');
+    Route::get('tenants/{id}', fn (string $id) => Inertia::render('Platform/Admin/TenantDetail', [
+        'tenantId' => (int) $id,
+    ]))->name('platform.admin.tenants.show');
 });
 
 require __DIR__.'/settings.php';

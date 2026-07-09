@@ -17,6 +17,7 @@ use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use App\Concerns\HasTenantScope;
 use App\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
@@ -56,6 +57,29 @@ class User extends Authenticatable implements PasskeyUser
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    public function tenants(): BelongsToMany
+    {
+        return $this->belongsToMany(Tenant::class, 'tenant_user')
+            ->withPivot('role', 'invited_at', 'joined_at')
+            ->withTimestamps();
+    }
+
+    public function currentTenantMembership(): ?TenantUser
+    {
+        $tenantId = self::resolveTenantId();
+
+        if (!$tenantId) {
+            return null;
+        }
+
+        /** @var TenantUser|null $membership */
+        $membership = TenantUser::where('tenant_id', $tenantId)
+            ->where('user_id', $this->id)
+            ->first();
+
+        return $membership;
     }
 
     protected function getAuditIgnore(): array

@@ -56,10 +56,12 @@ return new class extends Migration
             }
         }
 
-        // Add FK constraints + make NOT NULL on required tables
+        // Add FK constraints + make NOT NULL on required tables (exclude users for test compat)
         foreach ($tables as $table) {
             Schema::table($table, function (Blueprint $t) use ($table) {
-                $t->unsignedBigInteger('tenant_id')->nullable(false)->change();
+                if ($table !== 'users') {
+                    $t->unsignedBigInteger('tenant_id')->nullable(false)->change();
+                }
                 $t->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
             });
         }

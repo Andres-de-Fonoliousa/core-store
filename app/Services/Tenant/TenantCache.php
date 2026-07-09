@@ -9,12 +9,12 @@ class TenantCache
 {
     public function remember(Tenant $tenant, string $key, int $ttl, callable $callback): mixed
     {
-        return Cache::tags(["tenant:{$tenant->id}"])->remember($key, $ttl, $callback);
+        return Cache::remember($this->key($tenant, $key), $ttl, $callback);
     }
 
     public function flush(Tenant $tenant): void
     {
-        Cache::tags(["tenant:{$tenant->id}"])->flush();
+        Cache::forget("tenant:{$tenant->id}:*");
     }
 
     public function key(Tenant $tenant, string $key): string
@@ -25,5 +25,15 @@ class TenantCache
     public function userKey(Tenant $tenant, int $userId, string $key): string
     {
         return "tenant:{$tenant->id}:user:{$userId}:{$key}";
+    }
+
+    public function get(string $key): mixed
+    {
+        return Cache::get($key);
+    }
+
+    public function set(string $key, mixed $value, int $ttl = 3600): void
+    {
+        Cache::put($key, $value, $ttl);
     }
 }

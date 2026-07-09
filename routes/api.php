@@ -71,7 +71,12 @@ Route::middleware('auth:sanctum')->group(function () {
 | Admin Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth:sanctum', 'admin', 'throttle:tenant-api'])->prefix('admin')->group(function () {
+    // Tenant invitation management
+    Route::get('invitations', [\App\Http\Controllers\Api\Admin\TenantInvitationController::class, 'index']);
+    Route::post('invitations', [\App\Http\Controllers\Api\Admin\TenantInvitationController::class, 'invite']);
+    Route::post('invitations/{invitation}/resend', [\App\Http\Controllers\Api\Admin\TenantInvitationController::class, 'resend']);
+    Route::delete('invitations/{invitation}', [\App\Http\Controllers\Api\Admin\TenantInvitationController::class, 'revoke']);
     // Dashboard metrics
     Route::get('users', [UserController::class, 'index']);
     Route::get('orders', [AdminOrderController::class, 'index']);
@@ -101,12 +106,31 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     // Analytics
     Route::get('kpi', [\App\Http\Controllers\Api\Admin\KpiController::class, 'index'])->name('admin.api.kpi');
 
+    // Onboarding
+    Route::get('onboarding', [\App\Http\Controllers\Api\Admin\OnboardingController::class, 'status']);
+    Route::post('onboarding/dismiss', [\App\Http\Controllers\Api\Admin\OnboardingController::class, 'dismiss']);
+    Route::post('onboarding/complete', [\App\Http\Controllers\Api\Admin\OnboardingController::class, 'complete']);
+
     // Settings
     Route::get('settings/profit-margin', [SettingController::class, 'getMargin']);
     Route::post('settings/profit-margin', [SettingController::class, 'updateMargin']);
 
     // Payment Addresses
     Route::apiResource('payment-addresses', PaymentAddressController::class)->except('show');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Platform Admin API Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth:sanctum', 'platform.admin', 'throttle:tenant-api'])->prefix('platform/admin')->group(function () {
+    Route::get('dashboard', [\App\Http\Controllers\Platform\Admin\DashboardController::class, 'index']);
+    Route::get('tenants', [\App\Http\Controllers\Platform\Admin\DashboardController::class, 'tenants']);
+    Route::get('tenants/{id}', [\App\Http\Controllers\Platform\Admin\DashboardController::class, 'showTenant']);
+    Route::post('tenants/{id}/suspend', [\App\Http\Controllers\Platform\Admin\DashboardController::class, 'suspendTenant']);
+    Route::post('tenants/{id}/activate', [\App\Http\Controllers\Platform\Admin\DashboardController::class, 'activateTenant']);
+    Route::post('tenants/{id}/impersonate', [\App\Http\Controllers\Platform\Admin\DashboardController::class, 'impersonate']);
 });
 
 /*

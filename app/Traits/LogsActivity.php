@@ -25,11 +25,9 @@ trait LogsActivity
         });
 
         static::deleted(function ($model) {
-            // Avoid double-logging when soft-delete is just an update
-            if ($model->isForceDeleting() || !method_exists($model, 'isForceDeleting') || !$model->isForceDeleting()) {
-                if (in_array('Illuminate\Database\Eloquent\SoftDeletes', class_uses_recursive($model))) {
-                    $model->logAudit('deleted', $model->getAuditAttributes(), null);
-                }
+            // Log real/force deletes; skip soft deletes (logged as 'updated' by the updated event)
+            if (!method_exists($model, 'isForceDeleting') || $model->isForceDeleting()) {
+                $model->logAudit('deleted', $model->getAuditAttributes(), null);
             }
         });
 
