@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Services\ProductPricingService;
+use App\Services\Tenant\PlanFeatures;
+use App\Services\Tenant\TenantManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -43,6 +45,13 @@ class ProductController extends Controller
      */
     public function store(Request $request, ProductPricingService $pricingService): JsonResponse
     {
+        $tenant = app(TenantManager::class)->getCurrent();
+        if ($tenant && !PlanFeatures::canCreateProduct($tenant)) {
+            return response()->json([
+                'error' => 'Product limit reached for your plan. Upgrade to add more products.',
+            ], 403);
+        }
+
         $data = $request->validate([
             'provider_id' => ['required', 'exists:providers,id'],
             'category_id' => ['required', 'exists:categories,id'],

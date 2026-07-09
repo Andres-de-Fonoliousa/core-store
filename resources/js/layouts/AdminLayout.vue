@@ -42,6 +42,7 @@ onUnmounted(() => {
 });
 
 const { t } = useI18n();
+const isPlatformAdmin = computed(() => (page.props as any)?.is_platform_admin ?? false);
 
 const navItems = computed(() => [
   { label: t('admin.storeHome'), href: '/', icon: Home },
@@ -58,6 +59,7 @@ const navItems = computed(() => [
   { label: t('admin.analytics'), href: '/admin/kpi', icon: BarChart3 },
   { label: t('admin.pulse'), href: '/pulse', icon: Activity },
   { label: t('admin.settings'), href: '/admin/settings', icon: Settings },
+  ...(isPlatformAdmin.value ? [{ label: 'Platform Admin', href: '/platform/admin', icon: Cpu }] : []),
 ]);
 
 function isActive(href: string) {

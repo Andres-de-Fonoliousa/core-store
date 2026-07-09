@@ -11,21 +11,25 @@ return new class extends Migration
     {
         // Add FK constraints deferred from base migrations (circular dependency)
         // Drop first if it exists (may have auto-named FK from foreignId or none at all)
-        $fks = DB::select("SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'orders' AND REFERENCED_TABLE_NAME IS NOT NULL AND COLUMN_NAME = 'transaction_id'", [DB::getDatabaseName()]);
-        foreach ($fks as $fk) {
-            Schema::table('orders', function (Blueprint $table) use ($fk) {
-                $table->dropForeign($fk->CONSTRAINT_NAME);
-            });
+        if (DB::getDriverName() !== 'sqlite') {
+            $fks = DB::select("SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'orders' AND REFERENCED_TABLE_NAME IS NOT NULL AND COLUMN_NAME = 'transaction_id'", [DB::getDatabaseName()]);
+            foreach ($fks as $fk) {
+                Schema::table('orders', function (Blueprint $table) use ($fk) {
+                    $table->dropForeign($fk->CONSTRAINT_NAME);
+                });
+            }
         }
         Schema::table('orders', function (Blueprint $table) {
             $table->foreign('transaction_id', 'orders_txn_fk')->references('id')->on('transactions');
         });
 
-        $fks = DB::select("SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'transactions' AND REFERENCED_TABLE_NAME IS NOT NULL AND COLUMN_NAME = 'order_id'", [DB::getDatabaseName()]);
-        foreach ($fks as $fk) {
-            Schema::table('transactions', function (Blueprint $table) use ($fk) {
-                $table->dropForeign($fk->CONSTRAINT_NAME);
-            });
+        if (DB::getDriverName() !== 'sqlite') {
+            $fks = DB::select("SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'transactions' AND REFERENCED_TABLE_NAME IS NOT NULL AND COLUMN_NAME = 'order_id'", [DB::getDatabaseName()]);
+            foreach ($fks as $fk) {
+                Schema::table('transactions', function (Blueprint $table) use ($fk) {
+                    $table->dropForeign($fk->CONSTRAINT_NAME);
+                });
+            }
         }
         Schema::table('transactions', function (Blueprint $table) {
             $table->foreign('order_id', 'transactions_order_fk')->references('id')->on('orders')->cascadeOnDelete();

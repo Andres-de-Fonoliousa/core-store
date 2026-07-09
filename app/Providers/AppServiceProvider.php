@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Tenant;
+use App\Observers\TenantObserver;
+use App\Services\Tenant\PlanFeatures;
 use App\Services\Tenant\TenantManager;
 use App\Services\Tenant\TenantResolver;
 use App\Services\Tenant\TenantScope;
@@ -37,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         $this->configurePulse();
+        Tenant::observe(TenantObserver::class);
     }
 
     protected function configurePulse(): void
@@ -70,5 +74,13 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('api', fn (Request $request) => Limit::perMinute(60)
             ->by($request->user()?->id ?: $request->ip()),
         );
+
+        RateLimiter::for('tenant-api', function (Request $request) {
+            $tenant = app(TenantManager::class)->getCurrent();
+            $maxPerMinute = $tenant ? PlanFeatures::apiRateLimit($tenant) : 60;
+
+            return Limit::perMinute($maxPerMinute)
+                ->by('tenant:' . ($tenant?->id ?? 'global') . '|user:' . ($request->user()?->id ?? 'guest'));
+        });
     }
 }

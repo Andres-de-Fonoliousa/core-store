@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Exceptions\InsufficientProviderBalanceException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
+use App\Listeners\DeductTransactionFee;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Transaction;
@@ -106,6 +107,8 @@ class OrderController extends Controller
 
                 return $order;
             });
+            app(DeductTransactionFee::class)->handle($order);
+
             $order->user->notify(new UserNotification(
                 title: 'تم تأكيد الطلب',
                 body: "طلب {$product->name} × {$quantity} بقيمة \${$totalPrice} قيد التوصيل.",
