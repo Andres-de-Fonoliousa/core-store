@@ -32,3 +32,12 @@ yarn-error.log
 /sham-bridge/public/build
 /deploy.bundle
 /auth-tmp
+
+# credentials — never commit
+ssh_*.cjs
+.deploy.ps1
+deploy.ps1
+deploy-bridge-fix.ps1
+deploy_simple.ps1
+deploy_run.sh
+deploy/test_*.sh
