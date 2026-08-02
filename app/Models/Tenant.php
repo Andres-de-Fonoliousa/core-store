@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Services\Tenant\TenantManager;
-use Database\Factories\TenantFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -22,6 +20,7 @@ class Tenant extends Model
         'trial_ends_at', 'subscribed_at', 'expires_at',
         'settings', 'features',
         'platform_balance',
+        'onboarding_completed_at', 'seen_onboarding_at',
     ];
 
     protected function casts(): array
@@ -39,7 +38,7 @@ class Tenant extends Model
     protected static function booted(): void
     {
         static::creating(function (Tenant $tenant) {
-            if (!$tenant->uuid) {
+            if (! $tenant->uuid) {
                 $tenant->uuid = (string) Str::uuid();
             }
         });

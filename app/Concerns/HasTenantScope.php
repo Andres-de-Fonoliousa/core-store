@@ -5,6 +5,7 @@ namespace App\Concerns;
 use App\Services\Tenant\TenantManager;
 use App\Services\Tenant\TenantScope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
 trait HasTenantScope
@@ -12,6 +13,14 @@ trait HasTenantScope
     public static function bootHasTenantScope(): void
     {
         static::addGlobalScope('tenant', App::make(TenantScope::class));
+
+        static::creating(function (Model $model) {
+            $tenantId = static::resolveTenantId();
+
+            if ($tenantId && ! $model->getAttribute('tenant_id')) {
+                $model->setAttribute('tenant_id', $tenantId);
+            }
+        });
     }
 
     public function isTenantScoped(): bool
@@ -31,7 +40,7 @@ trait HasTenantScope
 
     public function scopeForTenant(Builder $query, int $tenantId): Builder
     {
-        return $query->withoutTenant()->where((new static)->getTable() . '.tenant_id', $tenantId);
+        return $query->withoutTenant()->where((new static)->getTable().'.tenant_id', $tenantId);
     }
 
     public static function resolveTenantId(): ?int
