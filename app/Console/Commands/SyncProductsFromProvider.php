@@ -6,14 +6,21 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Provider;
 use App\Services\ProductPricingService;
+use App\Services\Tenant\CatalogCache;
 use App\Services\World4CardService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Cache;
 
 class SyncProductsFromProvider extends Command
 {
     protected $signature = 'products:sync-from-provider {provider_id?} {--fresh : Deactivate products no longer in catalog}';
+
     protected $description = 'Sync products and categories from a provider API';
+
+    public function __construct(
+        private CatalogCache $catalogCache,
+    ) {
+        parent::__construct();
+    }
 
     public function handle(): int
     {
@@ -38,7 +45,7 @@ class SyncProductsFromProvider extends Command
                 $batch = array_splice($queue, 0, 10);
                 $ids = array_column($batch, 0);
 
-                $this->line('  Fetching ' . count($ids) . ' content pages...');
+                $this->line('  Fetching '.count($ids).' content pages...');
                 $contents = $api->getContentMany($ids);
 
                 foreach ($batch as $i => [$pId, $localParentId]) {
@@ -48,10 +55,10 @@ class SyncProductsFromProvider extends Command
                         $local = Category::updateOrCreate(
                             ['provider_category_id' => $cat['id']],
                             [
-                                'name'      => $cat['name'],
-                                'image'     => $cat['image'] ?? null,
+                                'name' => $cat['name'],
+                                'image' => $cat['image'] ?? null,
                                 'parent_id' => $localParentId,
-                                'status'    => 'active',
+                                'status' => 'active',
                             ]
                         );
                         $catMap[$cat['id']] = $local->id;
@@ -69,7 +76,7 @@ class SyncProductsFromProvider extends Command
             // Fetch all products
             $this->line('  Fetching products...');
             $products = $api->getProducts();
-            $this->line('  ' . count($products) . ' products received.');
+            $this->line('  '.count($products).' products received.');
 
             $syncedIds = [];
             foreach ($products as $p) {
@@ -79,15 +86,15 @@ class SyncProductsFromProvider extends Command
                 Product::updateOrCreate(
                     ['external_id' => $extId, 'provider_id' => $provider->id],
                     [
-                        'name'        => $p['name'],
+                        'name' => $p['name'],
                         'category_id' => $p['parent_id'] > 0 ? ($catMap[$p['parent_id']] ?? null) : null,
-                        'price'       => 0,
-                        'cost_price'  => $p['base_price'] ?? $p['price'],
-                        'params'      => $p['params'] ?? null,
-                        'qty_values'  => $this->normalizeQty($p['qty_values'] ?? []),
-                        'is_auto'     => true,
-                        'status'      => ($p['available'] ?? true) ? 'active' : 'inactive',
-                        'image'       => $p['category_img'] ?? null,
+                        'price' => 0,
+                        'cost_price' => $p['base_price'] ?? $p['price'],
+                        'params' => $p['params'] ?? null,
+                        'qty_values' => $this->normalizeQty($p['qty_values'] ?? []),
+                        'is_auto' => true,
+                        'status' => ($p['available'] ?? true) ? 'active' : 'inactive',
+                        'image' => $p['category_img'] ?? null,
                     ]
                 );
             }
@@ -104,9 +111,9 @@ class SyncProductsFromProvider extends Command
             $this->line('  Applying profit margins...');
             app(ProductPricingService::class)->updateAllProductPrices();
 
-            Cache::increment('cat_idx_v');
+            $this->catalogCache->bustAll();
 
-            $this->info("  Done.");
+            $this->info('  Done.');
         }
 
         return Command::SUCCESS;
@@ -114,7 +121,9 @@ class SyncProductsFromProvider extends Command
 
     private function normalizeQty(mixed $raw): array
     {
-        if ($raw === null) return [1];
+        if ($raw === null) {
+            return [1];
+        }
         if (is_array($raw)) {
             if (isset($raw['min']) || isset($raw['max'])) {
                 return [
@@ -122,8 +131,10 @@ class SyncProductsFromProvider extends Command
                     'max' => (int) ($raw['max'] ?? 999999),
                 ];
             }
+
             return array_map('intval', $raw);
         }
+
         return [1];
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Services\Tenant\TenantManager;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
@@ -16,7 +17,10 @@ class KpiController extends Controller
 {
     public function index(): JsonResponse
     {
-        return response()->json(Cache::remember('admin:kpi', 300, function () {
+        $tenantId = app(TenantManager::class)->getCurrentId();
+        $cacheKey = $tenantId ? "admin:kpi:{$tenantId}" : 'admin:kpi';
+
+        return response()->json(Cache::remember($cacheKey, 300, function () {
             $days = 30;
             $since = CarbonImmutable::now()->subDays($days - 1)->startOfDay();
 

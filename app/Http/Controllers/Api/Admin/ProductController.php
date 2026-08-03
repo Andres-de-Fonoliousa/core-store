@@ -5,14 +5,18 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Services\ProductPricingService;
+use App\Services\Tenant\CatalogCache;
 use App\Services\Tenant\PlanFeatures;
 use App\Services\Tenant\TenantManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
+    public function __construct(
+        private CatalogCache $catalogCache,
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -25,7 +29,7 @@ class ProductController extends Controller
             ->when($request->filled('provider_id'), fn ($query) => $query->where('provider_id', $request->provider_id))
             ->when($request->filled('category_id'), fn ($query) => $query->where('category_id', $request->category_id))
             ->when($request->filled('is_auto'), fn ($query) => $query->where('is_auto', $request->boolean('is_auto')))
-            ->when($request->filled('search'), fn ($query) => $query->where('name', 'like', '%' . $request->search . '%'))
+            ->when($request->filled('search'), fn ($query) => $query->where('name', 'like', '%'.$request->search.'%'))
             ->orderBy('name')
             ->paginate(20);
 
@@ -46,7 +50,7 @@ class ProductController extends Controller
     public function store(Request $request, ProductPricingService $pricingService): JsonResponse
     {
         $tenant = app(TenantManager::class)->getCurrent();
-        if ($tenant && !PlanFeatures::canCreateProduct($tenant)) {
+        if ($tenant && ! PlanFeatures::canCreateProduct($tenant)) {
             return response()->json([
                 'error' => 'Product limit reached for your plan. Upgrade to add more products.',
             ], 403);
@@ -74,7 +78,7 @@ class ProductController extends Controller
             $pricingService->updatePrice($product);
         }
 
-        Cache::increment('cat_idx_v');
+        $this->catalogCache->bust();
 
         return response()->json($product, 201);
     }
@@ -124,7 +128,7 @@ class ProductController extends Controller
             $pricingService->updatePrice($product);
         }
 
-        Cache::increment('cat_idx_v');
+        $this->catalogCache->bust();
 
         return response()->json($product);
     }
@@ -136,7 +140,7 @@ class ProductController extends Controller
     {
         $product->delete();
 
-        Cache::increment('cat_idx_v');
+        $this->catalogCache->bust();
 
         return response()->json(null, 204);
     }

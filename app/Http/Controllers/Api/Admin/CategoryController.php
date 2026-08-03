@@ -4,15 +4,19 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Services\Tenant\CatalogCache;
 use App\Services\Tenant\PlanFeatures;
 use App\Services\Tenant\TenantManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
+    public function __construct(
+        private CatalogCache $catalogCache,
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -22,12 +26,11 @@ class CategoryController extends Controller
         $status = $request->status ?? 'active';
         $page = $request->integer('page', 1);
         $perPage = $request->integer('per_page', 50);
-        $v = Cache::rememberForever('cat_idx_v', fn() => 1);
-        $cacheKey = "cat_idx:{$v}:{$status}:{$parentId}:{$page}:{$perPage}";
+        $cacheKey = $this->catalogCache->key($status, $parentId, $page, $perPage);
 
         $cached = Cache::remember($cacheKey, 300, function () use ($request, $parentId, $status, $page, $perPage) {
             $q = Category::query()
-                ->when($status !== 'all', fn($q) => $q->where('status', $status))
+                ->when($status !== 'all', fn ($q) => $q->where('status', $status))
                 ->when($request->filled('parent_id'), function ($q) use ($parentId) {
                     if ($parentId === 'null') {
                         $q->whereNull('parent_id');
@@ -57,7 +60,7 @@ class CategoryController extends Controller
 
     private function bustCategoryCache(): void
     {
-        Cache::increment('cat_idx_v');
+        $this->catalogCache->bust();
     }
 
     /**
@@ -74,7 +77,7 @@ class CategoryController extends Controller
     public function store(Request $request): JsonResponse
     {
         $tenant = app(TenantManager::class)->getCurrent();
-        if ($tenant && !PlanFeatures::canCreateCategory($tenant)) {
+        if ($tenant && ! PlanFeatures::canCreateCategory($tenant)) {
             return response()->json([
                 'error' => 'Category limit reached for your plan. Upgrade to add more categories.',
             ], 403);
@@ -148,10 +151,10 @@ class CategoryController extends Controller
         ]);
 
         $file = $request->file('image');
-        $filename = $category->id . '.jpg';
+        $filename = $category->id.'.jpg';
         $file->storeAs('categories', $filename, 'public');
 
-        $path = 'storage/categories/' . $filename;
+        $path = 'storage/categories/'.$filename;
         $category->update(['image' => $path]);
 
         $this->bustCategoryCache();

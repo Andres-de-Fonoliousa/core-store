@@ -9,12 +9,33 @@ class TenantCache
 {
     public function remember(Tenant $tenant, string $key, int $ttl, callable $callback): mixed
     {
-        return Cache::remember($this->key($tenant, $key), $ttl, $callback);
+        $fullKey = $this->key($tenant, $key);
+        $this->track($tenant, $fullKey);
+
+        return Cache::remember($fullKey, $ttl, $callback);
     }
 
     public function flush(Tenant $tenant): void
     {
-        Cache::forget("tenant:{$tenant->id}:*");
+        $indexKey = $this->key($tenant, '__keys');
+        $keys = Cache::get($indexKey, []);
+
+        foreach ($keys as $fullKey) {
+            Cache::forget($fullKey);
+        }
+
+        Cache::forget($indexKey);
+    }
+
+    private function track(Tenant $tenant, string $fullKey): void
+    {
+        $indexKey = $this->key($tenant, '__keys');
+        $keys = Cache::get($indexKey, []);
+
+        if (! in_array($fullKey, $keys, true)) {
+            $keys[] = $fullKey;
+            Cache::put($indexKey, $keys, now()->addDays(7));
+        }
     }
 
     public function key(Tenant $tenant, string $key): string
