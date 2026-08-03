@@ -60,6 +60,11 @@ class PlanFeatures
         ],
     ];
 
+    public static function plans(): array
+    {
+        return array_keys(self::$defaultPlans);
+    }
+
     public static function limits(string $plan): array
     {
         return self::$defaultPlans[$plan]['limits'] ?? self::$defaultPlans['free']['limits'];
@@ -83,6 +88,7 @@ class PlanFeatures
     public static function hasFeature(Tenant $tenant, string $feature): bool
     {
         $features = self::features($tenant->plan);
+
         return $features[$feature] ?? false;
     }
 
@@ -92,6 +98,7 @@ class PlanFeatures
         if ($limits['max_products'] === -1) {
             return true;
         }
+
         return $tenant->products()->count() < $limits['max_products'];
     }
 
@@ -101,6 +108,7 @@ class PlanFeatures
         if ($limits['max_users'] === -1) {
             return true;
         }
+
         return $tenant->users()->count() < $limits['max_users'];
     }
 
@@ -110,6 +118,7 @@ class PlanFeatures
         if ($limits['max_categories'] === -1) {
             return true;
         }
+
         return $tenant->categories()->count() < $limits['max_categories'];
     }
 

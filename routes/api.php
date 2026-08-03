@@ -117,6 +117,17 @@ Route::middleware(['auth:sanctum', 'admin', 'throttle:tenant-api'])->prefix('adm
 
     // Payment Addresses
     Route::apiResource('payment-addresses', PaymentAddressController::class)->except('show');
+
+    // Custom domains
+    Route::get('domains', [\App\Http\Controllers\Api\Admin\DomainController::class, 'index']);
+    Route::post('domains', [\App\Http\Controllers\Api\Admin\DomainController::class, 'store']);
+    Route::post('domains/{domainAlias}/verify', [\App\Http\Controllers\Api\Admin\DomainController::class, 'verify']);
+    Route::delete('domains/{domainAlias}', [\App\Http\Controllers\Api\Admin\DomainController::class, 'destroy']);
+
+    // Billing
+    Route::get('billing/overview', [\App\Http\Controllers\Api\Admin\BillingController::class, 'overview']);
+    Route::get('billing/invoices', [\App\Http\Controllers\Api\Admin\BillingController::class, 'invoices']);
+    Route::post('billing/plan', [\App\Http\Controllers\Api\Admin\BillingController::class, 'changePlan']);
 });
 
 /*

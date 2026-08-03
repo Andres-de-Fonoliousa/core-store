@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class DomainAlias extends Model
 {
     protected $fillable = [
-        'tenant_id', 'domain', 'verified_at',
+        'tenant_id', 'domain', 'verification_token', 'verified_at',
     ];
 
     protected function casts(): array

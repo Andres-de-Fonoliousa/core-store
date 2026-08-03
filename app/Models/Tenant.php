@@ -76,6 +76,11 @@ class Tenant extends Model
         return $this->hasMany(DomainAlias::class);
     }
 
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(SubscriptionInvoice::class);
+    }
+
     public function isActive(): bool
     {
         return $this->status === 'active';
