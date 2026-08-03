@@ -20,7 +20,11 @@ class IdentifyTenant
     {
         $tenant = $this->resolver->resolve($request);
 
-        if ($tenant && $tenant->status !== 'suspended') {
+        if ($tenant && $tenant->status === 'suspended') {
+            abort(403, 'This store is currently suspended.');
+        }
+
+        if ($tenant) {
             $this->manager->setCurrent($tenant);
             $this->applyTenantConfig($tenant);
         } else {

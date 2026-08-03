@@ -4,12 +4,12 @@ namespace App\Actions\Fortify;
 
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
-use App\Models\Tenant;
 use App\Models\TenantUser;
 use App\Models\User;
 use App\Services\Tenant\TenantManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
 class CreateNewUser implements CreatesNewUsers
@@ -24,16 +24,29 @@ class CreateNewUser implements CreatesNewUsers
         ])->validate();
 
         $invitationId = $input['invitation'] ?? null;
+        $tenant = app(TenantManager::class)->getCurrent();
 
-        return DB::transaction(function () use ($input, $invitationId) {
+        if (! $invitationId && ! $tenant) {
+            throw ValidationException::withMessages([
+                'email' => 'Registration is only available through a store invitation or by creating a store.',
+            ]);
+        }
+
+        return DB::transaction(function () use ($input, $invitationId, $tenant) {
             $user = User::create([
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => $input['password'],
+                'tenant_id' => $tenant?->id,
             ]);
 
             if ($invitationId) {
                 $this->acceptInvitation($user, $invitationId);
+            } elseif ($tenant) {
+                $tenant->users()->attach($user->id, [
+                    'role' => 'member',
+                    'joined_at' => now(),
+                ]);
             }
 
             return $user;
@@ -49,7 +62,7 @@ class CreateNewUser implements CreatesNewUsers
             ->whereNotNull('invited_at')
             ->first();
 
-        if (!$membership) {
+        if (! $membership) {
             return;
         }
 

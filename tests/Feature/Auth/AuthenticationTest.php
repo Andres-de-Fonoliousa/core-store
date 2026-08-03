@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\RateLimiter;
@@ -88,5 +89,36 @@ class AuthenticationTest extends TestCase
         ]);
 
         $response->assertTooManyRequests();
+    }
+
+    public function test_user_cannot_login_into_other_tenant()
+    {
+        $tenantA = Tenant::factory()->create();
+        $tenantB = Tenant::factory()->create();
+
+        $user = User::factory()->create(['tenant_id' => $tenantA->id]);
+
+        $this->withHeader('X-Tenant-ID', $tenantB->uuid)
+            ->post(route('login.store'), [
+                'email' => $user->email,
+                'password' => 'password',
+            ]);
+
+        $this->assertGuest();
+    }
+
+    public function test_user_can_login_into_own_tenant()
+    {
+        $tenant = Tenant::factory()->create();
+
+        $user = User::factory()->create(['tenant_id' => $tenant->id]);
+
+        $this->withHeader('X-Tenant-ID', $tenant->uuid)
+            ->post(route('login.store'), [
+                'email' => $user->email,
+                'password' => 'password',
+            ]);
+
+        $this->assertAuthenticated();
     }
 }
