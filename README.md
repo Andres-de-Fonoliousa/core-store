@@ -141,4 +141,6 @@ php artisan config:cache && php artisan route:cache
 
 MIT — see [LICENSE](LICENSE) for details.
 
-<!-- Add screenshots here: storefront home, product detail, admin dashboard, platform admin -->
+## Screenshots
+
+![Platform admin dashboard](docs/screenshots/cores-dashboard.png)
