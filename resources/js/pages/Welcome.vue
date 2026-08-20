@@ -1,29 +1,20 @@
 <script setup lang="ts">
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { onClickOutside } from '@vueuse/core';
 import { useApi } from '@/composables/useApi';
 import { useAuthStore } from '@/stores/authStore';
 import { useToast } from '@/composables/useToast';
 import { parseApiError } from '@/lib/errors';
-import { logout } from '@/routes';
-import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
-import { 
-  Gamepad2, Zap, Shield, Clock, ChevronLeft, ChevronRight,
+import AppNavbar from '@/components/AppNavbar.vue';
+import AppFooter from '@/components/AppFooter.vue';
+import {
+  Gamepad2, Zap, Shield, Clock,
   ShoppingCart, CreditCard, Gift, Download, Sparkles,
-  TrendingUp, Users, Package, ArrowLeft, Hexagon, Cpu,
-  User, LogOut, Settings, ChevronDown,
+  Users, Package, ArrowLeft,
 } from 'lucide-vue-next';
 
 // ── Reactive State ──
-const isScrolled = ref(false);
-const mobileMenuOpen = ref(false);
-
-const handleScroll = () => {
-  isScrolled.value = window.scrollY > 20;
-};
-
 let revealObserver: IntersectionObserver | null = null;
 let countersObserver: IntersectionObserver | null = null;
 const observedMagnetic = new WeakSet<Element>();
@@ -107,7 +98,6 @@ const initTilt = () => {
 };
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll, { passive: true });
   initReveal();
   initCounters();
   initMagnetic();
@@ -117,7 +107,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
   revealObserver?.disconnect();
   countersObserver?.disconnect();
 });
@@ -126,15 +115,6 @@ onUnmounted(() => {
 const api = useApi();
 const authStore = useAuthStore();
 const toast = useToast();
-
-const user = computed(() => authStore.user);
-const userMenuOpen = ref(false);
-const userMenuRef = ref<HTMLElement | null>(null);
-onClickOutside(userMenuRef, () => { userMenuOpen.value = false; });
-
-function handleLogout() {
-  router.post(logout().url);
-}
 
 function fmtPrice(v: string | number | null | undefined): string {
   if (v == null) return '0.00';
@@ -212,6 +192,12 @@ async function fetchCategories() {
 
 const { t } = useI18n();
 
+const navAnchors = [
+  { label: t('nav.products'), href: '#products' },
+  { label: t('home.section.browse'), href: '#categories' },
+  { label: t('home.howItWorks.title'), href: '#how' },
+];
+
 const steps = [
   { num: '01', title: t('home.howItWorks.step1'), desc: t('home.howItWorks.step1Desc'), icon: ShoppingCart, color: 'text-cyan-400', border: 'border-cyan-500/20', bg: 'bg-cyan-500/5' },
   { num: '02', title: t('home.howItWorks.step2'), desc: t('home.howItWorks.step2Desc'), icon: CreditCard, color: 'text-purple-400', border: 'border-purple-500/20', bg: 'bg-purple-500/5' },
@@ -240,101 +226,7 @@ const stats = [
     <div class="fixed inset-0 pointer-events-none z-0" style="background: radial-gradient(ellipse at 50% 0%, hsl(186 100% 55% / 0.04) 0%, transparent 60%)" />
 
     <!-- ═══ NAVIGATION ═══ -->
-    <nav
-      class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-      :class="isScrolled ? 'glass-strong border-b border-primary/10' : 'bg-transparent'"
-    >
-      <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <!-- Logo -->
-        <Link href="/" class="flex items-center gap-2.5 group">
-          <div class="w-8 h-8 rounded-md flex items-center justify-center border border-primary/30 bg-primary/10 glow-primary">
-            <Cpu class="w-4 h-4 text-primary" />
-          </div>
-          <span class="font-display text-lg font-bold tracking-wider text-white group-hover:text-primary transition-colors">
-            {{ $t('app.name') }}
-          </span>
-        </Link>
-
-        <!-- Desktop Nav -->
-        <div class="hidden md:flex items-center gap-8">
-          <a href="#products" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">{{ $t('nav.products') }}</a>
-          <a href="#categories" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">{{ $t('home.section.browse') }}</a>
-          <a href="#how" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">{{ $t('home.howItWorks.title') }}</a>
-          <LanguageSwitcher />
-          <!-- Auth user dropdown -->
-          <div v-if="user" ref="userMenuRef" class="relative">
-            <button @click="userMenuOpen = !userMenuOpen" class="flex items-center gap-2 px-3 py-2 text-sm font-medium bg-primary/5 text-primary border border-primary/20 rounded-md hover:bg-primary/10 hover:border-primary/40 transition-all">
-              <div class="w-6 h-6 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center">
-                <span class="text-[10px] font-bold text-primary">{{ user.name.charAt(0) }}</span>
-              </div>
-              <span class="text-xs text-white/80">{{ user.name }}</span>
-              <ChevronDown class="w-3 h-3 text-primary/60 transition-transform duration-200" :class="userMenuOpen ? 'rotate-180' : ''" />
-            </button>
-            <div v-if="userMenuOpen" class="absolute left-0 top-full mt-2 w-48 bg-card border border-primary/10 rounded-lg shadow-2xl shadow-black/50 backdrop-blur-xl overflow-hidden z-50">
-              <div class="p-1.5 flex flex-col gap-0.5">
-                <Link href="/settings/profile" class="flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:text-white hover:bg-primary/5 rounded-md transition-colors" @click="userMenuOpen = false">
-                  <User class="w-4 h-4 text-primary/70" /> {{ $t('nav.profile') }}
-                </Link>
-                <Link href="/settings/appearance" class="flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:text-white hover:bg-primary/5 rounded-md transition-colors" @click="userMenuOpen = false">
-                  <Settings class="w-4 h-4 text-primary/70" /> {{ $t('nav.settings') }}
-                </Link>
-                <div class="h-px bg-primary/10 my-1" />
-                <Link :href="logout()" as="button" class="flex items-center gap-3 px-3 py-2 text-sm text-red-400/70 hover:text-red-400 hover:bg-red-500/5 rounded-md transition-colors w-full text-right" @click="userMenuOpen = false">
-                  <LogOut class="w-4 h-4" /> {{ $t('nav.logout') }}
-                </Link>
-              </div>
-            </div>
-          </div>
-          <!-- Guest: login/register -->
-          <Link v-if="!user" href="/login" class="text-sm text-muted-foreground hover:text-primary transition-colors magnetic">{{ $t('nav.login') }}</Link>
-          <Link v-if="!user" href="/register" class="magnetic px-5 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-all glow-primary">
-            {{ $t('nav.startNow') }}
-          </Link>
-        </div>
-
-        <!-- Mobile Toggle -->
-        <button
-          class="md:hidden w-10 h-10 flex items-center justify-center text-white"
-          @click="mobileMenuOpen = !mobileMenuOpen"
-          aria-label="Menu"
-        >
-          <component :is="mobileMenuOpen ? ChevronRight : ChevronLeft" class="w-5 h-5" />
-        </button>
-      </div>
-
-      <!-- Mobile Menu -->
-      <div
-        v-if="mobileMenuOpen"
-        class="md:hidden glass-strong border-t border-primary/10"
-      >
-        <div class="px-6 py-4 flex flex-col gap-3">
-          <a href="#products" class="text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">{{ $t('nav.products') }}</a>
-          <a href="#categories" class="text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">{{ $t('home.section.browse') }}</a>
-          <a href="#how" class="text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">{{ $t('home.howItWorks.title') }}</a>
-          <div class="py-2"><LanguageSwitcher /></div>
-          <!-- Auth'd: profile/settings/logout -->
-          <template v-if="user">
-            <div class="h-px bg-primary/10 my-1" />
-            <Link href="/settings/profile" class="flex items-center gap-3 text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">
-              <User class="w-4 h-4 text-primary/70" /> {{ $t('nav.profile') }}
-            </Link>
-            <Link href="/settings/appearance" class="flex items-center gap-3 text-sm text-muted-foreground hover:text-primary py-2" @click="mobileMenuOpen = false">
-              <Settings class="w-4 h-4 text-primary/70" /> {{ $t('nav.settings') }}
-            </Link>
-            <Link :href="logout()" as="button" class="flex items-center gap-3 text-sm text-red-400/70 hover:text-red-400 py-2" @click="mobileMenuOpen = false">
-              <LogOut class="w-4 h-4" /> {{ $t('nav.logout') }}
-            </Link>
-          </template>
-          <!-- Guest: login/register -->
-          <template v-if="!user">
-            <Link href="/login" class="text-sm text-muted-foreground hover:text-primary py-2">{{ $t('nav.login') }}</Link>
-            <Link href="/register" class="px-5 py-2.5 text-sm font-medium bg-primary text-primary-foreground rounded-md text-center glow-primary">
-              {{ $t('nav.register') }}
-            </Link>
-          </template>
-        </div>
-      </div>
-    </nav>
+    <AppNavbar :anchors="navAnchors" />
 
     <!-- ═══ HERO ═══ -->
     <section class="relative min-h-screen flex items-center pt-16 pb-20">
@@ -711,38 +603,7 @@ const stats = [
     </section>
 
     <!-- ═══ FOOTER ═══ -->
-    <footer class="border-t border-primary/10 py-12">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div>
-            <div class="flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-md flex items-center justify-center border border-primary/30 bg-primary/10">
-                <Cpu class="w-3.5 h-3.5 text-primary" />
-              </div>
-              <span class="font-bold tracking-wider text-white font-display">{{ $t('app.name') }}</span>
-            </div>
-            <p class="text-xs text-muted-foreground mt-2 max-w-sm leading-relaxed">
-              {{ $t('app.tagline') }}
-            </p>
-          </div>
-          <div class="flex items-center gap-6">
-            <a href="#" class="text-muted-foreground hover:text-primary transition-colors" aria-label="Discord">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.248.195.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.419 0 1.334-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.419 0 1.334-.946 2.419-2.157 2.419z"/></svg>
-            </a>
-            <a href="#" class="text-muted-foreground hover:text-primary transition-colors" aria-label="Twitter">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </a>
-            <a href="#" class="text-muted-foreground hover:text-primary transition-colors" aria-label="Telegram">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 8.021-3.48 3.157-1.365 3.835-1.587 4.27-1.587z"/></svg>
-            </a>
-          </div>
-        </div>
-        <div class="mt-8 pt-6 border-t border-primary/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p class="text-[11px] text-muted-foreground">&copy; {{ new Date().getFullYear() }} {{ $t('app.name') }}. {{ $t('auth.split.copyright') }}</p>
-          <p class="text-[11px] text-muted-foreground font-mono">{{ $t('app.footerTagline') }}</p>
-        </div>
-      </div>
-    </footer>
+    <AppFooter />
   </div>
 </template>
 

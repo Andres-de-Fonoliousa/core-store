@@ -9,9 +9,10 @@ import { safeJsonLd, buildProductJsonLd, buildBreadcrumbJsonLd, buildStoreJsonLd
 import JsonLdScript from '@/components/JsonLdScript.vue';
 import {
   ShoppingCart, Zap, ChevronLeft, Star, ShieldCheck,
-  Clock, Package, AlertTriangle, CheckCircle, Cpu,
-  ArrowLeft, Minus, Plus, User, CreditCard,
+  Clock, Package, AlertTriangle, CheckCircle,
+  Minus, Plus, User, CreditCard,
 } from 'lucide-vue-next';
+import AppNavbar from '@/components/AppNavbar.vue';
 
 const props = defineProps<{ product: any }>();
 const api = useApi();
@@ -129,20 +130,8 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
       <div class="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[60%] h-[40%] bg-cyan-500/10 blur-[120px] rounded-full" />
     </div>
 
-    <!-- Navbar (Compact) -->
-    <nav class="fixed top-0 left-0 right-0 z-40 bg-[#070709]/80 backdrop-blur-xl border-b border-white/5">
-      <div class="w-full px-4 sm:px-6 lg:px-10 xl:px-16 h-16 flex items-center justify-between">
-        <Link href="/" class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-cyan-500/10 border border-cyan-400/30">
-            <Cpu class="w-4 h-4 text-cyan-400" />
-          </div>
-          <span class="text-lg font-bold tracking-wider text-white font-display">{{ $t('app.name') }}</span>
-        </Link>
-        <Link href="/products" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-1">
-          <ArrowLeft class="w-4 h-4" /> {{ $t('common.back') }}
-        </Link>
-      </div>
-    </nav>
+    <!-- Navbar -->
+    <AppNavbar />
 
     <main class="relative z-10 pt-24 pb-20 px-4 sm:px-6 lg:px-10 xl:px-16">
       <!-- Breadcrumb -->

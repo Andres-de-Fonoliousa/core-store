@@ -5,8 +5,8 @@ import { useI18n } from 'vue-i18n';
 import {
   Search, SlidersHorizontal, Grid2x2, List, Tag,
   ChevronLeft, ShoppingCart, Zap,
-  X, Package, Cpu, Loader2,
-  Home, ChevronRight, Layers, ArrowLeft,
+  X, Package, Loader2,
+  Home, ChevronRight, Layers,
   Gamepad2, Sparkles, Music, Gift, Monitor,
   Headphones, Film, Globe, Smartphone, Star,
   Shield, BookOpen, Cloud, Wifi,
@@ -14,9 +14,10 @@ import {
 import { useApi } from '@/composables/useApi';
 import { useToast } from '@/composables/useToast';
 import { parseApiError } from '@/lib/errors';
-import { useAuthStore } from '@/stores/authStore';
 import { safeJsonLd, buildBreadcrumbJsonLd, buildWebSiteJsonLd, buildStoreJsonLd, defaultDescription, siteName } from '@/lib/seo';
 import JsonLdScript from '@/components/JsonLdScript.vue';
+import AppNavbar from '@/components/AppNavbar.vue';
+import AppFooter from '@/components/AppFooter.vue';
 
 const props = defineProps<{
   categoryId?: number;
@@ -28,7 +29,6 @@ const props = defineProps<{
 const { t } = useI18n();
 const api = useApi();
 const toast = useToast();
-const auth = useAuthStore();
 
 const loading = ref(false);
 const productLoading = ref(false);
@@ -211,26 +211,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
     <div class="fixed inset-0 pointer-events-none z-0" style="background: radial-gradient(ellipse at 50% 0%, hsl(186 100% 55% / 0.03) 0%, transparent 50%)" />
 
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-primary/10">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <Link href="/" class="flex items-center gap-2.5 group shrink-0">
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center border border-primary/30 bg-primary/10">
-            <Cpu class="w-4 h-4 text-primary" />
-          </div>
-          <span class="text-lg font-bold tracking-wider text-white font-display">{{ $t('app.name') }}</span>
-        </Link>
-        <div class="flex items-center gap-3 sm:gap-6">
-          <Link href="/browse" class="text-sm text-primary font-semibold">{{ $t('nav.catalog') }}</Link>
-          <template v-if="auth.user">
-            <Link href="/dashboard" class="text-sm text-muted-foreground hover:text-white transition-colors">{{ $t('nav.dashboard') }}</Link>
-          </template>
-          <template v-else>
-            <Link href="/login" class="text-sm text-muted-foreground hover:text-white transition-colors hidden sm:inline">{{ $t('nav.login') }}</Link>
-            <Link href="/register" class="text-sm px-4 sm:px-5 py-2 font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all glow-primary">{{ $t('nav.register') }}</Link>
-          </template>
-        </div>
-      </div>
-    </nav>
+    <AppNavbar />
 
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28 pb-12">
 
@@ -604,6 +585,9 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
         </div>
       </div>
     </Transition>
+
+    <!-- Footer -->
+    <AppFooter />
   </div>
 </template>
 

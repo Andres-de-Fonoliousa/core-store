@@ -9,6 +9,8 @@ import { useAuthStore } from '@/stores/authStore';
 import { parseApiError } from '@/lib/errors';
 import { safeJsonLd, buildProductJsonLd, buildBreadcrumbJsonLd, buildStoreJsonLd, defaultDescription, siteName } from '@/lib/seo';
 import JsonLdScript from '@/components/JsonLdScript.vue';
+import AppNavbar from '@/components/AppNavbar.vue';
+import AppFooter from '@/components/AppFooter.vue';
 import type { Product } from '@/types/models';
 import {
   ShoppingCart, Zap, ArrowLeft, ShieldCheck, Clock, Package,
@@ -164,8 +166,11 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
       <div class="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[80%] h-[40%] bg-cyan-500/10 blur-[120px] rounded-full" />
     </div>
 
+    <!-- ═══ Navbar ═══ -->
+    <AppNavbar />
+
     <!-- ═══ Back Nav ═══ -->
-    <div class="relative z-10 w-full px-4 sm:px-6 lg:px-10 xl:px-16 pt-8 pb-4">
+    <div class="relative z-10 w-full px-4 sm:px-6 lg:px-10 xl:px-16 pt-24 pb-4">
       <Link href="/" class="inline-flex items-center gap-2 text-sm text-white/50 hover:text-cyan-400 transition-colors group">
         <div class="w-8 h-8 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center group-hover:border-cyan-400/30 transition-colors">
           <ArrowLeft class="w-4 h-4" />
@@ -435,17 +440,7 @@ const storeJsonLd = computed(() => safeJsonLd(buildStoreJsonLd()));
     </div>
 
     <!-- Footer -->
-    <footer class="w-full border-t border-white/5 py-8 relative z-10">
-      <div class="w-full px-4 sm:px-6 lg:px-10 xl:px-16 flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-          <div class="w-6 h-6 rounded-md flex items-center justify-center border border-cyan-400/30 bg-cyan-500/10">
-            <Cpu class="w-3 h-3 text-cyan-400" />
-          </div>
-          <span class="text-xs font-bold tracking-wider text-white/60 font-display">{{ $t('app.name') }}</span>
-        </div>
-        <p class="text-[10px] text-white/30 font-mono">{{ $t('app.footerTagline') }}</p>
-      </div>
-    </footer>
+    <AppFooter />
   </div>
 </template>
 

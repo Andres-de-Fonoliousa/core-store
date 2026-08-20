@@ -22,7 +22,10 @@ class SecurityHeaders
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
         $response->headers->remove('X-Frame-Options');
-        $response->headers->set('Content-Security-Policy', $this->cspPolicy());
+
+        if (!app()->environment('local')) {
+            $response->headers->set('Content-Security-Policy', $this->cspPolicy());
+        }
 
         return $response;
     }

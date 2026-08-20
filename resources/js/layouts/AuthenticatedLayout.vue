@@ -5,7 +5,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import { useAuthStore } from '@/stores/authStore';
 import {
   LayoutDashboard, ShoppingBag, Wallet, CreditCard, Settings,
-  LogOut, Menu, X, Cpu, ChevronLeft, Home, Bell,
+  LogOut, Menu, X, Cpu, ChevronLeft, Home, Bell, Compass,
 } from 'lucide-vue-next';
 import { Toaster } from '@/components/ui/sonner';
 import PageTransition from '@/components/PageTransition.vue';
@@ -19,13 +19,19 @@ const mobileMenu = ref(false);
 
 const { t } = useI18n();
 
+function isActive(href: string) {
+  if (href === '/') return page.url === '/';
+  return page.url.startsWith(href);
+}
+
 const navItems = computed(() => [
   { label: t('nav.home'), href: '/', icon: Home },
   { label: t('nav.dashboard'), href: '/dashboard', icon: LayoutDashboard },
+  { label: t('nav.catalog'), href: '/browse', icon: Compass },
   { label: t('nav.orders'), href: '/orders', icon: ShoppingBag },
   { label: t('nav.deposit'), href: '/deposit', icon: CreditCard },
   { label: t('nav.notifications'), href: '/notifications', icon: Bell },
-  { label: t('nav.settings'), href: '/settings', icon: Settings },
+  { label: t('nav.settings'), href: '/settings/profile', icon: Settings },
 ]);
 </script>
 
@@ -57,7 +63,7 @@ const navItems = computed(() => [
         </div>
 
         <nav class="hidden lg:flex items-center gap-1">
-          <Link v-for="item in navItems" :key="item.href" :href="item.href" class="px-4 py-2 text-sm text-white/50 hover:text-white rounded-lg hover:bg-white/5 transition-all" :class="page.url.startsWith(item.href) ? 'text-cyan-400 bg-cyan-500/5' : ''">
+          <Link v-for="item in navItems" :key="item.href" :href="item.href" class="px-4 py-2 text-sm text-white/50 hover:text-white rounded-lg hover:bg-white/5 transition-all" :class="isActive(item.href) ? 'text-cyan-400 bg-cyan-500/5' : ''">
             {{ item.label }}
           </Link>
         </nav>
@@ -76,7 +82,7 @@ const navItems = computed(() => [
       <!-- Mobile Menu -->
       <div v-if="mobileMenu" class="lg:hidden border-t border-white/5 bg-[#070709]/95 backdrop-blur-xl">
         <div class="px-6 py-4 flex flex-col gap-1">
-          <Link v-for="item in navItems" :key="item.href" :href="item.href" class="flex items-center gap-3 text-sm text-white/60 hover:text-white py-3 px-3 rounded-lg hover:bg-white/5 transition-colors" :class="page.url.startsWith(item.href) ? 'text-cyan-400 bg-cyan-500/5' : ''" @click="mobileMenu = false">
+          <Link v-for="item in navItems" :key="item.href" :href="item.href" class="flex items-center gap-3 text-sm text-white/60 hover:text-white py-3 px-3 rounded-lg hover:bg-white/5 transition-colors" :class="isActive(item.href) ? 'text-cyan-400 bg-cyan-500/5' : ''" @click="mobileMenu = false">
             <component :is="item.icon" class="w-4 h-4" />
             {{ item.label }}
           </Link>

@@ -39,7 +39,7 @@ onClickOutside(menuRef, () => { open.value = false; });
             <span class="text-[10px] font-mono text-white/40">$ {{ Number(authStore.user?.balance ?? 0).toFixed(2) }}</span>
           </div>
         </div>
-        <Link href="/profile" class="flex items-center gap-3 px-3 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors" @click="open = false">
+        <Link href="/settings/profile" class="flex items-center gap-3 px-3 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors" @click="open = false">
           <User class="w-4 h-4 text-cyan-400/70" /> {{ $t('nav.profile') }}
         </Link>
         <Link href="/orders" class="flex items-center gap-3 px-3 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors" @click="open = false">
@@ -48,7 +48,7 @@ onClickOutside(menuRef, () => { open.value = false; });
         <Link href="/deposit" class="flex items-center gap-3 px-3 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors" @click="open = false">
           <Wallet class="w-4 h-4 text-cyan-400/70" /> {{ $t('nav.deposit') }}
         </Link>
-        <Link href="/settings" class="flex items-center gap-3 px-3 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors" @click="open = false">
+        <Link href="/settings/appearance" class="flex items-center gap-3 px-3 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors" @click="open = false">
           <Settings class="w-4 h-4 text-cyan-400/70" /> {{ $t('nav.settings') }}
         </Link>
         <div class="h-px bg-white/5 my-1" />

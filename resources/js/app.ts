@@ -14,6 +14,7 @@ import AuthLayout from './layouts/AuthLayout.vue';
 import GuestLayout from './layouts/GuestLayout.vue';
 import PlatformAdminLayout from './layouts/PlatformAdminLayout.vue';
 import PlatformLayout from './layouts/PlatformLayout.vue';
+import SettingsLayout from './layouts/SettingsLayout.vue';
 import TenantLayout from './layouts/TenantLayout.vue';
 
 const appName = import.meta.env.VITE_APP_NAME || 'VoucherMarket';
@@ -81,6 +82,7 @@ createInertiaApp({
         if (name.startsWith('auth/')) return AuthLayout;
         if (name.startsWith('Platform/Admin/')) return PlatformAdminLayout;
         if (name.startsWith('Platform/')) return PlatformLayout;
+        if (name.startsWith('settings/')) return SettingsLayout;
         return TenantLayout;
     },
     progress: {

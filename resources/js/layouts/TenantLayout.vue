@@ -8,7 +8,6 @@ const page = usePage()
 
 const isAdminArea = computed(() => page.component.startsWith('Admin/'))
 const isCustomerArea = computed(() => page.component.startsWith('Customer/'))
-const isPublicArea = computed(() => page.component.startsWith('Public/'))
 </script>
 
 <template>
@@ -19,9 +18,8 @@ const isPublicArea = computed(() => page.component.startsWith('Public/'))
       '--brand-dark': shopStore.brandColorDark,
     }"
   >
-    <AdminLayout v-if="isAdminArea" />
-    <AuthenticatedLayout v-else-if="isCustomerArea" />
-    <GuestLayout v-else-if="isPublicArea" />
+    <AdminLayout v-if="isAdminArea"><slot /></AdminLayout>
+    <AuthenticatedLayout v-else-if="isCustomerArea"><slot /></AuthenticatedLayout>
     <slot v-else />
   </div>
 </template>

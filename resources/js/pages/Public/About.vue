@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
 import {
-  Cpu, Zap, Shield, Globe, Clock, Users, Gamepad2,
-  ChevronLeft, ArrowLeft,
+  Zap, Shield, Globe, Clock, Users, Gamepad2,
 } from 'lucide-vue-next';
+import AppNavbar from '@/components/AppNavbar.vue';
+import AppFooter from '@/components/AppFooter.vue';
 
 const values = [
   { icon: Zap, title: 'توصيل فوري', desc: 'شحن تلقائي في ثوانٍ. لا انتظار، لا تأخير.' },
@@ -41,20 +42,7 @@ const stats = [
 
     <div class="relative z-10">
       <!-- Navbar -->
-      <nav class="fixed top-0 left-0 right-0 isolate z-40 transition-all duration-300 bg-[#070709]/80 backdrop-blur-xl border-b border-white/5">
-        <div class="w-full px-4 sm:px-6 lg:px-10 xl:px-16 h-20 flex items-center justify-between">
-          <Link href="/" class="flex items-center gap-3 group">
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-cyan-500/10 border border-cyan-400/30">
-              <Cpu class="w-5 h-5 text-cyan-400" />
-            </div>
-            <span class="text-xl font-bold tracking-wider text-white font-display">{{ $t('app.name') }}</span>
-          </Link>
-          <div class="flex items-center gap-3">
-            <Link href="/login" class="text-sm text-white/60 hover:text-white transition-colors px-4 py-2">تسجيل الدخول</Link>
-            <Link href="/register" class="px-5 py-2 text-sm font-semibold bg-cyan-400 text-black rounded-xl hover:bg-cyan-300 transition-all hover:shadow-[0_0_25px_-5px_rgba(34,211,238,0.5)]">ابدأ الآن</Link>
-          </div>
-        </div>
-      </nav>
+      <AppNavbar />
 
       <!-- Hero -->
       <section class="relative w-full pt-32 pb-20 px-4 sm:px-6 lg:px-10 xl:px-16">
@@ -166,28 +154,7 @@ const stats = [
       </section>
 
       <!-- Footer -->
-      <footer class="w-full py-10 border-t border-white/5">
-        <div class="w-full px-4 sm:px-6 lg:px-10 xl:px-16">
-          <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg flex items-center justify-center border border-cyan-400/30 bg-cyan-500/10">
-                <Cpu class="w-4 h-4 text-cyan-400" />
-              </div>
-              <div>
-                <span class="font-bold tracking-wider text-white text-sm font-display">{{ $t('app.name') }}</span>
-                <p class="text-[10px] text-white/40 font-mono">منصة المنتجات الرقمية</p>
-              </div>
-            </div>
-            <div class="flex items-center gap-6 text-xs text-white/30 font-mono">
-              <Link href="/about" class="hover:text-cyan-400 transition-colors">عنّا</Link>
-              <Link href="/support" class="hover:text-cyan-400 transition-colors">الدعم</Link>
-              <Link href="/terms" class="hover:text-cyan-400 transition-colors">الشروط</Link>
-              <Link href="/privacy" class="hover:text-cyan-400 transition-colors">الخصوصية</Link>
-            </div>
-            <p class="text-[10px] text-white/30 font-mono">&copy; 2026 {{ $t('app.name') }}. جميع الحقوق محفوظة.</p>
-          </div>
-        </div>
-      </footer>
+      <AppFooter />
     </div>
   </div>
 </template>

@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
 import { useShopStore } from '@/stores/shopStore'
+import { Menu, X } from 'lucide-vue-next'
 
 const { t } = useI18n()
 const shopStore = useShopStore()
 const page = usePage()
+const mobileOpen = ref(false)
 
 onMounted(() => {
   shopStore.hydrate(page.props)
@@ -25,7 +27,7 @@ onMounted(() => {
             </div>
             <span class="text-lg font-bold tracking-wider text-white">{{ t('app.name') }}</span>
           </Link>
-          <nav class="flex items-center gap-6">
+          <nav class="hidden md:flex items-center gap-6">
             <Link href="/pricing" class="text-sm text-white/60 hover:text-white transition-colors">{{ t('platform.nav.pricing') }}</Link>
             <Link href="/features" class="text-sm text-white/60 hover:text-white transition-colors">{{ t('platform.nav.features') }}</Link>
             <Link href="/login" class="text-sm text-white/60 hover:text-white transition-colors">{{ t('platform.nav.login') }}</Link>
@@ -36,6 +38,29 @@ onMounted(() => {
               {{ t('platform.nav.getStarted') }}
             </Link>
           </nav>
+          <button
+            class="md:hidden w-10 h-10 flex items-center justify-center text-white"
+            @click="mobileOpen = !mobileOpen"
+            aria-label="Menu"
+          >
+            <component :is="mobileOpen ? X : Menu" class="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile menu -->
+      <div v-if="mobileOpen" class="md:hidden border-t border-white/5 bg-background/95 backdrop-blur-xl">
+        <div class="px-6 py-4 flex flex-col gap-1">
+          <Link href="/pricing" class="text-sm text-white/60 hover:text-white py-3" @click="mobileOpen = false">{{ t('platform.nav.pricing') }}</Link>
+          <Link href="/features" class="text-sm text-white/60 hover:text-white py-3" @click="mobileOpen = false">{{ t('platform.nav.features') }}</Link>
+          <Link href="/login" class="text-sm text-white/60 hover:text-white py-3" @click="mobileOpen = false">{{ t('platform.nav.login') }}</Link>
+          <Link
+            href="/create-store"
+            class="inline-flex items-center justify-center px-4 py-2.5 text-sm font-semibold bg-primary/10 text-primary border border-primary/20 rounded-lg hover:bg-primary/20 transition-all mt-2"
+            @click="mobileOpen = false"
+          >
+            {{ t('platform.nav.getStarted') }}
+          </Link>
         </div>
       </div>
     </header>
@@ -51,9 +76,9 @@ onMounted(() => {
         <div class="flex flex-col md:flex-row items-center justify-between gap-4">
           <p class="text-sm text-white/40">&copy; {{ new Date().getFullYear() }} {{ t('app.name') }}. {{ t('auth.split.copyright') }}</p>
           <div class="flex items-center gap-6">
-            <Link href="/terms" class="text-sm text-white/40 hover:text-white/60 transition-colors">{{ t('nav.home') }}</Link>
-            <Link href="/privacy" class="text-sm text-white/40 hover:text-white/60 transition-colors">{{ t('nav.products') }}</Link>
-            <Link href="/support" class="text-sm text-white/40 hover:text-white/60 transition-colors">{{ t('nav.orders') }}</Link>
+            <Link href="/terms" class="text-sm text-white/40 hover:text-white/60 transition-colors">{{ t('footer.terms') }}</Link>
+            <Link href="/privacy" class="text-sm text-white/40 hover:text-white/60 transition-colors">{{ t('footer.privacy') }}</Link>
+            <Link href="/support" class="text-sm text-white/40 hover:text-white/60 transition-colors">{{ t('footer.support') }}</Link>
           </div>
         </div>
       </div>

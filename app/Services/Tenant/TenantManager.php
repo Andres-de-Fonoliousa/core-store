@@ -43,6 +43,7 @@ class TenantManager
         $this->setCurrent($tenant);
         $result = $fn($tenant);
         $this->current = $previous;
+
         return $result;
     }
 }

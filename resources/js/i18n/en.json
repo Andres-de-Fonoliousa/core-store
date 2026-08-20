@@ -308,7 +308,7 @@
       "storeName": "Store Name",
       "storeNamePlaceholder": "My Digital Store",
       "email": "Email",
-      "emailPlaceholder": "you@example.com",
+      "emailPlaceholder": "you{'@'}example.com",
       "password": "Password",
       "passwordPlaceholder": "Min 8 characters",
       "confirmPassword": "Confirm Password",
@@ -365,5 +365,13 @@
     "errorOccurred": "An error occurred",
     "retry": "Retry",
     "mustLoginToBuy": "You must log in to purchase"
+  },
+
+  "footer": {
+    "info": "Info",
+    "about": "About",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "support": "Support"
   }
 }
